@@ -1,44 +1,36 @@
 // src/pages/Schedules.jsx
 import React, { useState, useEffect } from 'react';
-import {Paper, Typography,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Box,
-  Checkbox,
-  ListItemText,
-  Alert,
+import {
+  Paper, Typography, Button, Box, Chip, IconButton, Divider,
+  Select, MenuItem, FormControl, InputLabel, Alert, Tooltip, TextField, Switch
 } from '@mui/material';
+import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { format } from 'date-fns';
-
 import { db, ref, onValue, push, remove, set } from './firebase';
+import { toast } from './utils/feedback';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export default function Schedules() {
   const [schedules, setSchedules] = useState({});
   const [selectedDays, setSelectedDays] = useState([]);
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const [logText, setLogText] = useState('Schedule system ready...\n');
-  const [loading, setLoading] = useState(true);
 
   // Load schedules
   useEffect(() => {
     const unsub = onValue(ref(db, 'schedules'), (snap) => {
       const data = snap.val() || {};
       setSchedules(data);
-      setLoading(false);
     });
     return () => unsub();
   }, []);
 
-  // Load logs from Firebase (last 30 entries)
+  // Load logs
   useEffect(() => {
     const logsRef = ref(db, 'logs');
     const unsub = onValue(logsRef, (snapshot) => {
@@ -51,7 +43,7 @@ export default function Schedules() {
       const logArray = Object.entries(data)
         .map(([id, entry]) => ({ id, ...entry }))
         .sort((a, b) => b.timestamp - a.timestamp)
-        .slice(0, 30); // only last 30
+        .slice(0, 30);
 
       const formatted = logArray
         .map(e => `[${format(e.timestamp, 'HH:mm:ss')}] ${e.message}`)
@@ -63,139 +55,231 @@ export default function Schedules() {
     return () => unsub();
   }, []);
 
-  const addSchedule = () => {
-    if (selectedDays.length === 0 || !time) {
-      alert('Please select days and time');
+  const handleAddOrUpdate = () => {
+    if (!time || selectedDays.length === 0) {
+      toast('Please select time and days', 'warning');
       return;
     }
 
     const formattedTime = format(time, 'hh:mm a');
-    const newRef = push(ref(db, 'schedules'));
-
-    const newSchedule = {
-      id: newRef.key,
+    const payload = {
       days: selectedDays,
       time: formattedTime,
       enabled: true,
       createdAt: Date.now(),
     };
 
-    set(newRef, newSchedule).then(() => {
-      push(ref(db, 'logs'), {
-        message: `Added schedule: ${selectedDays.join(', ')} at ${formattedTime}`,
-        source: 'web',
-        timestamp: Date.now(),
-      });
-      setSelectedDays([]);
-      setTime(new Date());
-    });
+    if (editingId) {
+      set(ref(db, `schedules/${editingId}`), payload)
+        .then(() => {
+          toast('Schedule updated successfully!', 'success');
+          push(ref(db, 'logs'), {
+            message: `Updated schedule: ${selectedDays.join(', ')} at ${formattedTime}`,
+            source: 'web',
+            timestamp: Date.now(),
+          });
+          resetForm();
+        });
+    } else {
+      push(ref(db, 'schedules'), payload)
+        .then(() => {
+          toast('Schedule added successfully!', 'success');
+          push(ref(db, 'logs'), {
+            message: `Added schedule: ${selectedDays.join(', ')} at ${formattedTime}`,
+            source: 'web',
+            timestamp: Date.now(),
+          });
+          resetForm();
+        });
+    }
   };
 
-  const deleteSchedule = (id) => {
-    remove(ref(db, `schedules/${id}`)).then(() => {
-      push(ref(db, 'logs'), {
-        message: 'Deleted a schedule',
-        source: 'web',
-        timestamp: Date.now(),
+  const handleToggleEnabled = (id, currentEnabled) => {
+    set(ref(db, `schedules/${id}/enabled`), !currentEnabled)
+      .then(() => {
+        toast(`Schedule ${!currentEnabled ? 'enabled' : 'disabled'}`, 'info');
+        push(ref(db, 'logs'), {
+          message: `Schedule ${!currentEnabled ? 'enabled' : 'disabled'}: ID ${id}`,
+          source: 'web',
+          timestamp: Date.now(),
+        });
       });
-    });
   };
 
-  const toggleSchedule = (id, current) => {
-    set(ref(db, `schedules/${id}/enabled`), !current).then(() => {
-      push(ref(db, 'logs'), {
-        message: `Schedule ${!current ? 'enabled' : 'disabled'}`,
-        source: 'web',
-        timestamp: Date.now(),
-      });
-    });
+  const handleDelete = (id) => {
+    if (window.confirm('Delete this schedule permanently?')) {
+      remove(ref(db, `schedules/${id}`))
+        .then(() => {
+          toast('Schedule deleted', 'info');
+          push(ref(db, 'logs'), {
+            message: `Deleted schedule: ID ${id}`,
+            source: 'web',
+            timestamp: Date.now(),
+          });
+        });
+    }
   };
+
+  const handleEdit = (id, sched) => {
+    setEditingId(id);
+    setSelectedDays(sched.days);
+    const [t, period] = sched.time.split(' ');
+    const [h, m] = t.split(':');
+    let hours = parseInt(h);
+    if (period === 'PM' && hours !== 12) hours += 12;
+    if (period === 'AM' && hours === 12) hours = 0;
+    setTime(new Date(2000, 0, 1, hours, parseInt(m)));
+  };
+
+  const resetForm = () => {
+    setSelectedDays([]);
+    setTime(null);
+    setEditingId(null);
+  };
+
+  const activeCount = Object.values(schedules).filter(s => s.enabled).length;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
-        {/* Loading */}
-        {loading && <Alert severity="info">Loading schedules...</Alert>}
+      <Box sx={{ p: { xs: 2, sm: 3 } }}>
+        <Typography variant="h4" fontWeight={700} gutterBottom>
+          Feeding Schedules
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+          Manage automatic feeding times • {activeCount} active schedule{activeCount !== 1 ? 's' : ''}
+        </Typography>
 
-        {/* Main Layout */}
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', flex: 1 }}>
-          {/* Form */}
-          <Paper sx={{ p: 3, flex: '1 1 400px', minWidth: 300 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>Add New Schedule</Typography>
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>Days</InputLabel>
-              <Select
-                multiple
-                value={selectedDays}
-                onChange={(e) => setSelectedDays(e.target.value)}
-                renderValue={(selected) => selected.join(', ')}
-                label="Days"
-              >
-                {DAYS.map((day) => (
-                  <MenuItem key={day} value={day}>
-                    <Checkbox checked={selectedDays.includes(day)} />
-                    <ListItemText primary={day} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+        {/* Form on top */}
+        <Paper sx={{ p: 4, mb: 4 }}>
+          <Typography variant="h6" sx={{ mb: 3 }}>
+            {editingId ? 'Edit Schedule' : 'Create New Schedule'}
+          </Typography>
 
-            <TimePicker
-              label="Time"
-              value={time}
-              onChange={setTime}
-              slotProps={{ textField: { fullWidth: true, sx: { mb: 2 } } }}
-              ampm
-            />
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <InputLabel>Days</InputLabel>
+            <Select
+              multiple
+              value={selectedDays}
+              onChange={(e) => setSelectedDays(e.target.value)}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value.slice(0, 3)} size="small" />
+                  ))}
+                </Box>
+              )}
+            >
+              {DAYS.map((day) => (
+                <MenuItem key={day} value={day}>
+                  {day}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-            <Button variant="contained" color="success" onClick={addSchedule} fullWidth>
-              Add Schedule
+          <TimePicker
+            label="Feeding Time"
+            value={time}
+            onChange={setTime}
+            ampm
+            sx={{ mb: 3 }}
+            fullWidth  // Made full width to match days
+            renderInput={(params) => <TextField {...params} fullWidth />}
+          />
+
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<AddIcon />}
+              onClick={handleAddOrUpdate}
+              fullWidth
+            >
+              {editingId ? 'Update' : 'Add'} Schedule
             </Button>
-          </Paper>
+            {editingId && (
+              <Button variant="outlined" onClick={resetForm}>
+                Cancel
+              </Button>
+            )}
+          </Box>
+        </Paper>
 
-          {/* List */}
-          <Paper sx={{ p: 3, flex: '1 1 500px', minWidth: 300 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Active Schedules ({Object.keys(schedules).length})
-            </Typography>
-            {Object.keys(schedules).length === 0 ? (
-              <Alert severity="info">No schedules yet</Alert>
-            ) : (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {Object.entries(schedules)
-                  .sort(([,a], [,b]) => b.createdAt - a.createdAt)
-                  .map(([id, s]) => (
-                    <Paper key={id} variant="outlined" sx={{ p: 2 }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Box>
-                          <Typography fontWeight={600}>{s.days.join(', ')}</Typography>
-                          <Typography variant="h5" color="primary">{s.time}</Typography>
-                          <Typography variant="caption" color={s.enabled ? 'success.main' : 'text.secondary'}>
-                            {s.enabled ? 'Active' : 'Disabled'}
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Button size="small" onClick={() => toggleSchedule(id, s.enabled)} sx={{ mr: 1 }}>
-                            {s.enabled ? 'Disable' : 'Enable'}
-                          </Button>
-                          <Button size="small" color="error" onClick={() => deleteSchedule(id)}>
-                            Delete
-                          </Button>
+        {/* Active Schedules – scrollable + full width */}
+        <Paper sx={{ p: 4, mb: 4 }}>
+          <Typography variant="h6" sx={{ mb: 3 }}>
+            Active Schedules
+          </Typography>
+
+          {Object.keys(schedules).length === 0 ? (
+            <Alert severity="info">No schedules yet. Create one above!</Alert>
+          ) : (
+            <Box 
+              sx={{ 
+                maxHeight: 400, 
+                overflowY: 'auto', 
+                pr: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2
+              }}
+            >
+              {Object.entries(schedules)
+                .sort(([, a], [, b]) => b.createdAt - a.createdAt)
+                .map(([id, s]) => (
+                  <Paper 
+                    key={id} 
+                    variant="outlined" 
+                    sx={{ 
+                      p: 3, 
+                      borderRadius: 3,
+                      bgcolor: id === editingId ? 'action.selected' : 'background.paper',
+                      boxShadow: id === editingId ? '0 0 0 2px #1976d2' : 'none'
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box>
+                        <Typography variant="h6" fontWeight={600}>
+                          {s.time}
+                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 1, mt: 1, flexWrap: 'wrap' }}>
+                          {s.days.map(day => (
+                            <Chip key={day} label={day} size="small" color="primary" variant="outlined" />
+                          ))}
                         </Box>
                       </Box>
-                    </Paper>
-                  ))}
-              </Box>
-            )}
-          </Paper>
-        </div>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Switch
+                          checked={s.enabled}
+                          onChange={() => handleToggleEnabled(id, s.enabled)}
+                          color="primary"
+                        />
+                        <Tooltip title="Edit">
+                          <IconButton onClick={() => handleEdit(id, s)}>
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton color="error" onClick={() => handleDelete(id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </Box>
+                  </Paper>
+                ))}
+            </Box>
+          )}
+        </Paper>
 
-        {/* Log — now from Firebase */}
-        <Paper sx={{ p: 2 }}>
-          <Typography variant="h6" sx={{ mb: 1 }}>Schedule Log</Typography>
+        {/* Schedule Log */}
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Schedule Log
+          </Typography>
           <TextField
             multiline
-            rows={6}
+            rows={10}
             fullWidth
             value={logText}
             InputProps={{ readOnly: true }}
@@ -208,7 +292,7 @@ export default function Schedules() {
             }}
           />
         </Paper>
-      </div>
+      </Box>
     </LocalizationProvider>
   );
 }

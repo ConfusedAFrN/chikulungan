@@ -1,20 +1,123 @@
-import React, { useState, useEffect } from 'react';
-import { Paper, Typography, Button, TextField, Box } from '@mui/material';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line, Legend } from 'recharts';
-import { Gauge } from '@mui/x-charts/Gauge';
-import { publishFeed } from './mqtt';
-import { db, ref, onValue, push } from './firebase';
-import { format } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import {
+  Paper,
+  Typography,
+  Button,
+  TextField,
+  Box,
+  Grid,
+  CircularProgress,
+} from "@mui/material";
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  LineChart,
+  Line,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { Gauge } from "@mui/x-charts/Gauge";
+import { publishFeed } from "./mqtt";
+import { db, ref, onValue, push, set, get } from "./firebase";
+import { format, differenceInMinutes } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import { logEvent } from "./logger"; // If logger.js is used for events
+
+import { toast, setGlobalLoading } from "./utils/feedback";
 
 export default function Dashboard() {
-  const [sensors, setSensors] = useState({ temp: 0, humidity: 0, feed: 0 });
-  const [setLog] = useState('System ready...\n');
+  const [sensors, setSensors] = useState({
+    temp: 0,
+    humidity: 0,
+    feed: 0,
+    water: 0,
+  });
+  const [setLog] = useState("System ready...\n");
   const [online, setOnline] = useState(false);
   const [lastMqttTime, setLastMqttTime] = useState(0);
   const [history, setHistory] = useState([]);
   const [uptimeData, setUptimeData] = useState([]); // Now dynamic
   const [incidents, setIncidents] = useState(0);
+  const [lastAlertTimes, setLastAlertTimes] = useState({}); // e.g., { 'Low Feed': timestamp }
+
+  const checkAndAlert = async () => {
+    // Make async for await
+    const now = Date.now();
+    const alertTypes = [
+      {
+        condition: sensors.feed < alertThresholds.lowFeed,
+        type: "Low Feed",
+        message: `Feed level is low (${sensors.feed}%)`,
+        severity: "critical",
+      },
+      {
+        condition: sensors.temp > alertThresholds.highTemp,
+        type: "High Temperature",
+        message: `Temperature too high (${sensors.temp}°C)`,
+        severity: "critical",
+      },
+      {
+        condition: sensors.temp < alertThresholds.lowTemp,
+        type: "Low Temperature",
+        message: `Temperature too low (${sensors.temp}°C)`,
+        severity: "warning",
+      },
+      {
+        condition: sensors.humidity > alertThresholds.highHumidity,
+        type: "High Humidity",
+        message: `Humidity too high (${sensors.humidity}%)`,
+        severity: "warning",
+      },
+      {
+        condition: sensors.humidity < alertThresholds.lowHumidity,
+        type: "Low Humidity",
+        message: `Humidity too low (${sensors.humidity}%)`,
+        severity: "warning",
+      },
+    ];
+
+    for (const { condition, type, message, severity } of alertTypes) {
+      if (!condition) continue;
+
+      const lastTime = lastAlertTimes[type] || 0;
+      if (now - lastTime < 60000) continue; // Debounce: Skip if <1min
+
+      // Check for duplicate unresolved alert
+      const alertsRef = ref(db, "alerts");
+      const snapshot = await get(alertsRef);
+      const existing = snapshot.val();
+      const hasDuplicate =
+        existing &&
+        Object.values(existing).some(
+          (alert) =>
+            alert.type === type &&
+            !alert.resolved &&
+            now - Number(alert.timestamp) < 3600000 // Same type, unresolved, <1h
+        );
+      if (hasDuplicate) continue;
+
+      // Push new alert
+      const newAlertRef = push(ref(db, "alerts"));
+      const newAlert = {
+        type,
+        message,
+        severity,
+        timestamp: now,
+        resolved: false,
+      };
+      await set(newAlertRef, newAlert);
+
+      // Update debounce and log
+      setLastAlertTimes((prev) => ({ ...prev, [type]: now }));
+      if (logEvent) logEvent(`Alert triggered: ${type} - ${message}`, "web"); // Optional if logger exists
+      console.log(`Alert triggered: ${type}`);
+    }
+  };
 
   // === MQTT Listener ===
   useEffect(() => {
@@ -22,283 +125,583 @@ export default function Dashboard() {
       const { topic, payload } = e.detail;
       const now = Date.now();
 
-      if (topic === 'chickulungan/sensor/temp') {
+      if (topic === "chickulungan/sensor/temp") {
         const val = parseFloat(payload) || 0;
-        setSensors(prev => ({ ...prev, temp: val }));
-        addToHistory('temp', val, now);
+        setSensors((prev) => ({ ...prev, temp: val }));
+        addToHistory("temp", val, now);
+        checkAndAlert();
       }
-      if (topic === 'chickulungan/sensor/humidity') {
+      if (topic === "chickulungan/sensor/humidity") {
         const val = parseFloat(payload) || 0;
-        setSensors(prev => ({ ...prev, humidity: val }));
-        addToHistory('humidity', val, now);
+        setSensors((prev) => ({ ...prev, humidity: val }));
+        addToHistory("humidity", val, now);
+        checkAndAlert();
       }
-      if (topic === 'chickulungan/sensor/feed') {
-        setSensors(prev => ({ ...prev, feed: parseInt(payload) || 0 }));
+      if (topic === "chickulungan/sensor/feed") {
+        setSensors((prev) => ({ ...prev, feed: parseInt(payload) || 0 }));
+        checkAndAlert();
       }
-      if (topic === 'chickulungan/log') {
-        setLog(prev => prev + payload + '\n');
+      if (topic === "chickulungan/log") {
+        setLog((prev) => prev + payload + "\n");
       }
-      if (topic === 'chickulungan/status') {
-        setOnline(payload === 'online');
+      if (topic === "chickulungan/status") {
+        setOnline(payload === "online");
+      }
+      if (topic === "chickulungan/sensor/water") {
+        setSensors((prev) => ({ ...prev, water: parseInt(payload) || 0 }));
       }
 
       setLastMqttTime(now);
     };
 
-    window.addEventListener('mqtt-message', handler);
-    return () => window.removeEventListener('mqtt-message', handler);
-  },);
-  
+    window.addEventListener("mqtt-message", handler);
+    return () => window.removeEventListener("mqtt-message", handler);
+  });
 
   // Helper to add to live chart (improved with labels)
   const addToHistory = (type, value, now) => {
-    const time = new Date(now).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    setHistory(prev => {
-      const updated = prev.filter(p => p.time !== time);
-      updated.push({ time, [type]: value });
+    const time = new Date(now).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    setHistory((prev) => {
+      const existingIdx = prev.findIndex((p) => p.time === time);
+      let updated = [...prev];
+      if (existingIdx >= 0) {
+        updated[existingIdx] = { ...updated[existingIdx], [type]: value };
+      } else {
+        const last = prev[prev.length - 1] || {
+          temp: sensors.temp,
+          humidity: sensors.humidity,
+        };
+        updated.push({
+          time,
+          temp: type === "temp" ? value : last.temp,
+          humidity: type === "humidity" ? value : last.humidity,
+        });
+      }
       return updated.slice(-10);
     });
   };
 
   const [alertThresholds] = useState({
-    lowFeed: 20,       // Feed < 20%
-    highTemp: 35,      // Temp > 35°C
-    lowTemp: 18,       // Temp < 18°C
-    highHumidity: 80,  // Humidity > 80%
-    lowHumidity: 40,   // Humidity < 40%
+    lowFeed: 20, // Feed < 20%
+    highTemp: 35, // Temp > 35°C
+    lowTemp: 18, // Temp < 18°C
+    highHumidity: 80, // Humidity > 80%
+    lowHumidity: 40, // Humidity < 40%
   });
-
-
-  useEffect(() => {
-  const checkAndAlert = () => {
-    if (sensors.feed < alertThresholds.lowFeed) {
-      push(ref(db, 'alerts'), {
-        type: 'Low Feed',
-        message: `Feed level is low (${sensors.feed}%)`,
-        severity: 'critical',
-        timestamp: Date.now(),
-        resolved: false,
-      });
-    }
-    if (sensors.temp > alertThresholds.highTemp) {
-      push(ref(db, 'alerts'), {
-        type: 'High Temperature',
-        message: `Temperature is high (${sensors.temp}°C)`,
-        severity: 'warning',
-        timestamp: Date.now(),
-        resolved: false,
-      });
-    }
-    if (sensors.temp < alertThresholds.lowTemp) {
-      push(ref(db, 'alerts'), {
-        type: 'Low Temperature',
-        message: `Temperature is low (${sensors.temp}°C)`,
-        severity: 'warning',
-        timestamp: Date.now(),
-        resolved: false,
-      });
-    }
-    if (sensors.humidity > alertThresholds.highHumidity) {
-      push(ref(db, 'alerts'), {
-        type: 'High Humidity',
-        message: `Humidity is high (${sensors.humidity}%)`,
-        severity: 'warning',
-        timestamp: Date.now(),
-        resolved: false,
-      });
-    }
-    if (sensors.humidity < alertThresholds.lowHumidity) {
-      push(ref(db, 'alerts'), {
-        type: 'Low Humidity',
-        message: `Humidity is low (${sensors.humidity}%)`,
-        severity: 'warning',
-        timestamp: Date.now(),
-        resolved: false,
-      });
-    }
-  };
-
-  if (online) checkAndAlert();  // Only check when live (MQTT active)
-}, [sensors, online, alertThresholds.lowFeed, alertThresholds.highTemp, alertThresholds.lowTemp, alertThresholds.highHumidity, alertThresholds.lowHumidity]);  // Run on sensor change or status change
 
   // === Firebase Fallback ===
   useEffect(() => {
     const interval = setInterval(() => {
       if (Date.now() - lastMqttTime > 15000) {
-        const backupRef = ref(db, 'sensors');
-        onValue(backupRef, (snap) => {
-          const data = snap.val();
-          if (data) {
-            setSensors({
-              temp: data.temperature || 0,
-              humidity: data.humidity || 0,
-              feed: data.feedLevel || 0,
-            });
-            setOnline(false);
-          }
-        }, { onlyOnce: true });
+        const backupRef = ref(db, "sensors");
+        onValue(
+          backupRef,
+          (snap) => {
+            const data = snap.val();
+            if (data) {
+              setSensors({
+                temp: data.temperature || 0,
+                humidity: data.humidity || 0,
+                feed: data.feedLevel || 0,
+              });
+              setOnline(false);
+            }
+          },
+          { onlyOnce: true }
+        );
       }
     }, 5000);
     return () => clearInterval(interval);
   }, [lastMqttTime]);
 
   // === Load Real Uptime & Incidents from Firebase ===
+  //wait
   useEffect(() => {
-    // Uptime from status
-    onValue(ref(db, 'status/lastSeen'), (snap) => {
-      const lastSeen = snap.val();
-      if (lastSeen) {
-        const diff = Date.now() - lastSeen;
-        const d = Math.floor(diff / 86400000);
-        const h = Math.floor((diff % 86400000) / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        setUptimeData([
-          { day: 'Today', uptime: m > 0 ? 100 : 0 },
-          { day: 'Yesterday', uptime: h > 24 ? 100 : 0 },
-          { day: '2 Days Ago', uptime: d > 2 ? 100 : 0 },
-        ]);
+    const alertsRef = ref(db, "alerts");
+    const unsub = onValue(alertsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const unresolvedCount = Object.values(data).filter(
+          (alert) => !alert.resolved
+        ).length;
+        setIncidents(unresolvedCount);
+      } else {
+        setIncidents(0);
       }
     });
 
-    // Incidents from alerts
-    onValue(ref(db, 'alerts'), (snap) => {
-      const data = snap.val();
-      setIncidents(Object.keys(data || {}).length);
-    });
+    return () => unsub();
   }, []);
 
+  useEffect(() => {
+    const logsRef = ref(db, "logs");
+    const unsub = onValue(logsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
 
-// Isolate for now
+      const logArray = Object.values(data)
+        .map((log) => ({ ...log, timestamp: Number(log.timestamp) })) // Ensure number
+        .sort((a, b) => a.timestamp - b.timestamp); // Ascending for gaps
+
+      // Group by day and calculate uptime
+      const dailyUptime = {};
+      logArray.forEach((log, idx) => {
+        const day = format(new Date(log.timestamp), "MMM dd"); // e.g., "Sep 23"
+        if (!dailyUptime[day])
+          dailyUptime[day] = { activeMinutes: 0, lastTs: log.timestamp };
+
+        if (idx > 0) {
+          const prevTs = logArray[idx - 1].timestamp;
+          const gap = differenceInMinutes(
+            new Date(log.timestamp),
+            new Date(prevTs)
+          );
+          if (gap <= 10) {
+            // Assume active if logs within 10min
+            dailyUptime[day].activeMinutes += gap;
+          }
+        }
+        dailyUptime[day].lastTs = log.timestamp;
+      });
+
+      // Normalize to % (assume 1440 min/day, cap at 100%)
+      const uptimeDataFormatted = Object.entries(dailyUptime)
+        .map(([day, { activeMinutes }]) => ({
+          day,
+          uptime: Math.min(100, (activeMinutes / 1440) * 100).toFixed(1),
+        }))
+        .slice(-7); // Last 7 days for graph
+
+      setUptimeData(uptimeDataFormatted);
+    });
+
+    return () => unsub();
+  }, []);
+
+  // Isolate for now
   const feedNow = () => {
     publishFeed();
-    push(ref(db, 'logs'), );
+    push(ref(db, "logs"));
+    toast("Feed activated successfully!", "success");
+    setGlobalLoading(true);
   };
 
   const navigate = useNavigate();
 
   const setSched = () => {
-    navigate('/schedules');
+    navigate("/schedules");
   };
 
-//
-
+  //
 
   return (
-    <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
-      {/* Connection Status */}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: -2 }}>
-        {online ? 
-          <Typography variant="caption" color="success.main" sx={{ fontWeight: 600 }}>● Online (Live)</Typography> :
-          <Typography variant="caption" color="warning.main" sx={{ fontWeight: 600 }}>● Offline (Fallback)</Typography>
-        }
+    <Box sx={{ p: { xs: 2, sm: 3 } }}>
+      {/* Online Status Indicator */}
+      <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 2 }}>
+        <Box
+          sx={{
+            width: 12,
+            height: 12,
+            borderRadius: "50%",
+            backgroundColor: online ? "#4caf50" : "#f44336",
+            boxShadow: online ? "0 0 10px #4caf50" : "0 0 10px #f44336",
+            animation: online ? "pulse 2s infinite" : "none",
+          }}
+        />
+        <Typography variant="h6" fontWeight={600}>
+          {online ? "System Online" : "Disconnected"}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Last update:{" "}
+          {lastMqttTime ? format(lastMqttTime, "HH:mm:ss") : "Never"}
+        </Typography>
       </Box>
 
-      {/* === ROW 1: Gauges === */}
-      <Paper sx={{ p: 2 }}>
-        <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>Current Sensors</Typography>
-        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-          {[
-            { label: 'Temp', value: sensors.temp, max: 50, unit: '°C' },
-            { label: 'Humidity', value: sensors.humidity, max: 100, unit: '%' },
-            { label: 'Feed', value: sensors.feed, max: 100, unit: '%' },
-          ].map((item) => (
-            <Box key={item.label} sx={{ textAlign: 'center', minWidth: 150 }}>
-              <Gauge width={130} height={130} value={item.value} valueMin={0} valueMax={item.max} />
-              <Typography variant="body1" sx={{ mt: 1, fontWeight: 500 }}>
-                {item.label}: {item.value}{item.unit}
+      {/* Sensor Cards Grid */}
+      <Box
+        sx={{
+          width: "100%",
+          px: { xs: 2, sm: 3, md: 4 }, // Responsive horizontal padding
+        }}
+      >
+        <Grid container spacing={5}>
+          {/* Temperature */}
+          <Grid item xs={12} sm={6} lg={3}>
+            <Paper
+              sx={{
+                p: 3,
+                textAlign: "center",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                gutterBottom
+              >
+                Temperature
               </Typography>
-            </Box>
-          ))}
-        </div>
-      </Paper>
+              <Gauge
+                value={sensors.temp}
+                startAngle={-110}
+                endAngle={110}
+                height={180}
+                sx={{ mb: 2 }}
+                valueFormatter={(v) => `${v.toFixed(1)}°C`} // ← fixed: lowercase + function
+              />
+              <Typography
+                variant="h4"
+                fontWeight={700}
+                color={sensors.temp > 35 ? "error" : "success"}
+              >
+                {sensors.temp.toFixed(1)}°C
+              </Typography>
+            </Paper>
+          </Grid>
 
-      {/* === ROW 2: Uptime + Live Trends === */}
-      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', flex: 1 }}>
-        <Paper sx={{ p: 2, flex: '0 0 360px', minWidth: 300, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <Box>
-            <Typography variant="h6" sx={{ mb: 1 }}>Uptime</Typography>
-            <BarChart width={320} height={140} data={uptimeData}>
-              <CartesianGrid strokeDasharray="2 2" stroke="#333" />
-              <XAxis dataKey="day" tick={{ fontSize: 11 }} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
-              <Bar dataKey="uptime" fill={e => e.uptime ? '#00c853' : '#d32f2f'} />
-            </BarChart>
-            <Typography variant="body2" sx={{ mt: 0.5 }}>Incidents: {incidents}</Typography>
-          </Box>
+          {/* Humidity */}
+          <Grid item xs={12} sm={6} lg={3}>
+            <Paper
+              sx={{
+                p: 3,
+                textAlign: "center",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                gutterBottom
+              >
+                Humidity
+              </Typography>
+              <Gauge
+                value={sensors.humidity}
+                startAngle={-110}
+                endAngle={110}
+                height={180}
+                sx={{ mb: 2 }}
+                valueFormatter={(v) => `${v}%`}
+              />
+              <Typography
+                variant="h4"
+                fontWeight={700}
+                color={sensors.humidity > 80 ? "warning" : "primary"}
+              >
+                {sensors.humidity.toFixed(1)}%
+              </Typography>
+            </Paper>
+          </Grid>
 
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>Controls</Typography>
-            <Button variant="contained" size="small" onClick={feedNow} sx={{ mr: 1, minWidth: 110 }}>
-              FEED NOW
-            </Button>
-            <Button variant="outlined" size="small" onClick={setSched} sx={{ minWidth: 110 }}>
-              SET SCHEDULE
-            </Button>
-          </Box>
-        </Paper>
+          {/* Feed Level */}
+          <Grid item xs={12} sm={12} lg={4}>
+            <Paper
+              sx={{
+                p: 3,
+                textAlign: "center",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                gutterBottom
+              >
+                Feed Level
+              </Typography>
+              <Box sx={{ position: "relative", height: 180, mb: 2 }}>
+                <CircularProgress
+                  variant="determinate"
+                  value={sensors.feed}
+                  size={160}
+                  thickness={8}
+                  sx={{ color: sensors.feed < 20 ? "#f44336" : "#ffb400" }}
+                />
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography variant="h3" fontWeight={700}>
+                    {sensors.feed}%
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography
+                variant="h5"
+                color={sensors.feed < 20 ? "error" : "inherit"}
+              >
+                {sensors.feed < 20 ? "LOW!" : "Adequate"}
+              </Typography>
+            </Paper>
+          </Grid>
+          {/* Water Level */}
+          <Grid item xs={12} sm={6} lg={3}>
+            <Paper
+              sx={{
+                p: 3,
+                textAlign: "center",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                gutterBottom
+              >
+                Water Level
+              </Typography>
+              <Box sx={{ position: "relative", height: 180, mb: 2 }}>
+                <CircularProgress
+                  variant="determinate"
+                  value={sensors.water}
+                  size={160}
+                  thickness={8}
+                  sx={{ color: sensors.water < 20 ? "#f44336" : "#1976d2" }} // Red low, blue normal
+                />
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography variant="h3" fontWeight={700}>
+                    {sensors.water}%
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography
+                variant="h5"
+                color={sensors.water < 20 ? "error" : "inherit"}
+              >
+                {sensors.water < 20 ? "LOW!" : "Adequate"}
+              </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
 
-        <Paper sx={{ p: 2, flex: '1 1 400px', minWidth: 300 }}>
-          <Typography variant="h6" sx={{ mb: 1 }}>Sensor Trends (Live)</Typography>
-          {history.length === 0 ? (
-            <Typography color="textSecondary" sx={{ textAlign: 'center', mt: 8 }}>
-              Waiting for data...
-            </Typography>
-          ) : (
-            <LineChart width={380} height={260} data={history}>
-              <CartesianGrid strokeDasharray="2 2" stroke="#333" />
-              <XAxis dataKey="time" tick={{ fontSize: 12 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip contentStyle={{ backgroundColor: '#161b22', border: '1px solid #333' }} />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Line type="monotone" dataKey="temp" stroke="#ffb400" strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="humidity" stroke="#1976d2" strokeWidth={2} dot={false} />
+      {/* Control Buttons */}
+      <Box
+        sx={{
+          mt: 4,
+          display: "flex",
+          gap: 2,
+          justifyContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <Button variant="contained" size="large" onClick={feedNow}>
+          FEED NOW
+        </Button>
+        <Button variant="outlined" size="large" onClick={setSched}>
+          SET SCHEDULE
+        </Button>
+      </Box>
+
+      {/* Live Trends Chart */}
+      {/* Temperature Trend */}
+      <Paper sx={{ mt: 4, p: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Temperature Trend (Live)
+        </Typography>
+        {history.filter((h) => h.temp != null).length === 0 ? (
+          <Typography color="textSecondary" sx={{ textAlign: "center", py: 4 }}>
+            Waiting for data...
+          </Typography>
+        ) : (
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={history.filter((h) => h.temp != null)}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="time" />
+              <YAxis
+                domain={[0, 50]}
+                label={{
+                  value: "Temp (°C)",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
+              <Tooltip formatter={(v) => `${v.toFixed(1)}°C`} />
+              <Line
+                type="monotone"
+                dataKey="temp"
+                stroke="#ffb400"
+                strokeWidth={3}
+                dot={false}
+              />
             </LineChart>
-          )}
-        </Paper>
-      </div>
-
-      {/* === ROW 3: Terminal Log === */}
-      {/* === ROW 3: Terminal Log === */}
-      <Paper sx={{ p: 2, mt: 0 }}>
-        <Typography variant="h6" sx={{ mb: 1 }}>Terminal Log</Typography>
-          <LiveLog />
+          </ResponsiveContainer>
+        )}
       </Paper>
-    </div>
+
+      {/* Humidity Trend */}
+      <Paper sx={{ mt: 4, p: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Humidity Trend (Live)
+        </Typography>
+        {history.filter((h) => h.humidity != null).length === 0 ? (
+          <Typography color="textSecondary" sx={{ textAlign: "center", py: 4 }}>
+            Waiting for data...
+          </Typography>
+        ) : (
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={history.filter((h) => h.humidity != null)}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="time" />
+              <YAxis
+                domain={[0, 100]}
+                label={{
+                  value: "Humidity (%)",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
+              <Tooltip formatter={(v) => `${v.toFixed(1)}%`} />
+              <Line
+                type="monotone"
+                dataKey="humidity"
+                stroke="#1976d2"
+                strokeWidth={3}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+      </Paper>
+
+      {/* Uptime & Incidents */}
+      <Paper sx={{ mt: 4, p: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
+          <Typography variant="h6">System Uptime (Last 7 Days)</Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Typography variant="h6" color="error">
+              Incidents: {incidents}
+            </Typography>
+            {incidents > 0 && (
+              <Box
+                sx={{
+                  width: 12,
+                  height: 12,
+                  borderRadius: "50%",
+                  backgroundColor: "#f44336",
+                  animation: "pulse 1.5s infinite",
+                }}
+              />
+            )}
+          </Box>
+        </Box>
+
+        {uptimeData.length === 0 ? (
+          <Typography color="textSecondary" sx={{ textAlign: "center", py: 4 }}>
+            Collecting uptime data...
+          </Typography>
+        ) : (
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={uptimeData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip
+                formatter={(value) =>
+                  value != null ? `${Number(value).toFixed(1)}%` : "No data"
+                }
+                contentStyle={{
+                  backgroundColor: "#003783ff",
+                  border: "1px solid #d9d9d9ff",
+                }}
+              />
+              <Bar dataKey="uptime">
+                {uptimeData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={
+                      entry.uptime >= 98
+                        ? "#4caf50"
+                        : entry.uptime >= 90
+                        ? "#ff9800"
+                        : "#f44336"
+                    }
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+      </Paper>
+
+      {/* Terminal Log */}
+      <Paper sx={{ mt: 4, p: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Terminal Log
+        </Typography>
+        <LiveLog />
+      </Paper>
+    </Box>
   );
-}
 
-// Helper component for log (shared)
-function LiveLog() {
-  const [log, setLog] = useState('');
+  // Helper component for log (shared)
+  function LiveLog() {
+    const [log, setLog] = useState("");
 
-  useEffect(() => {
-    const unsub = onValue(ref(db, 'logs'), (snap) => {
-      const data = snap.val();
-      if (data) {
-        const arr = Object.values(data)
-          .sort((a, b) => b.timestamp - a.timestamp)
-          .slice(0, 30)
-          .map(e => `[${format(e.timestamp, 'HH:mm:ss')}] ${e.message}`)
-          .join('\n');
-        setLog(arr);
-      }
-    });
-    return () => unsub();
-  }, []);
+    useEffect(() => {
+      const unsub = onValue(ref(db, "logs"), (snap) => {
+        const data = snap.val();
+        if (data) {
+          const arr = Object.values(data)
+            .sort((a, b) => b.timestamp - a.timestamp)
+            .slice(0, 30)
+            .map((e) => `[${format(e.timestamp, "HH:mm:ss")}] ${e.message}`)
+            .join("\n");
+          setLog(arr);
+        }
+      });
+      return () => unsub();
+    }, []);
 
-  return (
-    <TextField
-      multiline
-      rows={6}
-      fullWidth
-      value={log || 'No logs yet'}
-      InputProps={{ readOnly: true }}
-      sx={{
-        backgroundColor: '#000',
-        color: '#0f0',
-        fontFamily: 'monospace',
-        fontSize: '0.875rem',
-      }}
-    />
-  );
+    return (
+      <TextField
+        multiline
+        rows={6}
+        fullWidth
+        value={log || "No logs yet"}
+        InputProps={{ readOnly: true }}
+        sx={{
+          backgroundColor: "#000",
+          color: "#0f0",
+          fontFamily: "monospace",
+          fontSize: "0.875rem",
+        }}
+      />
+    );
+  }
 }

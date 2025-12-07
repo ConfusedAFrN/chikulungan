@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { format } from 'date-fns';
-import { db, ref, onValue } from './firebase';
+import { db, ref, onValue, set } from './firebase';
 
 export default function Alerts() {
   const [alerts, setAlerts] = useState([]);
@@ -26,8 +26,7 @@ export default function Alerts() {
           .map(([id, alert]) => ({
             id,
             ...alert,
-            // Ensure timestamp is always a number
-            timestamp: Number(alert.timestamp) || Date.now(),
+            timestamp: Number(alert.timestamp) || Date.now(),  // Fallback to now if invalid
           }))
           .sort((a, b) => b.timestamp - a.timestamp);
 
@@ -42,13 +41,32 @@ export default function Alerts() {
   }, []);
 
   const resolveAlert = (id) => {
-    // We'll add Firebase write later — for now just mark locally
-    setAlerts(prev => prev.map(a => a.id === id ? { ...a, resolved: true } : a));
-  };
+  const alertRef = ref(db, `alerts/${id}`);
+  set(alertRef, { ...alerts.find(a => a.id === id), resolved: true })
+    .then(() => {
+      // Local update after successful DB write
+      setAlerts(prev => prev.map(a => a.id === id ? { ...a, resolved: true } : a));
+      console.log(`Alert ${id} resolved in Firebase`);
+    })
+    .catch((error) => {
+      console.error('Error resolving alert:', error);
+      alert('Failed to resolve alert – check console');
+    });
+};
 
   const resolveAll = () => {
-    setAlerts(prev => prev.map(a => ({ ...a, resolved: true })));
-  };
+  const unresolved = alerts.filter(a => !a.resolved);
+  unresolved.forEach((alert) => {
+    const alertRef = ref(db, `alerts/${alert.id}`);
+    set(alertRef, { ...alert, resolved: true })
+      .then(() => {
+        setAlerts(prev => prev.map(a => a.id === alert.id ? { ...a, resolved: true } : a));
+      })
+      .catch((error) => {
+        console.error('Error resolving all alerts:', error);
+      });
+  });
+};
 
   const getSeverityColor = (severity) => {
     return severity === 'critical' ? '#d32f2f' : '#ed6c02';
