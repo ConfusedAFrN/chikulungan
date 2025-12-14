@@ -12,11 +12,13 @@ import {
 } from '@mui/material';
 import { format } from 'date-fns';
 import { db, ref, onValue, push, serverTimestamp, set } from './firebase';
+import { useTheme } from '@mui/material/styles';
 
 export default function Logs() {
   const [logs, setLogs] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const theme = useTheme();
 
   // Real-time listener from Firebase
   useEffect(() => {
@@ -65,7 +67,7 @@ export default function Logs() {
     a.href = url;
     a.download = `chickulungan_logs_${format(new Date(), 'yyyy-MM-dd_HHmm')}.txt`;
     a.click();
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url); 
   };
 
   const filteredLogs = logs
@@ -110,7 +112,18 @@ export default function Logs() {
           fullWidth
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          sx={{ mb: 2 }}
+          sx={{
+  backgroundColor: theme.palette.mode === 'dark' ? '#000' : '#f5f5f5',  // Dark: black, Light: light gray
+  color: theme.palette.mode === 'dark' ? '#0f0' : '#000',  // Dark: green, Light: black
+  fontFamily: 'monospace',
+  fontSize: '0.875rem',
+  '& .MuiOutlinedInput-root': {
+    color: theme.palette.mode === 'dark' ? '#0f0' : '#000',
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.divider,
+  },
+}}
         />
 
         {loading ? (
@@ -126,22 +139,35 @@ export default function Logs() {
             value={filteredLogs || 'No matching logs.'}
             InputProps={{ readOnly: true }}
             sx={{
-              flex: 1,
-              backgroundColor: '#000',
-              fontFamily: 'monospace',
-              fontSize: '0.875rem',
-              '& .MuiOutlinedInput-root': {
-                color: '#0f0',
-                height: '100%',
-              },
-              '& .MuiOutlinedInput-input': {
-                overflow: 'auto !important',
-                height: '100% !important',
-              },
-            }}
+  backgroundColor: theme.palette.mode === 'dark' ? '#000' : '#f5f5f5',  // Dark: black, Light: light gray
+  color: theme.palette.mode === 'dark' ? '#0f0' : '#000',  // Dark: green, Light: black
+  fontFamily: 'monospace',
+  fontSize: '0.875rem',
+  '& .MuiOutlinedInput-root': {
+    color: theme.palette.mode === 'dark' ? '#0f0' : '#000',
+    overflowY: 'auto',  // Enable vertical scrolling
+    height: '100%',    // Full height
+    '&::-webkit-scrollbar': {  // Custom scrollbar for aesthetics
+      width: '8px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: theme.palette.mode === 'dark' ? '#333' : '#ddd',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: theme.palette.mode === 'dark' ? '#666' : '#aaa',
+      borderRadius: '4px',
+    },
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.divider,
+  },
+}}
           />
         )}
       </Paper>
     </div>
   );
 }
+
+//overflow: 'auto !important',
+               // height: '100% !important',

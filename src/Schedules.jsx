@@ -11,6 +11,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { format } from 'date-fns';
 import { db, ref, onValue, push, remove, set } from './firebase';
 import { toast } from './utils/feedback';
+import { useTheme } from '@mui/material/styles';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -20,6 +21,7 @@ export default function Schedules() {
   const [time, setTime] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [logText, setLogText] = useState('Schedule system ready...\n');
+  const theme = useTheme();
 
   // Load schedules
   useEffect(() => {
@@ -206,7 +208,7 @@ export default function Schedules() {
         </Paper>
 
         {/* Active Schedules – scrollable + full width */}
-        <Paper sx={{ p: 4, mb: 4 }}>
+        <Paper sx={{ p: 4, mb: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h6" sx={{ mb: 3 }}>
             Active Schedules
           </Typography>
@@ -215,15 +217,16 @@ export default function Schedules() {
             <Alert severity="info">No schedules yet. Create one above!</Alert>
           ) : (
             <Box 
-              sx={{ 
-                maxHeight: 400, 
-                overflowY: 'auto', 
-                pr: 2,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2
-              }}
-            >
+  sx={{ 
+    height: '100%', 
+    overflowY: 'auto', 
+    px: 2,  // Add left/right padding for symmetry
+    pr: 3,  // Slightly more right for scrollbar if needed
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2
+  }}
+>
               {Object.entries(schedules)
                 .sort(([, a], [, b]) => b.createdAt - a.createdAt)
                 .map(([id, s]) => (
@@ -236,7 +239,7 @@ export default function Schedules() {
                       bgcolor: id === editingId ? 'action.selected' : 'background.paper',
                       boxShadow: id === editingId ? '0 0 0 2px #1976d2' : 'none'
                     }}
-                  >
+                    >
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Box>
                         <Typography variant="h6" fontWeight={600}>
@@ -284,12 +287,17 @@ export default function Schedules() {
             value={logText}
             InputProps={{ readOnly: true }}
             sx={{
-              backgroundColor: '#000',
-              color: '#0f0',
-              fontFamily: 'monospace',
-              fontSize: '0.875rem',
-              '& .MuiOutlinedInput-root': { color: '#0f0' },
-            }}
+  backgroundColor: theme.palette.mode === 'dark' ? '#000' : '#f5f5f5',  // Dark: black, Light: light gray
+  color: theme.palette.mode === 'dark' ? '#0f0' : '#000',  // Dark: green, Light: black
+  fontFamily: 'monospace',
+  fontSize: '0.875rem',
+  '& .MuiOutlinedInput-root': {
+    color: theme.palette.mode === 'dark' ? '#0f0' : '#000',
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.divider,
+  },
+}}
           />
         </Paper>
       </Box>

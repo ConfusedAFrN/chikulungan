@@ -22,6 +22,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Gauge } from "@mui/x-charts/Gauge";
+import { useTheme } from '@mui/material/styles';
 import { publishFeed } from "./mqtt";
 import { db, ref, onValue, push, set, get } from "./firebase";
 import { format, differenceInMinutes } from "date-fns";
@@ -44,6 +45,7 @@ export default function Dashboard() {
   const [uptimeData, setUptimeData] = useState([]); // Now dynamic
   const [incidents, setIncidents] = useState(0);
   const [lastAlertTimes, setLastAlertTimes] = useState({}); // e.g., { 'Low Feed': timestamp }
+  const theme = useTheme();  // Gets current theme (dark/light)
 
   const checkAndAlert = async () => {
     // Make async for await
@@ -523,7 +525,7 @@ export default function Dashboard() {
 
       {/* Live Trends Chart */}
       {/* Temperature Trend */}
-      <Paper sx={{ mt: 4, p: 3 }}>
+       <Paper sx={{ mt: 4, p: 3 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>
           Temperature Trend (Live)
         </Typography>
@@ -632,14 +634,18 @@ export default function Dashboard() {
               <XAxis dataKey="day" />
               <YAxis domain={[0, 100]} />
               <Tooltip
-                formatter={(value) =>
-                  value != null ? `${Number(value).toFixed(1)}%` : "No data"
-                }
-                contentStyle={{
-                  backgroundColor: "#003783ff",
-                  border: "1px solid #d9d9d9ff",
-                }}
-              />
+  contentStyle={{
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.primary,
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: theme.shape.borderRadius,
+    padding: '8px 12px',
+    boxShadow: theme.shadows[4],
+  }}
+  itemStyle={{ color: theme.palette.text.primary }}  // For list items
+  labelStyle={{ color: theme.palette.text.secondary }}  // For date labels
+  //formatter={(v) => `${v.toFixed(1)}°C`}  // Adjust per chart
+/>
               <Bar dataKey="uptime">
                 {uptimeData.map((entry, index) => (
                   <Cell
@@ -696,11 +702,17 @@ export default function Dashboard() {
         value={log || "No logs yet"}
         InputProps={{ readOnly: true }}
         sx={{
-          backgroundColor: "#000",
-          color: "#0f0",
-          fontFamily: "monospace",
-          fontSize: "0.875rem",
-        }}
+  backgroundColor: theme.palette.mode === 'dark' ? '#000' : '#f5f5f5',  // Dark: black, Light: light gray
+  color: theme.palette.mode === 'dark' ? '#0f0' : '#000',  // Dark: green, Light: black
+  fontFamily: 'monospace',
+  fontSize: '0.875rem',
+  '& .MuiOutlinedInput-root': {
+    color: theme.palette.mode === 'dark' ? '#0f0' : '#000',
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.divider,
+  },
+}}
       />
     );
   }

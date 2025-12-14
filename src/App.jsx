@@ -44,6 +44,7 @@ import Dashboard from "./Dashboard";
 import Schedules from "./Schedules";
 import Alerts from "./Alerts";
 import Logs from "./Logs";
+import History from "./History";
 
 const fullDrawerWidth = 260;
 const miniDrawerWidth = 56;
@@ -55,6 +56,21 @@ const menu = [
   { text: "Logs", icon: <DescriptionIcon />, path: "/logs" },
   { text: 'History', icon: <HistoryIcon />, path: "/history" },
 ];
+
+const getTooltipText = (text) => {
+  switch (text) {
+    case 'Dashboard':
+      return 'Dashboard';
+    case 'Schedules':
+      return 'Schedule';
+    case 'Alerts':
+      return 'Alerts';
+    case 'Logs':
+      return 'Logs';
+    default:
+      return text;  // Fallback
+  }
+};
 
 function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -120,42 +136,46 @@ function Layout() {
       <List sx={{ px: collapsed ? 0 : 2 }}>
         {menu.map((item) => (
           <ListItem
-            key={item.text}
-            button
-            component={Link}
-            to={item.path}
-            selected={location.pathname === item.path}
-            onClick={() => setMobileOpen(false)}
-            sx={{
-              justifyContent: collapsed ? "center" : "flex-start",
-              px: collapsed ? 1.5 : 2,
-              borderRadius: 2,
-              mb: 0.5,
-              "&.Mui-selected": {
-                backgroundColor: darkMode ? "#1976d2" : "#e3f2fd",
-                fontWeight: 600,
-                "& .MuiListItemIcon-root": { color: "inherit" },
-              },
-              "&:hover": {
-                backgroundColor: darkMode
-                  ? "rgba(25, 118, 210, 0.2)"
-                  : "rgba(25, 118, 210, 0.08)",
-              },
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                color:
-                  location.pathname === item.path
-                    ? "inherit"
-                    : "text.secondary",
-                minWidth: collapsed ? "auto" : 40,
-              }}
-            >
-              {item.icon}
-            </ListItemIcon>
-            {!collapsed && <ListItemText primary={item.text} sx={{ ml: 2 }} />}
-          </ListItem>
+  key={item.text}
+  button
+  component={Link}
+  to={item.path}
+  selected={location.pathname === item.path}
+  onClick={() => setMobileOpen(false)}
+  sx={{
+    justifyContent: collapsed ? 'center' : 'flex-start',
+    px: collapsed ? 1.5 : 2,
+    borderRadius: 2,
+    mb: 0.5,
+    '&.Mui-selected': {
+      backgroundColor: darkMode ? '#1976d2' : '#e3f2fd',
+      fontWeight: 600,
+      '& .MuiListItemIcon-root': { color: 'inherit' },
+    },
+    '&:hover': {
+      backgroundColor: darkMode ? 'rgba(25, 118, 210, 0.2)' : 'rgba(25, 118, 210, 0.08)',
+    },
+  }}
+>
+  <Tooltip
+    title={getTooltipText(item.text)}  // Dynamic based on item
+    placement="right"  // Shows to the right for sidebar
+    arrow
+    enterDelay={500}  // Slight delay to avoid flicker
+  >
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <ListItemIcon
+        sx={{
+          color: location.pathname === item.path ? 'inherit' : 'text.secondary',
+          minWidth: collapsed ? 'auto' : 40,
+        }}
+      >
+        {item.icon}
+      </ListItemIcon>
+      {!collapsed && <ListItemText primary={item.text} sx={{ ml: 2 }} />}
+    </Box>
+  </Tooltip>
+</ListItem>
         ))}
       </List>
     </>
@@ -181,7 +201,8 @@ function Layout() {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": { width: fullDrawerWidth },
+            "& .MuiDrawer-paper": { width: fullDrawerWidth , touchAction: 'none'},
+            
           }}
         >
           {drawerContent}
