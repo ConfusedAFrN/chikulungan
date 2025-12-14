@@ -9,7 +9,7 @@ const options = {
 };
 
 // Use EMQX WebSocket (browser-safe, no auth)
-const client = mqtt.connect('ws://broker.emqx.io:8083/mqtt', options);
+const client = mqtt.connect('wss://broker.emqx.io:8084/mqtt', options);
 
 client.on('connect', () => {
   console.log('Web MQTT Connected!'); // ← Check browser console
