@@ -300,7 +300,8 @@ export default function Dashboard() {
   //
 
   return (
-    <Box sx={{ p: { xs: 2, sm: 3 } }}>
+    <Box sx={{ px: { xs: 1.5, sm: 3 }, py: { xs: 2, sm: 3 } }}>
+
       {/* Online Status Indicator */}
       <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 2 }}>
         <Box
@@ -322,14 +323,9 @@ export default function Dashboard() {
         </Typography>
       </Box>
 
-      {/* Sensor Cards Grid */}
-      <Box
-        sx={{
-          width: "100%",
-          px: { xs: 2, sm: 3, md: 4 }, // Responsive horizontal padding
-        }}
-      >
-        <Grid container spacing={5}>
+      
+        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+
           {/* Temperature */}
           <Grid item xs={12} sm={6} lg={3}>
             <Paper
@@ -392,7 +388,6 @@ export default function Dashboard() {
                 endAngle={110}
                 height={180}
                 sx={{ mb: 2 }}
-                valueFormatter={(v) => `${v}%`}
               />
               <Typography
                 variant="h4"
@@ -405,7 +400,7 @@ export default function Dashboard() {
           </Grid>
 
           {/* Feed Level */}
-          <Grid item xs={12} sm={12} lg={4}>
+          <Grid item xs={12} sm={6} lg={3}>
             <Paper
               sx={{
                 p: 3,
@@ -503,7 +498,7 @@ export default function Dashboard() {
             </Paper>
           </Grid>
         </Grid>
-      </Box>
+      
 
       {/* Control Buttons */}
       <Box
@@ -534,6 +529,7 @@ export default function Dashboard() {
             Waiting for data...
           </Typography>
         ) : (
+          
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={history.filter((h) => h.temp != null)}>
               <CartesianGrid strokeDasharray="3 3" />

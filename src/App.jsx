@@ -38,8 +38,9 @@ import {
   History as HistoryIcon,
 } from "@mui/icons-material";
 import { format } from "date-fns";
+import { useTheme,useMediaQuery } from "@mui/material";
 
-// Pages
+
 import Dashboard from "./Dashboard";
 import Schedules from "./Schedules";
 import Alerts from "./Alerts";
@@ -54,21 +55,21 @@ const menu = [
   { text: "Schedules", icon: <ScheduleIcon />, path: "/schedules" },
   { text: "Alerts", icon: <NotificationsIcon />, path: "/alerts" },
   { text: "Logs", icon: <DescriptionIcon />, path: "/logs" },
-  { text: 'History', icon: <HistoryIcon />, path: "/history" },
+  { text: "History", icon: <HistoryIcon />, path: "/history" },
 ];
 
 const getTooltipText = (text) => {
   switch (text) {
-    case 'Dashboard':
-      return 'Dashboard';
-    case 'Schedules':
-      return 'Schedule';
-    case 'Alerts':
-      return 'Alerts';
-    case 'Logs':
-      return 'Logs';
+    case "Dashboard":
+      return "Dashboard";
+    case "Schedules":
+      return "Schedule";
+    case "Alerts":
+      return "Alerts";
+    case "Logs":
+      return "Logs";
     default:
-      return text;  // Fallback
+      return text; // Fallback
   }
 };
 
@@ -78,8 +79,14 @@ function Layout() {
   const [collapsed, setCollapsed] = useState(true); // Default to collapsed
   const [clock, setClock] = useState(new Date());
   const location = useLocation();
+  const theme_b = useTheme();
+  const isMobile = useMediaQuery(theme_b.breakpoints.down("sm"));
 
-  const drawerWidth = collapsed ? miniDrawerWidth : fullDrawerWidth;
+  const drawerWidth = isMobile
+    ? fullDrawerWidth
+    : collapsed
+    ? miniDrawerWidth
+    : fullDrawerWidth;
 
   const theme = createTheme({
     palette: {
@@ -109,9 +116,6 @@ function Layout() {
     },
   });
 
-
-  
-
   useEffect(() => {
     const timer = setInterval(() => setClock(new Date()), 1000);
     return () => clearInterval(timer);
@@ -128,54 +132,63 @@ function Layout() {
             ChicKulungan
           </Typography>
         )}
-        <IconButton onClick={() => setCollapsed(!collapsed)}>
-          {collapsed ? <MenuIcon /> : <ChevronLeftIcon />}
-        </IconButton>
+        {!isMobile && (
+          <IconButton onClick={() => setCollapsed(!collapsed)}>
+            {collapsed ? <MenuIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        )}
       </Toolbar>
       {!collapsed && <Divider />}
       <List sx={{ px: collapsed ? 0 : 2 }}>
         {menu.map((item) => (
           <ListItem
-  key={item.text}
-  button
-  component={Link}
-  to={item.path}
-  selected={location.pathname === item.path}
-  onClick={() => setMobileOpen(false)}
-  sx={{
-    justifyContent: collapsed ? 'center' : 'flex-start',
-    px: collapsed ? 1.5 : 2,
-    borderRadius: 2,
-    mb: 0.5,
-    '&.Mui-selected': {
-      backgroundColor: darkMode ? '#1976d2' : '#e3f2fd',
-      fontWeight: 600,
-      '& .MuiListItemIcon-root': { color: 'inherit' },
-    },
-    '&:hover': {
-      backgroundColor: darkMode ? 'rgba(25, 118, 210, 0.2)' : 'rgba(25, 118, 210, 0.08)',
-    },
-  }}
->
-  <Tooltip
-    title={getTooltipText(item.text)}  // Dynamic based on item
-    placement="right"  // Shows to the right for sidebar
-    arrow
-    enterDelay={500}  // Slight delay to avoid flicker
-  >
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <ListItemIcon
-        sx={{
-          color: location.pathname === item.path ? 'inherit' : 'text.secondary',
-          minWidth: collapsed ? 'auto' : 40,
-        }}
-      >
-        {item.icon}
-      </ListItemIcon>
-      {!collapsed && <ListItemText primary={item.text} sx={{ ml: 2 }} />}
-    </Box>
-  </Tooltip>
-</ListItem>
+            key={item.text}
+            button
+            component={Link}
+            to={item.path}
+            selected={location.pathname === item.path}
+            onClick={() => setMobileOpen(false)}
+            sx={{
+              justifyContent: collapsed ? "center" : "flex-start",
+              px: collapsed ? 1.5 : 2,
+              borderRadius: 2,
+              mb: 0.5,
+              "&.Mui-selected": {
+                backgroundColor: darkMode ? "#1976d2" : "#e3f2fd",
+                fontWeight: 600,
+                "& .MuiListItemIcon-root": { color: "inherit" },
+              },
+              "&:hover": {
+                backgroundColor: darkMode
+                  ? "rgba(25, 118, 210, 0.2)"
+                  : "rgba(25, 118, 210, 0.08)",
+              },
+            }}
+          >
+            <Tooltip
+              title={getTooltipText(item.text)} // Dynamic based on item
+              placement="right" // Shows to the right for sidebar
+              arrow
+              enterDelay={500} // Slight delay to avoid flicker
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <ListItemIcon
+                  sx={{
+                    color:
+                      location.pathname === item.path
+                        ? "inherit"
+                        : "text.secondary",
+                    minWidth: collapsed ? "auto" : 40,
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                {(!collapsed || isMobile) && (
+                  <ListItemText primary={item.text} sx={{ ml: 2 }} />
+                )}
+              </Box>
+            </Tooltip>
+          </ListItem>
         ))}
       </List>
     </>
@@ -191,6 +204,7 @@ function Layout() {
           height: "100vh",
           width: "100vw",
           bgcolor: "background.default",
+          overflow: "hidden",
         }}
       >
         {/* Mobile Drawer */}
@@ -201,8 +215,10 @@ function Layout() {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": { width: fullDrawerWidth , touchAction: 'none'},
-            
+            "& .MuiDrawer-paper": {
+              width: fullDrawerWidth,
+              touchAction: "none",
+            },
           }}
         >
           {drawerContent}
@@ -227,17 +243,25 @@ function Layout() {
         {/* Main Content */}
         <Box
           component="main"
-          sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            ml: { sm: `${drawerWidth}px` }, // REMOVE xs
+            pt: { xs: 7, sm: 9 }, // tighter mobile top spacing
+            px: { xs: 1.5, sm: 3 },
+            overflow: "hidden",
+          }}
         >
           <AppBar
             position="fixed"
             sx={{
-              width: { sm: `calc(100% - ${drawerWidth}px)` },
+              width: { xs: "100%", sm: `calc(100% - ${drawerWidth}px)` },
               ml: { sm: `${drawerWidth}px` },
               bgcolor: "background.paper",
               color: "text.primary",
               boxShadow: 1,
-              transition: "margin-left 0.3s, width 0.3s",
             }}
           >
             <Toolbar>
@@ -273,10 +297,9 @@ function Layout() {
           <Box
             sx={{
               flexGrow: 1,
-              p: 3,
-              pt: 10,
-              overflow: "auto",
-              transition: "padding-left 0.3s",
+              px: { xs: 0, sm: 1 },
+              py: { xs: 1.5, sm: 3 },
+              overflowY: "auto",
             }}
           >
             <Routes>

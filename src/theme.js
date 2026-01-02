@@ -37,6 +37,8 @@ export const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
+          padding: { xs: 2, sm: 3 },  // Smaller padding on mobile
+          minWidth: '100%',  // Ensure full width
           backgroundImage: 'unset',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
           backdropFilter: 'blur(10px)',
@@ -110,6 +112,14 @@ export const theme = createTheme({
           },
         },
       },
+
+      MuiTypography: {
+    styleOverrides: {
+      root: {
+        fontSize: { xs: '0.875rem', sm: '1rem' },  // Slightly larger on mobile
+      },
+    },
+  },
     },
     
   },

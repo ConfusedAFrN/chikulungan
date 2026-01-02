@@ -152,7 +152,7 @@ export default function Schedules() {
         </Typography>
 
         {/* Form on top */}
-        <Paper sx={{ p: 4, mb: 4 }}>
+        <Paper sx={{ p: { xs: 3, sm: 4 }, mb: 4, boxSizing: 'border-box' }}>
           <Typography variant="h6" sx={{ mb: 3 }}>
             {editingId ? 'Edit Schedule' : 'Create New Schedule'}
           </Typography>
@@ -180,14 +180,12 @@ export default function Schedules() {
           </FormControl>
 
           <TimePicker
-            label="Feeding Time"
-            value={time}
-            onChange={setTime}
-            ampm
-            sx={{ mb: 3 }}
-            fullWidth  // Made full width to match days
-            renderInput={(params) => <TextField {...params} fullWidth />}
-          />
+  label="Feeding Time"
+  value={time}
+  onChange={setTime}
+  renderInput={(params) => <TextField {...params} fullWidth />}
+  sx={{ mb: 3, width: '100%' }}  // Ensure full width with bottom margin
+/>
 
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Button
@@ -208,7 +206,7 @@ export default function Schedules() {
         </Paper>
 
         {/* Active Schedules – scrollable + full width */}
-        <Paper sx={{ p: 4, mb: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        <Paper sx={{ p: { xs: 3, sm: 4 }, mb: 4, flexGrow: 1, display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
           <Typography variant="h6" sx={{ mb: 3 }}>
             Active Schedules
           </Typography>
@@ -220,8 +218,7 @@ export default function Schedules() {
   sx={{ 
     height: '100%', 
     overflowY: 'auto', 
-    px: 2,  // Add left/right padding for symmetry
-    pr: 3,  // Slightly more right for scrollbar if needed
+    px: { xs: 2, sm: 3 },  // Dynamic left/right padding
     display: 'flex',
     flexDirection: 'column',
     gap: 2
@@ -276,7 +273,7 @@ export default function Schedules() {
         </Paper>
 
         {/* Schedule Log */}
-        <Paper sx={{ p: 3 }}>
+        <Paper sx={{ p: { xs: 3, sm: 4 }, mb: 4, boxSizing: 'border-box' }}>
           <Typography variant="h6" sx={{ mb: 2 }}>
             Schedule Log
           </Typography>
