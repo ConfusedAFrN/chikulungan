@@ -38,8 +38,7 @@ import {
   History as HistoryIcon,
 } from "@mui/icons-material";
 import { format } from "date-fns";
-import { useTheme,useMediaQuery } from "@mui/material";
-
+import { useTheme, useMediaQuery } from "@mui/material";
 
 import Dashboard from "./Dashboard";
 import Schedules from "./Schedules";
@@ -74,13 +73,14 @@ const getTooltipText = (text) => {
 };
 
 function Layout() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false );
   const [darkMode, setDarkMode] = useState(true);
   const [collapsed, setCollapsed] = useState(true); // Default to collapsed
   const [clock, setClock] = useState(new Date());
   const location = useLocation();
   const theme_b = useTheme();
   const isMobile = useMediaQuery(theme_b.breakpoints.down("sm"));
+  
 
   const drawerWidth = isMobile
     ? fullDrawerWidth
@@ -127,7 +127,7 @@ function Layout() {
   const drawerContent = (
     <>
       <Toolbar sx={{ justifyContent: collapsed ? "center" : "space-between" }}>
-        {!collapsed && (
+        {!collapsed &&  (
           <Typography variant="h6" fontWeight={600} noWrap>
             ChicKulungan
           </Typography>
@@ -137,9 +137,26 @@ function Layout() {
             {collapsed ? <MenuIcon /> : <ChevronLeftIcon />}
           </IconButton>
         )}
+        {collapsed && isMobile && (
+        <Typography variant="h6" fontWeight={600} noWrap>
+          ChicKulungan
+        </Typography>
+      )}
       </Toolbar>
       {!collapsed && <Divider />}
-      <List sx={{ px: collapsed ? 0 : 2 }}>
+      {!collapsed && !isMobile && (
+        <Typography variant="h6" fontWeight={600} noWrap>
+          ChicKulungan
+        </Typography>
+      )}
+      <List
+        sx={{
+          px: isMobile ? 3 : collapsed ? 0 : 2,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: collapsed && !isMobile ? "center" : "stretch",
+        }}
+      >
         {menu.map((item) => (
           <ListItem
             key={item.text}
@@ -149,8 +166,8 @@ function Layout() {
             selected={location.pathname === item.path}
             onClick={() => setMobileOpen(false)}
             sx={{
-              justifyContent: collapsed ? "center" : "flex-start",
-              px: collapsed ? 1.5 : 2,
+              justifyContent: collapsed && !isMobile ? "center" : "initial", // Center only if collapsed on desktop
+              px: isMobile ? 3 : collapsed ? 1.5 : 2, // More padding on mobile for touch
               borderRadius: 2,
               mb: 0.5,
               "&.Mui-selected": {
@@ -178,7 +195,9 @@ function Layout() {
                       location.pathname === item.path
                         ? "inherit"
                         : "text.secondary",
-                    minWidth: collapsed ? "auto" : 40,
+                    minWidth: collapsed && !isMobile ? "auto" : 40, // No minWidth collapsed desktop only
+                    mr: collapsed && !isMobile ? 0 : 1, // No margin collapsed desktop
+                    justifyContent: isMobile ? "flex-start" : "initial", // Left-align on mobile for better flow
                   }}
                 >
                   {item.icon}
@@ -209,6 +228,7 @@ function Layout() {
       >
         {/* Mobile Drawer */}
         <Drawer
+        
           variant="temporary"
           open={mobileOpen}
           onClose={() => setMobileOpen(false)}
@@ -217,7 +237,7 @@ function Layout() {
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {
               width: fullDrawerWidth,
-              touchAction: "none",
+              boxSizing: "border-box", // Ensures padding doesn't overflow
             },
           }}
         >
