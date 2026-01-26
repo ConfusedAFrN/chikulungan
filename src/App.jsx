@@ -45,6 +45,9 @@ import Schedules from "./Schedules";
 import Alerts from "./Alerts";
 import Logs from "./Logs";
 import History from "./History";
+import { MqttProvider } from "./MqttProvider";
+import AlertEngine from "./AlertEngine";
+
 
 const fullDrawerWidth = 260;
 const miniDrawerWidth = 56;
@@ -80,6 +83,8 @@ function Layout() {
   const location = useLocation();
   const theme_b = useTheme();
   const isMobile = useMediaQuery(theme_b.breakpoints.down("sm"));
+  const clockText = isMobile ? format(clock, "MMM d, h:mm a") : format(clock, "PPP p");
+
   
 
   const drawerWidth = isMobile
@@ -144,11 +149,7 @@ function Layout() {
       )}
       </Toolbar>
       {!collapsed && <Divider />}
-      {!collapsed && !isMobile && (
-        <Typography variant="h6" fontWeight={600} noWrap>
-          ChicKulungan
-        </Typography>
-      )}
+      
       <List
         sx={{
           px: isMobile ? 3 : collapsed ? 0 : 2,
@@ -214,9 +215,11 @@ function Layout() {
   );
 
   return (
+    
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <GlobalFeedback />
+      <AlertEngine />
       <Box
         sx={{
           display: "flex",
@@ -261,19 +264,27 @@ function Layout() {
         </Drawer>
 
         {/* Main Content */}
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            ml: { sm: `${drawerWidth}px` }, // REMOVE xs
-            pt: { xs: 7, sm: 9 }, // tighter mobile top spacing
-            px: { xs: 1.5, sm: 3 },
-            overflow: "hidden",
-          }}
-        >
+       <Box
+  component="main"
+  sx={{
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+
+    // IMPORTANT: don't force 100% width on a flex sibling
+    width: "auto",
+    minWidth: 0,
+
+    // IMPORTANT: remove this — permanent drawer already pushes layout
+    ml: 0,
+
+    pt: { xs: 7, sm: 9 },
+    px: { xs: 1.5, sm: 3 },
+    overflow: "hidden",
+  }}
+>
+
+
           <AppBar
             position="fixed"
             sx={{
@@ -293,12 +304,28 @@ function Layout() {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-                {currentTitle}
-              </Typography>
-              <Typography variant="body2" sx={{ mr: 3 }}>
-                {format(clock, "PPP p")}
-              </Typography>
+              <Typography
+  variant={isMobile ? "subtitle1" : "h6"}
+  noWrap
+  sx={{ flexGrow: 1, minWidth: 0 }} // minWidth 0 is important for truncation
+>
+  {currentTitle}
+</Typography>
+
+<Typography
+  variant="body2"
+  noWrap
+  sx={{
+    mr: { xs: 1, sm: 3 },
+    display: { xs: "none", sm: "block" }, // hide on mobile (cleanest)
+    // If you prefer to show it on mobile, change this line to:
+    // display: "block"
+    // and it will use the short clockText.
+  }}
+>
+  {clockText}
+</Typography>
+
               <Tooltip
                 title={
                   darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"
@@ -339,7 +366,9 @@ function Layout() {
 export default function App() {
   return (
     <Router>
-      <Layout />
+      <MqttProvider>
+        <Layout />
+      </MqttProvider>
     </Router>
   );
 }

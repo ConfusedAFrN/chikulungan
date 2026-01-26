@@ -1,5 +1,5 @@
 // src/pages/Logs.jsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Paper,
   Typography,
@@ -9,10 +9,47 @@ import {
   Chip,
   CircularProgress,
   Alert,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 import { format } from "date-fns";
 import { db, ref, onValue, push, serverTimestamp, set } from "./firebase";
 import { useTheme } from "@mui/material/styles";
+
+function normalize(s = "") {
+  return s
+    .toString()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "") // strip accents
+    .replace(/[^a-z0-9\s:./_-]/g, " ") // remove noisy punctuation
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getTimestampMs(ts) {
+  // RTDB serverTimestamp resolves to a number (ms) when read,
+  // but guard anyway because logs can be malformed or missing timestamp.
+  if (typeof ts === "number") return ts;
+  if (typeof ts === "string") {
+    const n = Number(ts);
+    return Number.isFinite(n) ? n : 0;
+  }
+  if (ts && typeof ts === "object") {
+    // Some libs return { seconds, nanoseconds } (more common in Firestore),
+    // or other shapes. Handle best-effort:
+    if (typeof ts.seconds === "number") return ts.seconds * 1000;
+    if (typeof ts._seconds === "number") return ts._seconds * 1000;
+  }
+  return 0;
+}
+
+function sourceLabel(src) {
+  if (src === "esp32") return "ESP32";
+  if (src === "web") return "Web";
+  return "System";
+}
 
 export default function Logs() {
   const [logs, setLogs] = useState([]);
@@ -28,7 +65,12 @@ export default function Logs() {
       if (data) {
         const logArray = Object.entries(data)
           .map(([id, log]) => ({ id, ...log }))
-          .sort((a, b) => b.timestamp - a.timestamp)
+          .map((l) => ({
+            ...l,
+            // precompute tsMs for stable sort + formatting
+            tsMs: getTimestampMs(l.timestamp),
+          }))
+          .sort((a, b) => (b.tsMs || 0) - (a.tsMs || 0))
           .slice(0, 500); // Limit to last 500 entries
         setLogs(logArray);
       } else {
@@ -55,53 +97,73 @@ export default function Logs() {
     }
   };
 
-  const exportLogs = () => {
-    const filtered = logs
-      .filter((log) => log.message.toLowerCase().includes(search.toLowerCase()))
-      .map(
-        (log) =>
-          `${format(log.timestamp, "PP p")} [${log.source}] ${log.message}`
-      )
-      .join("\n");
+  const tokens = useMemo(() => {
+    const q = normalize(search);
+    return q ? q.split(" ").filter(Boolean) : [];
+  }, [search]);
 
-    const blob = new Blob([filtered], { type: "text/plain" });
+  // Filtered lines for display + export (same source of truth)
+  const filteredLines = useMemo(() => {
+    if (!logs.length) return [];
+
+    return logs
+      .filter((log) => {
+        const msg = log.message ?? "";
+        const src = log.source ?? "";
+        const tsMs = log.tsMs ?? getTimestampMs(log.timestamp);
+
+        // Build searchable "haystack": message + source + date string
+        const dateStr = tsMs ? format(new Date(tsMs), "MMM dd, yyyy hh:mm:ss a") : "";
+        const haystack = normalize(`${msg} ${src} ${dateStr}`);
+
+        if (tokens.length === 0) return true;
+        // all tokens must match somewhere
+        return tokens.every((t) => haystack.includes(t));
+      })
+      .map((log) => {
+        const tsMs = log.tsMs ?? getTimestampMs(log.timestamp);
+        const timeLabel = tsMs
+          ? format(new Date(tsMs), "MMM dd, yyyy │ hh:mm:ss a")
+          : "Unknown time";
+
+        return (
+          `${timeLabel}  ` +
+          `${sourceLabel(log.source)}  ` +
+          `${log.message ?? ""}`
+        );
+      });
+  }, [logs, tokens]);
+
+  const exportLogs = () => {
+    const text = filteredLines.length ? filteredLines.join("\n") : "No matching logs.";
+    const blob = new Blob([text], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `chickulungan_logs_${format(
-      new Date(),
-      "yyyy-MM-dd_HHmm"
-    )}.txt`;
+    a.download = `chickulungan_logs_${format(new Date(), "yyyy-MM-dd_HHmm")}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const filteredLogs = logs
-    .filter((log) => log.message.toLowerCase().includes(search.toLowerCase()))
-    .map(
-      (log) =>
-        `${format(log.timestamp, "MMM dd, yyyy │ hh:mm:ss a")}  ` +
-        `${
-          log.source === "esp32"
-            ? "ESP32"
-            : log.source === "web"
-            ? "Web"
-            : "System"
-        }  ${log.message}`
-    )
-    .join("\n");
-
   return (
     <Box
-  sx={{
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  }}
->
-
-      <Paper sx={{ p: 3, flex: 1, display: "flex", flexDirection: "column" }}>
-        <Box //Header Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        minHeight: 0,
+      }}
+    >
+      <Paper
+        sx={{
+          p: 3,
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+        }}
+      >
+        <Box
           sx={{
             display: "flex",
             flexDirection: { xs: "column", sm: "row" },
@@ -122,11 +184,15 @@ export default function Logs() {
             <Typography variant="h5" fontWeight="bold">
               System Logs
             </Typography>
-            <Chip
-              label={`${logs.length} entries`}
-              size="small"
-              color="primary"
-            />
+            <Chip label={`${logs.length} entries`} size="small" color="primary" />
+            {search.trim() && (
+              <Chip
+                label={`${filteredLines.length} match`}
+                size="small"
+                color={filteredLines.length ? "success" : "warning"}
+                variant="outlined"
+              />
+            )}
           </Box>
 
           <Box
@@ -169,14 +235,28 @@ export default function Logs() {
         </Box>
 
         <TextField
-          label="Search logs..."
+          label="Search logs (e.g. 'feed error', 'esp32 07:10 pm')"
           variant="outlined"
           fullWidth
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          InputProps={{
+            endAdornment: search ? (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="Clear search"
+                  edge="end"
+                  onClick={() => setSearch("")}
+                  size="small"
+                >
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
+          }}
           sx={{
-            backgroundColor: theme.palette.mode === "dark" ? "#000" : "#f5f5f5", // Dark: black, Light: light gray
-            color: theme.palette.mode === "dark" ? "#0f0" : "#000", // Dark: green, Light: black
+            backgroundColor: theme.palette.mode === "dark" ? "#000" : "#f5f5f5",
+            color: theme.palette.mode === "dark" ? "#0f0" : "#000",
             fontFamily: "monospace",
             fontSize: "0.875rem",
             "& .MuiOutlinedInput-root": {
@@ -193,36 +273,26 @@ export default function Logs() {
             <CircularProgress />
           </Box>
         ) : logs.length === 0 ? (
-          <Alert severity="info">
-            No logs yet. System events will appear here.
-          </Alert>
+          <Alert severity="info">No logs yet. System events will appear here.</Alert>
         ) : (
           <TextField
             multiline
             fullWidth
-            value={filteredLogs || "No matching logs."}
+            value={filteredLines.length ? filteredLines.join("\n") : "No matching logs."}
             InputProps={{ readOnly: true }}
             sx={{
-              backgroundColor:
-                theme.palette.mode === "dark" ? "#000" : "#f5f5f5", // Dark: black, Light: light gray
-              color: theme.palette.mode === "dark" ? "#0f0" : "#000", // Dark: green, Light: black
+              mt: 2,
+              flex: 1,
+              minHeight: 0,
+              backgroundColor: theme.palette.mode === "dark" ? "#000" : "#f5f5f5",
+              color: theme.palette.mode === "dark" ? "#0f0" : "#000",
               fontFamily: "monospace",
               fontSize: "0.875rem",
               "& .MuiOutlinedInput-root": {
                 color: theme.palette.mode === "dark" ? "#0f0" : "#000",
-                overflowY: "auto", // Enable vertical scrolling
-                height: "100%", // Full height
-                "&::-webkit-scrollbar": {
-                  // Custom scrollbar for aesthetics
-                  width: "8px",
-                },
-                "&::-webkit-scrollbar-track": {
-                  background: theme.palette.mode === "dark" ? "#333" : "#ddd",
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  background: theme.palette.mode === "dark" ? "#666" : "#aaa",
-                  borderRadius: "4px",
-                },
+                height: "100%",
+                alignItems: "flex-start",
+                overflowY: "auto",
               },
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: theme.palette.divider,
@@ -234,6 +304,3 @@ export default function Logs() {
     </Box>
   );
 }
-
-//overflow: 'auto !important',
-// height: '100% !important',

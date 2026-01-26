@@ -1,35 +1,68 @@
 // src/pages/Alerts.jsx
-import React, { useState, useEffect } from 'react';
+// To be added = Feed Interrupted Alert
+import React, { useMemo, useState, useEffect } from "react";
 import {
   Paper,
   Typography,
   Button,
   Box,
   Chip,
-  Alert,
+  Alert as MuiAlert,
   CircularProgress,
-} from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import { format } from 'date-fns';
-import { db, ref, onValue, set } from './firebase';
+  Divider,
+  Stack,
+  useMediaQuery,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { DataGrid } from "@mui/x-data-grid";
+import { format } from "date-fns";
+import { db, ref, onValue, set } from "./firebase";
+
+function toTsMs(raw) {
+  // Accept: number (ms), ISO string, numeric string. Otherwise: 0.
+  if (typeof raw === "number" && Number.isFinite(raw) && raw > 0) return raw;
+  if (typeof raw === "string") {
+    const asNum = Number(raw);
+    if (Number.isFinite(asNum) && asNum > 0) return asNum;
+    const parsed = Date.parse(raw);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+  return 0;
+}
+
+function severityToColor(sev) {
+  // Data: sev is "critical" or "warning" (based on your existing logic)
+  if (sev === "critical") return "error";
+  return "warning";
+}
+
+function prettyTime(tsMs) {
+  if (!Number.isFinite(tsMs) || tsMs <= 0) return "Unknown time";
+  return format(new Date(tsMs), "MMM dd, yyyy hh:mm:ss a");
+}
 
 export default function Alerts() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const alertsRef = ref(db, 'alerts');
+    const alertsRef = ref(db, "alerts");
     const unsub = onValue(alertsRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         const list = Object.entries(data)
-          .map(([id, alert]) => ({
-            id,
-            ...alert,
-            timestamp: Number(alert.timestamp) || Date.now(),  // Fallback to now if invalid
-          }))
-          .sort((a, b) => b.timestamp - a.timestamp);
-
+          .map(([id, alert]) => {
+            const tsMs = toTsMs(alert?.timestamp);
+            return {
+              id,
+              ...alert,
+              tsMs: tsMs || Date.now(), // fallback so sorting is stable
+            };
+          })
+          .sort((a, b) => (b.tsMs || 0) - (a.tsMs || 0));
         setAlerts(list);
       } else {
         setAlerts([]);
@@ -40,127 +73,224 @@ export default function Alerts() {
     return () => unsub();
   }, []);
 
-  const resolveAlert = (id) => {
-  const alertRef = ref(db, `alerts/${id}`);
-  set(alertRef, { ...alerts.find(a => a.id === id), resolved: true })
-    .then(() => {
-      // Local update after successful DB write
-      setAlerts(prev => prev.map(a => a.id === id ? { ...a, resolved: true } : a));
-      console.log(`Alert ${id} resolved in Firebase`);
-    })
-    .catch((error) => {
-      console.error('Error resolving alert:', error);
-      alert('Failed to resolve alert – check console');
-    });
-};
+  const activeCount = useMemo(
+    () => alerts.filter((a) => !a.resolved).length,
+    [alerts]
+  );
 
-  const resolveAll = () => {
-  const unresolved = alerts.filter(a => !a.resolved);
-  unresolved.forEach((alert) => {
-    const alertRef = ref(db, `alerts/${alert.id}`);
-    set(alertRef, { ...alert, resolved: true })
+  const resolveAlert = (id) => {
+    const found = alerts.find((a) => a.id === id);
+    if (!found) return;
+
+    const alertRef = ref(db, `alerts/${id}`);
+    set(alertRef, { ...found, resolved: true })
       .then(() => {
-        setAlerts(prev => prev.map(a => a.id === alert.id ? { ...a, resolved: true } : a));
+        setAlerts((prev) =>
+          prev.map((a) => (a.id === id ? { ...a, resolved: true } : a))
+        );
       })
       .catch((error) => {
-        console.error('Error resolving all alerts:', error);
+        console.error("Error resolving alert:", error);
+        window.alert("Failed to resolve alert – check console");
       });
-  });
-};
-
-  const getSeverityColor = (severity) => {
-    return severity === 'critical' ? '#d32f2f' : '#ed6c02';
   };
 
-  const columns = [
-    {
-      field: 'timestamp',
-      headerName: 'Time',
-      width: 180,
-      valueFormatter: (params) => {
-        const ts = params.value;
-        try {
-          return format(new Date(ts), 'MMM dd, yyyy – HH:mm:ss');
-        } catch {
-          return 'Unknown time';
-        }
+  const resolveAll = () => {
+    const unresolved = alerts.filter((a) => !a.resolved);
+    unresolved.forEach((a) => {
+      const alertRef = ref(db, `alerts/${a.id}`);
+      set(alertRef, { ...a, resolved: true })
+        .then(() => {
+          setAlerts((prev) =>
+            prev.map((x) => (x.id === a.id ? { ...x, resolved: true } : x))
+          );
+        })
+        .catch((error) => {
+          console.error("Error resolving all alerts:", error);
+        });
+    });
+  };
+
+  const columns = useMemo(
+    () => [
+      {
+        field: "tsMs",
+        headerName: "Time",
+        width: 220,
+        valueGetter: (params) => params?.row?.tsMs ?? 0,
+        renderCell: (params) => prettyTime(Number(params?.row?.tsMs)),
       },
-    },
-    {
-      field: 'type',
-      headerName: 'Type',
-      width: 150,
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          size="small"
-          sx={{
-            backgroundColor: getSeverityColor(params.row.severity || 'warning'),
-            color: 'white',
-            fontWeight: 'bold',
-          }}
-        />
-      ),
-    },
-    { field: 'message', headerName: 'Message', flex: 1 },
-    {
-      field: 'resolved',
-      headerName: 'Status',
-      width: 120,
-      renderCell: (params) =>
-        params.value ? (
-          <Chip label="Resolved" color="success" size="small" />
-        ) : (
-          <Chip label="Active" color="error" size="small" />
+      {
+        field: "type",
+        headerName: "Type",
+        width: 150,
+        renderCell: (params) => (
+          <Chip
+            label={params.value || "unknown"}
+            size="small"
+            color={severityToColor(params.row?.severity)}
+            sx={{ fontWeight: "bold" }}
+          />
         ),
-    },
-    {
-      field: 'actions',
-      headerName: '',
-      width: 100,
-      renderCell: (params) =>
-        !params.row.resolved && (
-          <Button size="small" variant="outlined" onClick={() => resolveAlert(params.row.id)}>
-            Resolve
-          </Button>
-        ),
-    },
-  ];
+      },
+      { field: "message", headerName: "Message", flex: 1, minWidth: 240 },
+      {
+        field: "resolved",
+        headerName: "Status",
+        width: 120,
+        renderCell: (params) =>
+          params.value ? (
+            <Chip label="Resolved" color="success" size="small" />
+          ) : (
+            <Chip label="Active" color="error" size="small" />
+          ),
+      },
+      {
+        field: "actions",
+        headerName: "",
+        width: 120,
+        sortable: false,
+        filterable: false,
+        renderCell: (params) =>
+          !params.row.resolved && (
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => resolveAlert(params.row.id)}
+            >
+              Resolve
+            </Button>
+          ),
+      },
+    ],
+    [alerts]
+  );
 
   return (
-    <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Paper sx={{ p: 3, flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography variant="h5" fontWeight="bold">
+    <Box
+      sx={{
+        p: { xs: 1.5, sm: 2 },
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        minHeight: 0,
+      }}
+    >
+      <Paper
+        sx={{
+          p: { xs: 1.5, sm: 3 },
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+        }}
+      >
+        {/* Header */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: { xs: 1.5, sm: 0 },
+            justifyContent: "space-between",
+            alignItems: { xs: "flex-start", sm: "center" },
+            mb: 2,
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
+            <Typography variant={isMobile ? "h6" : "h5"} fontWeight="bold">
               Alert Center
             </Typography>
-            {alerts.filter(a => !a.resolved).length > 0 && (
-              <Chip
-                label={`${alerts.filter(a => !a.resolved).length} Active`}
-                color="error"
-                size="small"
-              />
+
+            {activeCount > 0 && (
+              <Chip label={`${activeCount} Active`} color="error" size="small" />
             )}
           </Box>
+
           <Button
             variant="contained"
-            color="primary"
             onClick={resolveAll}
-            disabled={alerts.filter(a => !a.resolved).length === 0}
+            disabled={activeCount === 0}
+            sx={{ width: { xs: "100%", sm: "auto" } }}
           >
             Resolve All
           </Button>
         </Box>
 
+        {/* Body */}
         {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', my: 8 }}>
+          <Box sx={{ display: "flex", justifyContent: "center", my: 8 }}>
             <CircularProgress />
           </Box>
         ) : alerts.length === 0 ? (
-          <Alert severity="success">No alerts — system running smoothly!</Alert>
+          <MuiAlert severity="success">
+            No alerts — system running smoothly!
+          </MuiAlert>
+        ) : isMobile ? (
+          // ✅ Mobile: card list (readable, not cramped)
+          <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto", pr: 0.5 }}>
+            <Stack spacing={1.25}>
+              {alerts.map((a) => {
+                const sevColor = severityToColor(a.severity);
+                return (
+                  <Paper
+                    key={a.id}
+                    variant="outlined"
+                    sx={{
+                      p: 1.25,
+                      borderColor:
+                        a.resolved
+                          ? theme.palette.divider
+                          : sevColor === "error"
+                          ? theme.palette.error.main
+                          : theme.palette.warning.main,
+                    }}
+                  >
+                    <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
+                      <Box sx={{ minWidth: 0 }}>
+                        <Typography variant="subtitle2" noWrap>
+                          {prettyTime(a.tsMs)}
+                        </Typography>
+                        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 0.5 }}>
+                          <Chip
+                            label={a.type || "unknown"}
+                            size="small"
+                            color={sevColor}
+                            sx={{ fontWeight: "bold" }}
+                          />
+                          {a.resolved ? (
+                            <Chip label="Resolved" size="small" color="success" />
+                          ) : (
+                            <Chip label="Active" size="small" color="error" />
+                          )}
+                        </Box>
+                      </Box>
+
+                      {!a.resolved && (
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() => resolveAlert(a.id)}
+                          sx={{ flexShrink: 0 }}
+                        >
+                          Resolve
+                        </Button>
+                      )}
+                    </Box>
+
+                    <Divider sx={{ my: 1 }} />
+
+                    <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
+                      {a.message || "(no message)"}
+                    </Typography>
+                  </Paper>
+                );
+              })}
+            </Stack>
+          </Box>
         ) : (
-          <Box sx={{ flex: 1 }}>
+          // ✅ Desktop/tablet: DataGrid, but themed (no hard-coded dark colors)
+          <Box sx={{ flex: 1, minHeight: 0 }}>
             <DataGrid
               rows={alerts}
               columns={columns}
@@ -168,15 +298,30 @@ export default function Alerts() {
               rowsPerPageOptions={[10, 20]}
               disableSelectionOnClick
               sx={{
-                backgroundColor: '#161b22',
-                border: 'none',
-                color: '#f0f6fc',
-                '& .MuiDataGrid-cell': { borderBottom: '1px solid #30363d' },
+                border: "none",
+                bgcolor: theme.palette.background.paper,
+                color: theme.palette.text.primary,
+
+                "& .MuiDataGrid-columnHeaders": {
+                  bgcolor:
+                    theme.palette.mode === "dark"
+                      ? "rgba(255,255,255,0.06)"
+                      : "rgba(0,0,0,0.04)",
+                  borderBottom: `1px solid ${theme.palette.divider}`,
+                },
+
+                "& .MuiDataGrid-cell": {
+                  borderBottom: `1px solid ${theme.palette.divider}`,
+                },
+
+                "& .MuiDataGrid-footerContainer": {
+                  borderTop: `1px solid ${theme.palette.divider}`,
+                },
               }}
             />
           </Box>
         )}
       </Paper>
-    </div>
+    </Box>
   );
 }

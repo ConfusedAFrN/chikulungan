@@ -1,5 +1,5 @@
 // src/pages/Schedules.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Paper,
   Typography,
@@ -7,7 +7,6 @@ import {
   Box,
   Chip,
   IconButton,
-  Divider,
   Select,
   MenuItem,
   FormControl,
@@ -16,37 +15,24 @@ import {
   Tooltip,
   TextField,
   Switch,
+  Stack,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-} from "@mui/icons-material";
+import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { format } from "date-fns";
 import { db, ref, onValue, push, remove, set } from "./firebase";
 import { toast } from "./utils/feedback";
-import { useTheme } from "@mui/material/styles";
+import { refreshSchedules } from "./mqtt";
 
-const DAYS = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export default function Schedules() {
   const [schedules, setSchedules] = useState({});
   const [selectedDays, setSelectedDays] = useState([]);
   const [time, setTime] = useState(null);
   const [editingId, setEditingId] = useState(null);
-  const [logText, setLogText] = useState("Schedule system ready...\n");
-  const theme = useTheme();
 
   // Load schedules
   useEffect(() => {
@@ -57,30 +43,16 @@ export default function Schedules() {
     return () => unsub();
   }, []);
 
-  // Load logs
-  useEffect(() => {
-    const logsRef = ref(db, "logs");
-    const unsub = onValue(logsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (!data) {
-        setLogText("No logs yet\n");
-        return;
-      }
+  const activeCount = useMemo(
+    () => Object.values(schedules).filter((s) => s?.enabled).length,
+    [schedules]
+  );
 
-      const logArray = Object.entries(data)
-        .map(([id, entry]) => ({ id, ...entry }))
-        .sort((a, b) => b.timestamp - a.timestamp)
-        .slice(0, 30);
-
-      const formatted = logArray
-        .map((e) => `[${format(e.timestamp, "HH:mm:ss")}] ${e.message}`)
-        .join("\n");
-
-      setLogText(formatted + "\n");
-    });
-
-    return () => unsub();
-  }, []);
+  const resetForm = () => {
+    setSelectedDays([]);
+    setTime(null);
+    setEditingId(null);
+  };
 
   const handleAddOrUpdate = () => {
     if (!time || selectedDays.length === 0) {
@@ -88,7 +60,7 @@ export default function Schedules() {
       return;
     }
 
-    const formattedTime = format(time, "hh:mm a");
+    const formattedTime = format(time, "hh:mm a").toUpperCase();
     const payload = {
       days: selectedDays,
       time: formattedTime,
@@ -99,25 +71,31 @@ export default function Schedules() {
     if (editingId) {
       set(ref(db, `schedules/${editingId}`), payload).then(() => {
         toast("Schedule updated successfully!", "success");
+
+        // Tell ESP32 to refresh schedules now
+        refreshSchedules();
+
         push(ref(db, "logs"), {
-          message: `Updated schedule: ${selectedDays.join(
-            ", "
-          )} at ${formattedTime}`,
+          message: `Updated schedule: ${selectedDays.join(", ")} at ${formattedTime}`,
           source: "web",
           timestamp: Date.now(),
         });
+
         resetForm();
       });
     } else {
       push(ref(db, "schedules"), payload).then(() => {
         toast("Schedule added successfully!", "success");
+
+        // Tell ESP32 to refresh schedules now
+        refreshSchedules();
+
         push(ref(db, "logs"), {
-          message: `Added schedule: ${selectedDays.join(
-            ", "
-          )} at ${formattedTime}`,
+          message: `Added schedule: ${selectedDays.join(", ")} at ${formattedTime}`,
           source: "web",
           timestamp: Date.now(),
         });
+
         resetForm();
       });
     }
@@ -126,10 +104,12 @@ export default function Schedules() {
   const handleToggleEnabled = (id, currentEnabled) => {
     set(ref(db, `schedules/${id}/enabled`), !currentEnabled).then(() => {
       toast(`Schedule ${!currentEnabled ? "enabled" : "disabled"}`, "info");
+
+      // Tell ESP32 to refresh schedules now
+      refreshSchedules();
+
       push(ref(db, "logs"), {
-        message: `Schedule ${
-          !currentEnabled ? "enabled" : "disabled"
-        }: ID ${id}`,
+        message: `Schedule ${!currentEnabled ? "enabled" : "disabled"}: ID ${id}`,
         source: "web",
         timestamp: Date.now(),
       });
@@ -140,33 +120,39 @@ export default function Schedules() {
     if (window.confirm("Delete this schedule permanently?")) {
       remove(ref(db, `schedules/${id}`)).then(() => {
         toast("Schedule deleted", "info");
+
+        // Tell ESP32 to refresh schedules now
+        refreshSchedules();
+
         push(ref(db, "logs"), {
           message: `Deleted schedule: ID ${id}`,
           source: "web",
           timestamp: Date.now(),
         });
+
+        // If you deleted the one you were editing, reset the form
+        if (editingId === id) resetForm();
       });
     }
   };
 
   const handleEdit = (id, sched) => {
     setEditingId(id);
-    setSelectedDays(sched.days);
-    const [t, period] = sched.time.split(" ");
-    const [h, m] = t.split(":");
-    let hours = parseInt(h);
+    setSelectedDays(sched.days || []);
+
+    // Convert "hh:mm AM/PM" to Date
+    const [t, periodRaw] = (sched.time || "").split(" ");
+    const period = (periodRaw || "").toUpperCase();
+    const [hStr, mStr] = (t || "12:00").split(":");
+
+    let hours = parseInt(hStr, 10);
+    const minutes = parseInt(mStr, 10);
+
     if (period === "PM" && hours !== 12) hours += 12;
     if (period === "AM" && hours === 12) hours = 0;
-    setTime(new Date(2000, 0, 1, hours, parseInt(m)));
-  };
 
-  const resetForm = () => {
-    setSelectedDays([]);
-    setTime(null);
-    setEditingId(null);
+    setTime(new Date(2000, 0, 1, hours, minutes));
   };
-
-  const activeCount = Object.values(schedules).filter((s) => s.enabled).length;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -179,13 +165,13 @@ export default function Schedules() {
           {activeCount !== 1 ? "s" : ""}
         </Typography>
 
-        {/* Form on top */}
-        <Paper sx={{ p: { xs: 3, sm: 4 }, mb: 4, boxSizing: "border-box" }}>
-          <Typography variant="h6" sx={{ mb: 3 }}>
+        {/* Form */}
+        <Paper sx={{ p: { xs: 2, sm: 4 }, mb: 4, boxSizing: "border-box" }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
             {editingId ? "Edit Schedule" : "Create New Schedule"}
           </Typography>
 
-          <FormControl fullWidth sx={{ mb: 3 }}>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel>Days</InputLabel>
             <Select
               multiple
@@ -211,11 +197,12 @@ export default function Schedules() {
             label="Feeding Time"
             value={time}
             onChange={setTime}
-            renderInput={(params) => <TextField {...params} fullWidth />}
-            sx={{ mb: 3, width: "100%" }} // Ensure full width with bottom margin
+            slotProps={{ textField: { fullWidth: true } }}
+            sx={{ mb: 2, width: "100%" }}
           />
 
-          <Box sx={{ display: "flex", gap: 2 }}>
+          {/* Buttons: stack on mobile */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25}>
             <Button
               variant="contained"
               size="large"
@@ -225,26 +212,24 @@ export default function Schedules() {
             >
               {editingId ? "Update" : "Add"} Schedule
             </Button>
+
             {editingId && (
-              <Button variant="outlined" onClick={resetForm}>
+              <Button variant="outlined" onClick={resetForm} fullWidth>
                 Cancel
               </Button>
             )}
-          </Box>
+          </Stack>
         </Paper>
 
-        {/* Active Schedules – scrollable + full width */}
+        {/* Active Schedules */}
         <Paper
           sx={{
-            p: { xs: 3, sm: 4 },
+            p: { xs: 2, sm: 4 },
             mb: 4,
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
             boxSizing: "border-box",
           }}
         >
-          <Typography variant="h6" sx={{ mb: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
             Active Schedules
           </Typography>
 
@@ -253,29 +238,23 @@ export default function Schedules() {
           ) : (
             <Box
               sx={{
-                height: "100%",
-                overflowY: "auto",
-                px: { xs: 2, sm: 3 }, // Dynamic left/right padding
                 display: "flex",
                 flexDirection: "column",
                 gap: 2,
               }}
             >
               {Object.entries(schedules)
-                .sort(([, a], [, b]) => b.createdAt - a.createdAt)
+                .sort(([, a], [, b]) => (b?.createdAt || 0) - (a?.createdAt || 0))
                 .map(([id, s]) => (
                   <Paper
                     key={id}
                     variant="outlined"
                     sx={{
-                      p: 3,
+                      p: 2,
                       borderRadius: 3,
-                      bgcolor:
-                        id === editingId
-                          ? "action.selected"
-                          : "background.paper",
-                      boxShadow:
-                        id === editingId ? "0 0 0 2px #1976d2" : "none",
+                      bgcolor: id === editingId ? "action.selected" : "background.paper",
+                      boxShadow: id === editingId ? "0 0 0 2px #1976d2" : "none",
+                      overflow: "hidden",
                     }}
                   >
                     <Box
@@ -284,22 +263,16 @@ export default function Schedules() {
                         flexDirection: { xs: "column", sm: "row" },
                         alignItems: { xs: "flex-start", sm: "center" },
                         justifyContent: "space-between",
-                        gap: { xs: 2, sm: 0 },
+                        gap: { xs: 1.5, sm: 2 },
                       }}
                     >
-                      <Box>
-                        <Typography variant="h6" fontWeight={600}>
+                      <Box sx={{ minWidth: 0 }}>
+                        <Typography variant="h6" fontWeight={600} noWrap>
                           {s.time}
                         </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: 1,
-                            mt: 1,
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          {s.days.map((day) => (
+
+                        <Box sx={{ display: "flex", gap: 1, mt: 1, flexWrap: "wrap" }}>
+                          {(s.days || []).map((day) => (
                             <Chip
                               key={day}
                               label={day}
@@ -310,6 +283,8 @@ export default function Schedules() {
                           ))}
                         </Box>
                       </Box>
+
+                      {/* Actions: never stretch the card */}
                       <Box
                         sx={{
                           display: "flex",
@@ -321,23 +296,19 @@ export default function Schedules() {
                         }}
                       >
                         <Switch
-                          checked={s.enabled}
-                          onChange={() => handleToggleEnabled(id, s.enabled)}
+                          checked={!!s.enabled}
+                          onChange={() => handleToggleEnabled(id, !!s.enabled)}
                           color="primary"
                         />
+
                         <Tooltip title="Edit">
-                          <IconButton
-                            onClick={() => handleEdit(id, s)}
-                            sx={{ flex: "0 0 auto" }}
-                          >
+                          <IconButton onClick={() => handleEdit(id, s)} size="small">
                             <EditIcon />
                           </IconButton>
+                        </Tooltip>
 
-                          <IconButton
-                            color="error"
-                            onClick={() => handleDelete(id)}
-                            sx={{ flex: "0 0 auto" }}
-                          >
+                        <Tooltip title="Delete">
+                          <IconButton onClick={() => handleDelete(id)} color="error" size="small">
                             <DeleteIcon />
                           </IconButton>
                         </Tooltip>
@@ -347,33 +318,6 @@ export default function Schedules() {
                 ))}
             </Box>
           )}
-        </Paper>
-
-        {/* Schedule Log */}
-        <Paper sx={{ p: { xs: 3, sm: 4 }, mb: 4, boxSizing: "border-box" }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Schedule Log
-          </Typography>
-          <TextField
-            multiline
-            rows={10}
-            fullWidth
-            value={logText}
-            InputProps={{ readOnly: true }}
-            sx={{
-              backgroundColor:
-                theme.palette.mode === "dark" ? "#000" : "#f5f5f5", // Dark: black, Light: light gray
-              color: theme.palette.mode === "dark" ? "#0f0" : "#000", // Dark: green, Light: black
-              fontFamily: "monospace",
-              fontSize: "0.875rem",
-              "& .MuiOutlinedInput-root": {
-                color: theme.palette.mode === "dark" ? "#0f0" : "#000",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: theme.palette.divider,
-              },
-            }}
-          />
         </Paper>
       </Box>
     </LocalizationProvider>

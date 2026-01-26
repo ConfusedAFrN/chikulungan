@@ -24,10 +24,12 @@ import {
 import { Gauge } from "@mui/x-charts/Gauge";
 import { useTheme } from '@mui/material/styles';
 import { publishFeed } from "./mqtt";
-import { db, ref, onValue, push, set, get } from "./firebase";
+import { db, ref, onValue, push, } from "./firebase";
 import { format, differenceInMinutes } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { logEvent } from "./logger"; // If logger.js is used for events
+
+
+
 
 import { toast, setGlobalLoading } from "./utils/feedback";
 
@@ -40,125 +42,61 @@ export default function Dashboard() {
   });
   const [setLog] = useState("System ready...\n");
   const [online, setOnline] = useState(false);
-  const [lastMqttTime, setLastMqttTime] = useState(0);
+  const [lastUpdateMs, setLastUpdateMs] = useState(null);
+
+  const [ setLastMqttTime] = useState(0);
   const [history, setHistory] = useState([]);
   const [uptimeData, setUptimeData] = useState([]); // Now dynamic
   const [incidents, setIncidents] = useState(0);
-  const [lastAlertTimes, setLastAlertTimes] = useState({}); // e.g., { 'Low Feed': timestamp }
   const theme = useTheme();  // Gets current theme (dark/light)
+  const [isFeeding, setIsFeeding] = useState(false);
 
-  const checkAndAlert = async () => {
-    // Make async for await
-    const now = Date.now();
-    const alertTypes = [
-      {
-        condition: sensors.feed < alertThresholds.lowFeed,
-        type: "Low Feed",
-        message: `Feed level is low (${sensors.feed}%)`,
-        severity: "critical",
-      },
-      {
-        condition: sensors.temp > alertThresholds.highTemp,
-        type: "High Temperature",
-        message: `Temperature too high (${sensors.temp}°C)`,
-        severity: "critical",
-      },
-      {
-        condition: sensors.temp < alertThresholds.lowTemp,
-        type: "Low Temperature",
-        message: `Temperature too low (${sensors.temp}°C)`,
-        severity: "warning",
-      },
-      {
-        condition: sensors.humidity > alertThresholds.highHumidity,
-        type: "High Humidity",
-        message: `Humidity too high (${sensors.humidity}%)`,
-        severity: "warning",
-      },
-      {
-        condition: sensors.humidity < alertThresholds.lowHumidity,
-        type: "Low Humidity",
-        message: `Humidity too low (${sensors.humidity}%)`,
-        severity: "warning",
-      },
-    ];
 
-    for (const { condition, type, message, severity } of alertTypes) {
-      if (!condition) continue;
 
-      const lastTime = lastAlertTimes[type] || 0;
-      if (now - lastTime < 60000) continue; // Debounce: Skip if <1min
-
-      // Check for duplicate unresolved alert
-      const alertsRef = ref(db, "alerts");
-      const snapshot = await get(alertsRef);
-      const existing = snapshot.val();
-      const hasDuplicate =
-        existing &&
-        Object.values(existing).some(
-          (alert) =>
-            alert.type === type &&
-            !alert.resolved &&
-            now - Number(alert.timestamp) < 3600000 // Same type, unresolved, <1h
-        );
-      if (hasDuplicate) continue;
-
-      // Push new alert
-      const newAlertRef = push(ref(db, "alerts"));
-      const newAlert = {
-        type,
-        message,
-        severity,
-        timestamp: now,
-        resolved: false,
-      };
-      await set(newAlertRef, newAlert);
-
-      // Update debounce and log
-      setLastAlertTimes((prev) => ({ ...prev, [type]: now }));
-      if (logEvent) logEvent(`Alert triggered: ${type} - ${message}`, "web"); // Optional if logger exists
-      console.log(`Alert triggered: ${type}`);
-    }
-  };
 
   // === MQTT Listener ===
   useEffect(() => {
-    const handler = (e) => {
-      const { topic, payload } = e.detail;
-      const now = Date.now();
+  const handler = (e) => {
+    const { topic, payload } = e.detail;
+    const now = Date.now();
 
-      if (topic === "chickulungan/sensor/temp") {
-        const val = parseFloat(payload) || 0;
-        setSensors((prev) => ({ ...prev, temp: val }));
-        addToHistory("temp", val, now);
-        checkAndAlert();
-      }
-      if (topic === "chickulungan/sensor/humidity") {
-        const val = parseFloat(payload) || 0;
-        setSensors((prev) => ({ ...prev, humidity: val }));
-        addToHistory("humidity", val, now);
-        checkAndAlert();
-      }
-      if (topic === "chickulungan/sensor/feed") {
-        setSensors((prev) => ({ ...prev, feed: parseInt(payload) || 0 }));
-        checkAndAlert();
-      }
-      if (topic === "chickulungan/log") {
-        setLog((prev) => prev + payload + "\n");
-      }
-      if (topic === "chickulungan/status") {
-        setOnline(payload === "online");
-      }
-      if (topic === "chickulungan/sensor/water") {
-        setSensors((prev) => ({ ...prev, water: parseInt(payload) || 0 }));
-      }
+    if (topic === "chickulungan/sensor/temp") {
+      const val = parseFloat(payload) || 0;
+      setSensors((prev) => ({ ...prev, temp: val }));
+      addToHistory("temp", val, now);
+   ;
+    }
 
-      setLastMqttTime(now);
-    };
+    if (topic === "chickulungan/sensor/humidity") {
+      const val = parseFloat(payload) || 0;
+      setSensors((prev) => ({ ...prev, humidity: val }));
+      addToHistory("humidity", val, now);
+      
+    }
 
-    window.addEventListener("mqtt-message", handler);
-    return () => window.removeEventListener("mqtt-message", handler);
-  });
+    if (topic === "chickulungan/sensor/feed") {
+      setSensors((prev) => ({ ...prev, feed: parseInt(payload) || 0 }));
+   
+    }
+
+    if (topic === "chickulungan/sensor/water") {
+      setSensors((prev) => ({ ...prev, water: parseInt(payload) || 0 }));
+    }
+
+    if (topic === "chickulungan/log") {
+      setLog((prev) => prev + payload + "\n");
+    }
+
+    // ❌ REMOVE this line (we won't use MQTT status for online anymore)
+    // if (topic === "chickulungan/status") setOnline(payload === "online");
+
+    setLastMqttTime(now);
+  };
+
+  window.addEventListener("mqtt-message", handler);
+  return () => window.removeEventListener("mqtt-message", handler);
+}, []); // ✅ add this
+
 
   // Helper to add to live chart (improved with labels)
   const addToHistory = (type, value, now) => {
@@ -186,38 +124,51 @@ export default function Dashboard() {
     });
   };
 
-  const [alertThresholds] = useState({
-    lowFeed: 20, // Feed < 20%
-    highTemp: 35, // Temp > 35°C
-    lowTemp: 18, // Temp < 18°C
-    highHumidity: 80, // Humidity > 80%
-    lowHumidity: 40, // Humidity < 40%
+  // === Firebase Fallback ===
+  // === Firebase Sensors Listener (always on) ===
+useEffect(() => {
+  const sensorsRef = ref(db, "sensors");
+
+  const unsub = onValue(sensorsRef, (snap) => {
+    const data = snap.val();
+    if (!data) return;
+
+    setSensors((prev) => ({
+      ...prev,
+      temp: data.temperature ?? prev.temp ?? 0,
+      humidity: data.humidity ?? prev.humidity ?? 0,
+      feed: data.feedLevel ?? prev.feed ?? 0,
+      water: data.waterLevel ?? prev.water ?? 0,
+    }));
+
+    // lastUpdate should be ms epoch (number). Handle string too.
+    if (data.lastUpdate != null) {
+      const v = Number(data.lastUpdate);
+      if (!Number.isNaN(v)) setLastUpdateMs(v);
+    }
   });
 
-  // === Firebase Fallback ===
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (Date.now() - lastMqttTime > 15000) {
-        const backupRef = ref(db, "sensors");
-        onValue(
-          backupRef,
-          (snap) => {
-            const data = snap.val();
-            if (data) {
-              setSensors({
-                temp: data.temperature || 0,
-                humidity: data.humidity || 0,
-                feed: data.feedLevel || 0,
-              });
-              setOnline(false);
-            }
-          },
-          { onlyOnce: true }
-        );
-      }
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [lastMqttTime]);
+  return () => unsub();
+}, []);
+
+// === Online/Offline based on lastUpdate ===
+useEffect(() => {
+  const OFFLINE_AFTER_MS = 90 * 1000; // 90 seconds
+
+  const tick = () => {
+    if (!lastUpdateMs) {
+      setOnline(false);
+      return;
+    }
+    const age = Date.now() - Number(lastUpdateMs);
+    setOnline(age <= OFFLINE_AFTER_MS);
+  };
+
+  tick(); // run immediately
+  const timer = setInterval(tick, 5000);
+  return () => clearInterval(timer);
+}, [lastUpdateMs]);
+
 
   // === Load Real Uptime & Incidents from Firebase ===
   //wait
@@ -285,11 +236,25 @@ export default function Dashboard() {
 
   // Isolate for now
   const feedNow = () => {
-    publishFeed();
-    push(ref(db, "logs"));
-    toast("Feed activated successfully!", "success");
-    setGlobalLoading(true);
-  };
+  if (isFeeding) return;
+  setIsFeeding(true);
+
+  setGlobalLoading(true);
+  publishFeed();
+
+  push(ref(db, "logs"), {
+    message: "Feed command sent from Dashboard",
+    source: "web",
+    timestamp: Date.now(),
+  });
+
+  toast("Feed command sent!", "success");
+
+  setTimeout(() => {
+    setGlobalLoading(false);
+    setIsFeeding(false);
+  }, 1000);
+};
 
   const navigate = useNavigate();
 
@@ -314,12 +279,12 @@ export default function Dashboard() {
             animation: online ? "pulse 2s infinite" : "none",
           }}
         />
-        <Typography variant="h6" fontWeight={600}>
+      <Typography variant="h6" fontWeight={600}>
           {online ? "System Online" : "Disconnected"}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Last update:{" "}
-          {lastMqttTime ? format(lastMqttTime, "HH:mm:ss") : "Never"}
+          Last update: {lastUpdateMs ? format(lastUpdateMs, "HH:mm:ss") : "Never"}
+
         </Typography>
       </Box>
 
@@ -510,9 +475,10 @@ export default function Dashboard() {
           flexWrap: "wrap",
         }}
       >
-        <Button variant="contained" size="large" onClick={feedNow}>
-          FEED NOW
-        </Button>
+        <Button variant="contained" size="large" onClick={feedNow} disabled={isFeeding}>
+  FEED NOW
+</Button>
+
         <Button variant="outlined" size="large" onClick={setSched}>
           SET SCHEDULE
         </Button>

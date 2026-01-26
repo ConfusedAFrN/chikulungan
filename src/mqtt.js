@@ -8,6 +8,12 @@ const options = {
   debug: true,
 };
 
+export const refreshSchedules = () => {
+  client.publish("chickulungan/control/refreshSchedules", "1");
+  console.log("Requested schedule refresh");
+};
+
+
 // Use EMQX WebSocket (browser-safe, no auth)
 const client = mqtt.connect('wss://broker.emqx.io:8084/mqtt', options);
 
