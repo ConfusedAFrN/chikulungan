@@ -1,11 +1,10 @@
 // src/pages/History.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import {
-    Paper,
+  Paper,
   Typography,
   Box,
   Button,
-  TextField,
   Chip,
   Stack,
   Alert,
@@ -60,6 +59,41 @@ export default function History() {
   const [historyData, setHistoryData] = useState([]);
 
   useEffect(() => {
+    const end = new Date();
+    const start = subDays(end, 30);
+    setStartDate(start);
+    setEndDate(end);
+    setPendingStart(start);
+    setPendingEnd(end);
+  }, []);
+
+  const summary = useMemo(() => {
+    if (!historyData.length) {
+      return {
+        totalDays: 0,
+        avgTemp: "-",
+        avgHumidity: "-",
+        latestFeed: "-",
+        latestWater: "-",
+      };
+    }
+
+    const avgTemp =
+      historyData.reduce((sum, item) => sum + item.temp, 0) / historyData.length;
+    const avgHumidity =
+      historyData.reduce((sum, item) => sum + item.humidity, 0) / historyData.length;
+    const latest = historyData[historyData.length - 1];
+
+    return {
+      totalDays: historyData.length,
+      avgTemp: `${avgTemp.toFixed(1)}°C`,
+      avgHumidity: `${avgHumidity.toFixed(1)}%`,
+      latestFeed: `${latest.feed.toFixed(0)}%`,
+      latestWater: `${latest.water.toFixed(0)}%`,
+    };
+  }, [historyData]);
+
+  useEffect(() => {
     const historyRef = ref(db, "/history/daily");
     const unsubscribe = onValue(historyRef, (snapshot) => {
       const data = snapshot.val();
@@ -98,9 +132,21 @@ export default function History() {
   }, []);
 
   const handleApplyDates = () => {
+    if (pendingStart && pendingEnd && isAfter(pendingStart, pendingEnd)) {
+      toast("Start date cannot be later than end date", "warning");
+      return;
+    }
+
     setStartDate(pendingStart);
     setEndDate(pendingEnd);
+    setRange("custom");
     toast("Filter applied", "success");
+  };
+
+  const handleResetFilters = () => {
+    setRange("30");
+    applyRange("30");
+    toast("Filters reset", "info");
   };
 
   // Apply quick range -> pre-fills date pickers (optional but explainable)
@@ -207,6 +253,38 @@ export default function History() {
           This page shows <b>daily averages</b> (temperature & humidity) and <b>end-of-day levels</b> (feed & water).
         </Typography>
 
+        <Box
+          sx={{
+            mb: 2,
+            display: "grid",
+            gap: 2,
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(2, minmax(0, 1fr))",
+              lg: "repeat(5, minmax(0, 1fr))",
+            },
+          }}
+        >
+          {[
+            ["Tracked Days", summary.totalDays],
+            ["Avg Temperature", summary.avgTemp],
+            ["Avg Humidity", summary.avgHumidity],
+            ["Latest Feed", summary.latestFeed],
+            ["Latest Water", summary.latestWater],
+          ].map(([label, value]) => (
+            <Box key={label}>
+              <Paper sx={{ p: 2 }}>
+                <Typography variant="body2" color="text.secondary">
+                  {label}
+                </Typography>
+                <Typography variant="h6" fontWeight={700}>
+                  {value}
+                </Typography>
+              </Paper>
+            </Box>
+          ))}
+        </Box>
+
         {/* Quick Range + Outlier Filter */}
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -234,6 +312,11 @@ export default function History() {
               color={range === "all" ? "primary" : "default"}
               onClick={() => applyRange("all")}
             />
+            <Chip
+              label="Reset"
+              variant="outlined"
+              onClick={handleResetFilters}
+            />
           </Box>
         </Stack>
 
@@ -243,13 +326,13 @@ export default function History() {
             label="Start Date"
             value={pendingStart}
             onChange={setPendingStart}
-            renderInput={(params) => <TextField {...params} />}
+            slotProps={{ textField: { size: "small" } }}
           />
           <DatePicker
             label="End Date"
             value={pendingEnd}
             onChange={setPendingEnd}
-            renderInput={(params) => <TextField {...params} />}
+            slotProps={{ textField: { size: "small" } }}
           />
 
           <Button variant="contained" onClick={handleApplyDates}>

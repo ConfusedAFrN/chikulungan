@@ -47,6 +47,8 @@ export default function Alerts() {
 
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notifSupported, setNotifSupported] = useState(false);
+  const [notifPermission, setNotifPermission] = useState("default");
 
   useEffect(() => {
     const alertsRef = ref(db, "alerts");
@@ -72,6 +74,20 @@ export default function Alerts() {
 
     return () => unsub();
   }, []);
+
+  useEffect(() => {
+    const supported = typeof window !== "undefined" && "Notification" in window;
+    setNotifSupported(supported);
+    if (supported) {
+      setNotifPermission(Notification.permission);
+    }
+  }, []);
+
+  const requestNotificationPermission = async () => {
+    if (!("Notification" in window)) return;
+    const result = await Notification.requestPermission();
+    setNotifPermission(result);
+  };
 
   const activeCount = useMemo(
     () => alerts.filter((a) => !a.resolved).length,
@@ -218,6 +234,23 @@ export default function Alerts() {
         </Box>
 
         {/* Body */}
+        {notifSupported && notifPermission !== "granted" && (
+          <MuiAlert
+            severity={notifPermission === "denied" ? "warning" : "info"}
+            sx={{ mb: 2 }}
+            action={
+              notifPermission === "default" ? (
+                <Button color="inherit" size="small" onClick={requestNotificationPermission}>
+                  Enable
+                </Button>
+              ) : null
+            }
+          >
+            {notifPermission === "denied"
+              ? "Browser notifications are blocked. Please allow them in your browser settings."
+              : "Enable browser notifications to receive alert updates (mobile browsers require a tap)."}
+          </MuiAlert>
+        )}
         {loading ? (
           <Box sx={{ display: "flex", justifyContent: "center", my: 8 }}>
             <CircularProgress />

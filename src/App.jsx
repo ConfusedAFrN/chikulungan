@@ -304,6 +304,20 @@ function Layout() {
               >
                 <MenuIcon />
               </IconButton>
+              <Box
+                component="img"
+                src="/Logo-chikulungan.jpg"
+                alt="ChicKulungan logo"
+                sx={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 1,
+                  objectFit: "cover",
+                  mr: 1.25,
+                  border: "1px solid",
+                  borderColor: "divider",
+                }}
+              />
               <Typography
   variant={isMobile ? "subtitle1" : "h6"}
   noWrap
