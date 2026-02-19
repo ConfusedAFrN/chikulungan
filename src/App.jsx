@@ -12,6 +12,7 @@ import {
   Drawer,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   AppBar,
@@ -48,7 +49,6 @@ import History from "./History";
 import { MqttProvider } from "./MqttProvider";
 import AlertEngine from "./AlertEngine";
 
-
 const fullDrawerWidth = 260;
 const miniDrawerWidth = 56;
 
@@ -76,16 +76,16 @@ const getTooltipText = (text) => {
 };
 
 function Layout() {
-  const [mobileOpen, setMobileOpen] = useState(false );
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [collapsed, setCollapsed] = useState(true); // Default to collapsed
   const [clock, setClock] = useState(new Date());
   const location = useLocation();
   const theme_b = useTheme();
   const isMobile = useMediaQuery(theme_b.breakpoints.down("sm"));
-  const clockText = isMobile ? format(clock, "MMM d, h:mm a") : format(clock, "PPP p");
-
-  
+  const clockText = isMobile
+    ? format(clock, "MMM d, h:mm a")
+    : format(clock, "PPP p");
 
   const drawerWidth = isMobile
     ? fullDrawerWidth
@@ -131,25 +131,64 @@ function Layout() {
 
   const drawerContent = (
     <>
-      <Toolbar sx={{ justifyContent: collapsed ? "center" : "space-between" }}>
-        {!collapsed &&  (
-          <Typography variant="h6" fontWeight={600} noWrap>
-            ChicKulungan
-          </Typography>
-        )}
-        {!isMobile && (
-          <IconButton onClick={() => setCollapsed(!collapsed)}>
-            {collapsed ? <MenuIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        )}
-        {collapsed && isMobile && (
-        <Typography variant="h6" fontWeight={600} noWrap>
-          ChicKulungan
-        </Typography>
-      )}
-      </Toolbar>
+      <Toolbar
+  sx={{
+    justifyContent: collapsed && !isMobile ? "center" : "space-between",
+    flexDirection: collapsed && !isMobile ? "column" : "row",
+    gap: collapsed && !isMobile ? 0.5 : 1, // Slight reduction for tighter fit
+    py: collapsed && !isMobile ? 1 : 0,
+    minHeight: collapsed && !isMobile ? 96 : 72,
+  }}
+>
+  <Box
+    component={Link}
+    to="/"
+    onClick={() => setMobileOpen(false)}
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      gap: 1, // Reduced from 1.25 to prevent overflow
+      color: "inherit",
+      textDecoration: "none",
+      minWidth: 0,
+    }}
+  >
+    <Box
+      component="img"
+      src="/Logo-chikulungan.png"
+      alt="ChicKulungan logo"
+      loading="lazy" // Added for better load performance
+      sx={{
+        width: { xs: 45, sm:  50}, // Smaller on mobile to avoid crowding
+        height: { xs: 45, sm: 50 },
+        borderRadius: 5,
+        objectFit: "cover",
+      }}
+    />
+    {(!collapsed || isMobile) && (
+      <Typography 
+        variant="h6" 
+        fontWeight={700} 
+        sx={{ 
+          fontSize: { xs: '1rem', sm: '1.25rem' } // Responsive: smaller on xs to fit without truncation
+        }}
+      >
+        ChicKulungan
+      </Typography>
+    )}
+  </Box>
+  {!isMobile && (
+    <IconButton
+      onClick={() => setCollapsed(!collapsed)}
+      size="small"
+      sx={{ ml: collapsed && !isMobile ? 0 : "auto" }}
+    >
+      {collapsed ? <MenuIcon /> : <ChevronLeftIcon />}
+    </IconButton>
+  )}
+</Toolbar>
       {!collapsed && <Divider />}
-      
+
       <List
         sx={{
           px: isMobile ? 3 : collapsed ? 0 : 2,
@@ -161,52 +200,58 @@ function Layout() {
         {menu.map((item) => (
           <ListItem
             key={item.text}
-            button
-            component={Link}
-            to={item.path}
-            selected={location.pathname === item.path}
-            onClick={() => setMobileOpen(false)}
             sx={{
-              justifyContent: collapsed && !isMobile ? "center" : "initial", // Center only if collapsed on desktop
-              px: isMobile ? 3 : collapsed ? 1.5 : 2, // More padding on mobile for touch
-              borderRadius: 2,
+              p: 0,
               mb: 0.5,
-              "&.Mui-selected": {
-                backgroundColor: darkMode ? "#1976d2" : "#e3f2fd",
-                fontWeight: 600,
-                "& .MuiListItemIcon-root": { color: "inherit" },
-              },
-              "&:hover": {
-                backgroundColor: darkMode
-                  ? "rgba(25, 118, 210, 0.2)"
-                  : "rgba(25, 118, 210, 0.08)",
-              },
             }}
           >
             <Tooltip
-              title={getTooltipText(item.text)} // Dynamic based on item
-              placement="right" // Shows to the right for sidebar
+              title={getTooltipText(item.text)}
+              placement="right"
               arrow
-              enterDelay={500} // Slight delay to avoid flicker
+              disableHoverListener={!collapsed || isMobile}
+              enterDelay={500}
             >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              <ListItemButton
+                component={Link}
+                to={item.path}
+                selected={location.pathname === item.path}
+                onClick={() => setMobileOpen(false)}
+                sx={{
+                  justifyContent: collapsed && !isMobile ? "center" : "initial",
+                  px: isMobile ? 2.25 : collapsed ? 1.5 : 2,
+                  py: 1,
+                  borderRadius: 2,
+                  "&.Mui-selected": {
+                    backgroundColor: darkMode ? "#1976d2" : "#e3f2fd",
+                    fontWeight: 700,
+                    "& .MuiListItemIcon-root": { color: "inherit" },
+                    "& .MuiTypography-root": { fontWeight: 700 },
+                  },
+                  "&:hover": {
+                    backgroundColor: darkMode
+                      ? "rgba(25, 118, 210, 0.2)"
+                      : "rgba(25, 118, 210, 0.08)",
+                  },
+                }}
+              >
                 <ListItemIcon
                   sx={{
                     color:
                       location.pathname === item.path
                         ? "inherit"
                         : "text.secondary",
-                    minWidth: collapsed && !isMobile ? "auto" : 40, // No minWidth collapsed desktop only
-                    mr: collapsed && !isMobile ? 0 : 1, // No margin collapsed desktop
-                    justifyContent: isMobile ? "flex-start" : "initial", // Left-align on mobile for better flow
+                    minWidth: collapsed && !isMobile ? "auto" : 40,
+                    mr: collapsed && !isMobile ? 0 : 1,
+                    justifyContent: isMobile ? "flex-start" : "initial",
                   }}
                 >
                   {item.icon}
                 </ListItemIcon>
                 {(!collapsed || isMobile) && (
-                  <ListItemText primary={item.text} sx={{ ml: 2 }} />
+                  <ListItemText primary={item.text} sx={{ ml: 0.5 }} />
                 )}
-              </Box>
+              </ListItemButton>
             </Tooltip>
           </ListItem>
         ))}
@@ -215,7 +260,6 @@ function Layout() {
   );
 
   return (
-    
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <GlobalFeedback />
@@ -231,7 +275,6 @@ function Layout() {
       >
         {/* Mobile Drawer */}
         <Drawer
-        
           variant="temporary"
           open={mobileOpen}
           onClose={() => setMobileOpen(false)}
@@ -264,27 +307,20 @@ function Layout() {
         </Drawer>
 
         {/* Main Content */}
-       <Box
-  component="main"
-  sx={{
-    flexGrow: 1,
-    display: "flex",
-    flexDirection: "column",
-
-    // IMPORTANT: don't force 100% width on a flex sibling
-    width: "auto",
-    minWidth: 0,
-
-    // IMPORTANT: remove this — permanent drawer already pushes layout
-    ml: 0,
-
-    pt: { xs: 7, sm: 9 },
-    px: { xs: 1.5, sm: 3 },
-    overflow: "hidden",
-  }}
->
-
-
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            width: "auto",
+            minWidth: 0,
+            ml: 0,
+            pt: { xs: 7, sm: 9 },
+            px: { xs: 1.5, sm: 3 },
+            overflow: "hidden",
+          }}
+        >
           <AppBar
             position="fixed"
             sx={{
@@ -304,41 +340,24 @@ function Layout() {
               >
                 <MenuIcon />
               </IconButton>
-              <Box
-                component="img"
-                src="/Logo-chikulungan.jpg"
-                alt="ChicKulungan logo"
-                sx={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: 1,
-                  objectFit: "cover",
-                  mr: 1.25,
-                  border: "1px solid",
-                  borderColor: "divider",
-                }}
-              />
               <Typography
-  variant={isMobile ? "subtitle1" : "h6"}
-  noWrap
-  sx={{ flexGrow: 1, minWidth: 0 }} // minWidth 0 is important for truncation
->
-  {currentTitle}
-</Typography>
+                variant={isMobile ? "subtitle1" : "h6"}
+                noWrap
+                sx={{ flexGrow: 1, minWidth: 0 }}
+              >
+                {currentTitle}
+              </Typography>
 
-<Typography
-  variant="body2"
-  noWrap
-  sx={{
-    mr: { xs: 1, sm: 3 },
-    display: { xs: "none", sm: "block" }, // hide on mobile (cleanest)
-    // If you prefer to show it on mobile, change this line to:
-    // display: "block"
-    // and it will use the short clockText.
-  }}
->
-  {clockText}
-</Typography>
+              <Typography
+                variant="body2"
+                noWrap
+                sx={{
+                  mr: { xs: 1, sm: 3 },
+                  display: { xs: "none", sm: "block" },
+                }}
+              >
+                {clockText}
+              </Typography>
 
               <Tooltip
                 title={

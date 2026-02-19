@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback, } from "react";
 import {
   Paper,
   Typography,
@@ -629,16 +629,10 @@ export default function Dashboard() {
           </ResponsiveContainer>
         )}
       </Paper>
-
-      {/* Terminal Log */}
-      <Paper sx={{ mt: 4, p: 3 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Terminal Log
-        </Typography>
-        <LiveLog />
-      </Paper>
     </Box>
   );
+
+  
 
   // Helper component for log (limited query = faster)
   function LiveLog() {
@@ -673,7 +667,7 @@ export default function Dashboard() {
         multiline
         rows={6}
         fullWidth
-        value={log || "No logs yet"}
+        value={log}
         InputProps={{ readOnly: true }}
         sx={{
           backgroundColor: theme.palette.mode === "dark" ? "#000" : "#f5f5f5",
