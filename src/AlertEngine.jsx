@@ -49,13 +49,57 @@ function ensureNotificationPermissionOnce() {
 }
 
 function fireBrowserNotification(title, body) {
+  if (!("Notification" in window)) return;
+  if (Notification.permission !== "granted") return;
+
+  // Prefer service-worker notifications when available:
+  // better support on mobile + works reliably with installed PWAs.
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.ready
+      .then((registration) => {
+        if (registration?.showNotification) {
+          return registration.showNotification(title, {
+            body,
+            tag: "chickulungan-alert",
+            renotify: true,
+          });
+        }
+
+        // Fallback to window notification.
+        new Notification(title, { body });
+      })
+      .catch(() => {
+        // Fallback if service worker isn't ready yet.
+        try {
+          new Notification(title, { body });
+        } catch {
+          /* noop */
+        }
+      });
+    return;
+  }
+
   try {
-    if (!("Notification" in window)) return;
-    if (Notification.permission !== "granted") return;
     new Notification(title, { body });
   } catch {
     /* noop */
   }
+}
+
+function formatElapsed(ms) {
+  if (!Number.isFinite(ms) || ms <= 0) return "0s";
+
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const parts = [];
+  if (hours > 0) parts.push(`${hours}h`);
+  if (minutes > 0) parts.push(`${minutes}m`);
+  if (hours === 0 && seconds > 0) parts.push(`${seconds}s`);
+
+  return parts.join(" ") || "0s";
 }
 
 function loadReminderState() {
@@ -221,7 +265,7 @@ export default function AlertEngine() {
     if (age > OFFLINE_AFTER_MS) {
       await createAlert({
         type: "Device Offline",
-        message: `No ESP32 update for ${(age / 1000).toFixed(0)}s`,
+        message: `No ESP32 update for ${formatElapsed(age)}`,
         severity: "critical",
       });
     }
