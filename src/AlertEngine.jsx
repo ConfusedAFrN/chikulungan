@@ -16,13 +16,13 @@ const OFFLINE_AFTER_MS = 90 * 1000; // 90s offline threshold
 // =====================
 // Reminders (unresolved)
 // =====================
-const REMINDER_CRITICAL_MS = 5 * 60 * 1000; // 5 minutes
-const REMINDER_WARNING_MS = 15 * 60 * 1000; // 15 minutes
-const REMINDER_TICK_MS = 30 * 1000; // check every 30 seconds
+const REMINDER_CRITICAL_MS = 10 * 60 * 1000; // 10 minutes (anti-spam)
+const REMINDER_WARNING_MS = 30 * 60 * 1000; // 30 minutes (anti-spam)
+const REMINDER_TICK_MS = 60 * 1000; // check every 60 seconds
 const REMINDER_STORAGE_KEY = "alertReminderState_v1";
 
 // If true, only reminds when tab is not focused (less annoying while actively using app)
-const REMIND_ONLY_WHEN_HIDDEN = false;
+const REMIND_ONLY_WHEN_HIDDEN = true;
 
 function ensureNotificationPermissionOnce() {
   try {
@@ -48,7 +48,7 @@ function ensureNotificationPermissionOnce() {
   }
 }
 
-function fireBrowserNotification(title, body) {
+function fireBrowserNotification(title, body, options = {}) {
   if (!("Notification" in window)) return;
   if (Notification.permission !== "granted") return;
 
@@ -60,8 +60,8 @@ function fireBrowserNotification(title, body) {
         if (registration?.showNotification) {
           return registration.showNotification(title, {
             body,
-            tag: "chickulungan-alert",
-            renotify: true,
+            tag: options.tag || "chickulungan-alert",
+            renotify: Boolean(options.renotify),
           });
         }
 
@@ -148,6 +148,7 @@ export default function AlertEngine() {
   const lastUpdateMsRef = useRef(null);
 
   const alertsSnapshotRef = useRef({});
+  const resolvingIdsRef = useRef(new Set());
   const [ready, setReady] = useState(false);
 
   // Debounce per alert type
@@ -208,6 +209,71 @@ export default function AlertEngine() {
     },
     [shouldCreateAlert]
   );
+
+  const resolveAlertsByPredicate = useCallback(async (predicate) => {
+    const entries = Object.entries(alertsSnapshotRef.current || {});
+
+    const targets = entries.filter(([id, alert]) => {
+      if (!alert || alert.resolved) return false;
+      if (resolvingIdsRef.current.has(id)) return false;
+      return predicate(alert);
+    });
+
+    if (!targets.length) return;
+
+    await Promise.all(
+      targets.map(async ([id, alert]) => {
+        resolvingIdsRef.current.add(id);
+        try {
+          await set(ref(db, `alerts/${id}`), {
+            ...alert,
+            resolved: true,
+            resolvedAt: Date.now(),
+            resolvedBy: "auto",
+          });
+        } finally {
+          resolvingIdsRef.current.delete(id);
+        }
+      })
+    );
+  }, []);
+
+  const autoResolveStabilizedAlerts = useCallback(async () => {
+    const s = sensorsRef.current;
+
+    const isTempNormal =
+      Number.isFinite(Number(s.temp)) &&
+      Number(s.temp) >= alertThresholds.lowTemp &&
+      Number(s.temp) <= alertThresholds.highTemp;
+    const isHumidityNormal =
+      Number.isFinite(Number(s.humidity)) &&
+      Number(s.humidity) >= alertThresholds.lowHumidity &&
+      Number(s.humidity) <= alertThresholds.highHumidity;
+    const isFeedNormal = Number.isFinite(Number(s.feed)) && Number(s.feed) >= alertThresholds.lowFeed;
+    // No explicit water thresholds yet in this file; use a safe baseline for recovery.
+    const isWaterNormal = Number.isFinite(Number(s.water)) && Number(s.water) > 0;
+
+    await resolveAlertsByPredicate((a) => {
+      const type = String(a.type || "").toLowerCase();
+
+      if (type.includes("temperature")) return isTempNormal;
+      if (type.includes("humidity")) return isHumidityNormal;
+      if (type.includes("feed")) return isFeedNormal;
+      if (type.includes("water")) return isWaterNormal;
+
+      return false;
+    });
+  }, [resolveAlertsByPredicate]);
+
+  const autoResolveOfflineAlertsIfRecovered = useCallback(async () => {
+    const lastUpdate = Number(lastUpdateMsRef.current || 0);
+    if (!lastUpdate) return;
+
+    const age = Date.now() - lastUpdate;
+    if (age > OFFLINE_AFTER_MS) return;
+
+    await resolveAlertsByPredicate((a) => String(a.type || "").toLowerCase() === "device offline");
+  }, [resolveAlertsByPredicate]);
 
   const evaluateAlerts = useCallback(async () => {
     const lastUpdate = Number(lastUpdateMsRef.current || 0);
@@ -278,14 +344,14 @@ export default function AlertEngine() {
     if (REMIND_ONLY_WHEN_HIDDEN && document.visibilityState === "visible") return;
 
     const alertsObj = alertsSnapshotRef.current || {};
-    const { list, total, criticalCount, warningCount } = summarizeUnresolved(alertsObj);
+    const { list, total } = summarizeUnresolved(alertsObj);
     if (total === 0) return;
 
     const now = Date.now();
     let remindedAny = false;
 
-    // Remind up to 2 alerts per tick to avoid spam
-    const toConsider = list.slice(0, 2);
+    // Remind only 1 alert per tick to reduce notification pressure on browsers.
+    const toConsider = list.slice(0, 1);
 
     for (const a of toConsider) {
       const sev = normalizeSeverity(a.severity);
@@ -308,21 +374,14 @@ export default function AlertEngine() {
         `REMINDER (${sev.toUpperCase()}): ${a.type}: ${a.message}`,
         sev === "critical" ? "error" : "warning"
       );
-      fireBrowserNotification(title, body);
+      fireBrowserNotification(title, body, {
+        tag: sev === "critical" ? "chickulungan-alert-critical" : "chickulungan-alert-warning",
+        renotify: sev === "critical",
+      });
     }
 
-    // Optional “summary” notification (only if we reminded something)
-    if (remindedAny) {
-      saveReminderState(reminderStateRef.current);
-
-      // You can comment this out if it's too noisy:
-      const summary =
-        criticalCount > 0
-          ? `${criticalCount} critical unresolved alert(s)`
-          : `${warningCount} unresolved alert(s)`;
-
-      fireBrowserNotification("ChicKulungan: Unresolved Alerts", summary);
-    }
+    // Persist reminder timestamps only when we actually notified.
+    if (remindedAny) saveReminderState(reminderStateRef.current);
 
     // Cleanup reminder state for resolved/removed alerts
     const cleaned = {};
@@ -355,10 +414,18 @@ export default function AlertEngine() {
 
       evaluateAlerts();
       evaluateOffline();
+      autoResolveStabilizedAlerts();
+      autoResolveOfflineAlertsIfRecovered();
     });
 
     return () => unsub();
-  }, [ready, evaluateAlerts, evaluateOffline]);
+  }, [
+    ready,
+    evaluateAlerts,
+    evaluateOffline,
+    autoResolveStabilizedAlerts,
+    autoResolveOfflineAlertsIfRecovered,
+  ]);
 
   // ✅ MQTT listener (fast updates)
   useEffect(() => {
@@ -371,15 +438,18 @@ export default function AlertEngine() {
       if (topic === "chickulungan/sensor/temp") {
         sensorsRef.current.temp = parseFloat(payload) || 0;
         evaluateAlerts();
+        autoResolveStabilizedAlerts();
       } else if (topic === "chickulungan/sensor/humidity") {
         sensorsRef.current.humidity = parseFloat(payload) || 0;
         evaluateAlerts();
+        autoResolveStabilizedAlerts();
       } else if (topic === "chickulungan/sensor/feed") {
         sensorsRef.current.feed = parseInt(payload, 10) || 0;
         evaluateAlerts();
+        autoResolveStabilizedAlerts();
       } else if (topic === "chickulungan/sensor/water") {
         sensorsRef.current.water = parseInt(payload, 10) || 0;
-        // You can add water threshold alerts later when you define levels
+        autoResolveStabilizedAlerts();
       } else if (topic === "chickulungan/status") {
         // optional: online/offline by MQTT LWT can be added later
       }
@@ -387,16 +457,17 @@ export default function AlertEngine() {
 
     window.addEventListener("mqtt-message", handler);
     return () => window.removeEventListener("mqtt-message", handler);
-  }, [ready, evaluateAlerts]);
+  }, [ready, evaluateAlerts, autoResolveStabilizedAlerts]);
 
   // Periodic offline check even if nothing changes
   useEffect(() => {
     if (!ready) return;
     const t = setInterval(() => {
       evaluateOffline();
+      autoResolveOfflineAlertsIfRecovered();
     }, 5000);
     return () => clearInterval(t);
-  }, [ready, evaluateOffline]);
+  }, [ready, evaluateOffline, autoResolveOfflineAlertsIfRecovered]);
 
   // ✅ Periodic reminder tick
   useEffect(() => {
