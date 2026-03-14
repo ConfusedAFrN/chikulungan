@@ -1,0 +1,306 @@
+{
+  "history": {
+    "daily": {
+      "2026-01-01": {
+        "date": "2026-01-01",
+        "tempAvg": 26.0,
+        "tempMin": 23.9,
+        "tempMax": 28.9,
+        "humAvg": 71.7,
+        "feedEnd": 89.2,
+        "waterEnd": 90.7,
+        "samples": 96
+      },
+      "2026-01-02": {
+        "date": "2026-01-02",
+        "tempAvg": 26.8,
+        "tempMin": 24.6,
+        "tempMax": 29.7,
+        "humAvg": 72.6,
+        "feedEnd": 85.9,
+        "waterEnd": 86.5,
+        "samples": 96
+      },
+      "2026-01-03": {
+        "date": "2026-01-03",
+        "tempAvg": 27.5,
+        "tempMin": 25.1,
+        "tempMax": 30.3,
+        "humAvg": 72.9,
+        "feedEnd": 82.2,
+        "waterEnd": 82.5,
+        "samples": 96
+      },
+      "2026-01-04": {
+        "date": "2026-01-04",
+        "tempAvg": 28.0,
+        "tempMin": 25.5,
+        "tempMax": 30.7,
+        "humAvg": 72.7,
+        "feedEnd": 78.4,
+        "waterEnd": 78.8,
+        "samples": 96
+      },
+      "2026-01-05": {
+        "date": "2026-01-05",
+        "tempAvg": 28.2,
+        "tempMin": 25.6,
+        "tempMax": 30.8,
+        "humAvg": 72.1,
+        "feedEnd": 74.5,
+        "waterEnd": 75.5,
+        "samples": 96
+      },
+      "2026-01-06": {
+        "date": "2026-01-06",
+        "tempAvg": 28.2,
+        "tempMin": 25.6,
+        "tempMax": 30.7,
+        "humAvg": 71.1,
+        "feedEnd": 70.9,
+        "waterEnd": 71.8,
+        "samples": 96
+      },
+      "2026-01-07": {
+        "date": "2026-01-07",
+        "tempAvg": 28.0,
+        "tempMin": 25.4,
+        "tempMax": 30.4,
+        "humAvg": 69.9,
+        "feedEnd": 67.6,
+        "waterEnd": 67.7,
+        "samples": 96
+      },
+      "2026-01-08": {
+        "date": "2026-01-08",
+        "tempAvg": 27.8,
+        "tempMin": 25.2,
+        "tempMax": 30.1,
+        "humAvg": 68.7,
+        "feedEnd": 64.8,
+        "waterEnd": 63.5,
+        "samples": 96
+      },
+      "2026-01-09": {
+        "date": "2026-01-09",
+        "tempAvg": 27.5,
+        "tempMin": 25.1,
+        "tempMax": 29.7,
+        "humAvg": 67.4,
+        "feedEnd": 61.5,
+        "waterEnd": 59.2,
+        "samples": 96
+      },
+      "2026-01-10": {
+        "date": "2026-01-10",
+        "tempAvg": 27.4,
+        "tempMin": 25.0,
+        "tempMax": 29.5,
+        "humAvg": 66.2,
+        "feedEnd": 57.8,
+        "waterEnd": 55.0,
+        "samples": 96
+      },
+      "2026-01-11": {
+        "date": "2026-01-11",
+        "tempAvg": 27.2,
+        "tempMin": 25.0,
+        "tempMax": 29.2,
+        "humAvg": 65.2,
+        "feedEnd": 53.9,
+        "waterEnd": 51.0,
+        "samples": 96
+      },
+      "2026-01-12": {
+        "date": "2026-01-12",
+        "tempAvg": 27.1,
+        "tempMin": 25.0,
+        "tempMax": 29.0,
+        "humAvg": 64.2,
+        "feedEnd": 50.0,
+        "waterEnd": 47.4,
+        "samples": 96
+      },
+      "2026-01-13": {
+        "date": "2026-01-13",
+        "tempAvg": 26.8,
+        "tempMin": 24.9,
+        "tempMax": 28.7,
+        "humAvg": 63.3,
+        "feedEnd": 46.4,
+        "waterEnd": 44.1,
+        "samples": 96
+      },
+      "2026-01-14": {
+        "date": "2026-01-14",
+        "tempAvg": 26.4,
+        "tempMin": 24.6,
+        "tempMax": 28.3,
+        "humAvg": 62.5,
+        "feedEnd": 43.2,
+        "waterEnd": 40.3,
+        "samples": 96
+      },
+      "2026-01-15": {
+        "date": "2026-01-15",
+        "tempAvg": 28.9,
+        "tempMin": 24.2,
+        "tempMax": 31.3,
+        "humAvg": 68.2,
+        "feedEnd": 40.3,
+        "waterEnd": 36.2,
+        "samples": 96
+      },
+      "2026-01-16": {
+        "date": "2026-01-16",
+        "tempAvg": 28.2,
+        "tempMin": 23.6,
+        "tempMax": 30.7,
+        "humAvg": 67.3,
+        "feedEnd": 37.0,
+        "waterEnd": 31.9,
+        "samples": 96
+      },
+      "2026-01-17": {
+        "date": "2026-01-17",
+        "tempAvg": 27.5,
+        "tempMin": 22.9,
+        "tempMax": 30.1,
+        "humAvg": 66.4,
+        "feedEnd": 33.2,
+        "waterEnd": 27.7,
+        "samples": 96
+      },
+      "2026-01-18": {
+        "date": "2026-01-18",
+        "tempAvg": 23.9,
+        "tempMin": 22.3,
+        "tempMax": 26.0,
+        "humAvg": 59.0,
+        "feedEnd": 29.4,
+        "waterEnd": 23.5,
+        "samples": 96
+      },
+      "2026-01-19": {
+        "date": "2026-01-19",
+        "tempAvg": 23.5,
+        "tempMin": 21.8,
+        "tempMax": 25.7,
+        "humAvg": 58.0,
+        "feedEnd": 25.5,
+        "waterEnd": 90.0,
+        "samples": 96
+      },
+      "2026-01-20": {
+        "date": "2026-01-20",
+        "tempAvg": 23.3,
+        "tempMin": 21.5,
+        "tempMax": 25.7,
+        "humAvg": 57.1,
+        "feedEnd": 21.9,
+        "waterEnd": 86.4,
+        "samples": 96
+      },
+      "2026-01-21": {
+        "date": "2026-01-21",
+        "tempAvg": 23.5,
+        "tempMin": 21.6,
+        "tempMax": 26.0,
+        "humAvg": 56.4,
+        "feedEnd": 18.8,
+        "waterEnd": 83.0,
+        "samples": 96
+      },
+      "2026-01-22": {
+        "date": "2026-01-22",
+        "tempAvg": 23.9,
+        "tempMin": 21.8,
+        "tempMax": 26.5,
+        "humAvg": 55.9,
+        "feedEnd": 89.0,
+        "waterEnd": 79.2,
+        "samples": 96
+      },
+      "2026-01-23": {
+        "date": "2026-01-23",
+        "tempAvg": 24.4,
+        "tempMin": 22.2,
+        "tempMax": 27.2,
+        "humAvg": 55.8,
+        "feedEnd": 85.6,
+        "waterEnd": 75.1,
+        "samples": 96
+      },
+      "2026-01-24": {
+        "date": "2026-01-24",
+        "tempAvg": 25.0,
+        "tempMin": 22.7,
+        "tempMax": 27.9,
+        "humAvg": 56.1,
+        "feedEnd": 81.9,
+        "waterEnd": 70.8,
+        "samples": 96
+      },
+      "2026-01-25": {
+        "date": "2026-01-25",
+        "tempAvg": 25.6,
+        "tempMin": 23.1,
+        "tempMax": 28.5,
+        "humAvg": 57.0,
+        "feedEnd": 78.0,
+        "waterEnd": 66.5,
+        "samples": 96
+      },
+      "2026-01-26": {
+        "date": "2026-01-26",
+        "tempAvg": 26.0,
+        "tempMin": 23.5,
+        "tempMax": 28.9,
+        "humAvg": 58.3,
+        "feedEnd": 74.1,
+        "waterEnd": 62.4,
+        "samples": 96
+      },
+      "2026-01-27": {
+        "date": "2026-01-27",
+        "tempAvg": 26.3,
+        "tempMin": 23.7,
+        "tempMax": 29.2,
+        "humAvg": 60.1,
+        "feedEnd": 70.6,
+        "waterEnd": 58.5,
+        "samples": 96
+      },
+      "2026-01-28": {
+        "date": "2026-01-28",
+        "tempAvg": 26.6,
+        "tempMin": 24.0,
+        "tempMax": 29.4,
+        "humAvg": 62.2,
+        "feedEnd": 67.5,
+        "waterEnd": 55.0,
+        "samples": 96
+      },
+      "2026-01-29": {
+        "date": "2026-01-29",
+        "tempAvg": 26.8,
+        "tempMin": 24.2,
+        "tempMax": 29.6,
+        "humAvg": 64.5,
+        "feedEnd": 64.5,
+        "waterEnd": 51.5,
+        "samples": 96
+      },
+      "2026-01-30": {
+        "date": "2026-01-30",
+        "tempAvg": 27.1,
+        "tempMin": 24.6,
+        "tempMax": 29.8,
+        "humAvg": 66.8,
+        "feedEnd": 61.1,
+        "waterEnd": 47.6,
+        "samples": 96
+      }
+    }
+  }
+}

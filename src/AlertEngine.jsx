@@ -5,6 +5,7 @@ import { toast } from "./utils/feedback";
 
 const alertThresholds = {
   lowFeed: 20,
+  lowWater: 20,          // ← ADDED: triggers "Low Water" critical alert
   highTemp: 35,
   lowTemp: 18,
   highHumidity: 80,
@@ -250,8 +251,7 @@ export default function AlertEngine() {
       Number(s.humidity) >= alertThresholds.lowHumidity &&
       Number(s.humidity) <= alertThresholds.highHumidity;
     const isFeedNormal = Number.isFinite(Number(s.feed)) && Number(s.feed) >= alertThresholds.lowFeed;
-    // No explicit water thresholds yet in this file; use a safe baseline for recovery.
-    const isWaterNormal = Number.isFinite(Number(s.water)) && Number(s.water) > 0;
+    const isWaterNormal = Number.isFinite(Number(s.water)) && Number(s.water) >= alertThresholds.lowWater; // ← UPDATED
 
     await resolveAlertsByPredicate((a) => {
       const type = String(a.type || "").toLowerCase();
@@ -259,7 +259,7 @@ export default function AlertEngine() {
       if (type.includes("temperature")) return isTempNormal;
       if (type.includes("humidity")) return isHumidityNormal;
       if (type.includes("feed")) return isFeedNormal;
-      if (type.includes("water")) return isWaterNormal;
+      if (type.includes("water")) return isWaterNormal;   // ← ADDED
 
       return false;
     });
@@ -290,6 +290,12 @@ export default function AlertEngine() {
         condition: Number(s.feed) < alertThresholds.lowFeed,
         type: "Low Feed",
         message: `Feed level is low (${s.feed}%)`,
+        severity: "critical",
+      },
+      {
+        condition: Number(s.water) < alertThresholds.lowWater,   // ← NEW Low Water alert
+        type: "Low Water",
+        message: `Water level is low (${s.water}%)`,
         severity: "critical",
       },
       {
@@ -449,6 +455,7 @@ export default function AlertEngine() {
         autoResolveStabilizedAlerts();
       } else if (topic === "chickulungan/sensor/water") {
         sensorsRef.current.water = parseInt(payload, 10) || 0;
+        evaluateAlerts();                    // ← NOW triggers Low Water check
         autoResolveStabilizedAlerts();
       } else if (topic === "chickulungan/status") {
         // optional: online/offline by MQTT LWT can be added later

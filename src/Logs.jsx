@@ -13,6 +13,7 @@ import {
   IconButton,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
+import { DataGrid } from "@mui/x-data-grid";
 import { format } from "date-fns";
 import { db, ref, onValue, push, serverTimestamp, set } from "./firebase";
 import { useTheme } from "@mui/material/styles";
@@ -22,25 +23,19 @@ function normalize(s = "") {
     .toString()
     .toLowerCase()
     .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "") // strip accents
-    .replace(/[^a-z0-9\s:./_-]/g, " ") // remove noisy punctuation
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s:./_-]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
 
 function getTimestampMs(ts) {
-  // RTDB serverTimestamp resolves to a number (ms) when read,
-  // but guard anyway because logs can be malformed or missing timestamp.
-  if (typeof ts === "number") return ts;
+  if (typeof ts === "number" && Number.isFinite(ts) && ts > 0) return ts;
   if (typeof ts === "string") {
     const n = Number(ts);
-    return Number.isFinite(n) ? n : 0;
-  }
-  if (ts && typeof ts === "object") {
-    // Some libs return { seconds, nanoseconds } (more common in Firestore),
-    // or other shapes. Handle best-effort:
-    if (typeof ts.seconds === "number") return ts.seconds * 1000;
-    if (typeof ts._seconds === "number") return ts._seconds * 1000;
+    if (Number.isFinite(n) && n > 0) return n;
+    const parsed = Date.parse(ts);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
   }
   return 0;
 }
@@ -53,6 +48,7 @@ function sourceLabel(src) {
 
 export default function Logs() {
   const [logs, setLogs] = useState([]);
+  const [totalEntries, setTotalEntries] = useState(0);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
@@ -63,18 +59,21 @@ export default function Logs() {
     const unsub = onValue(logsRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
+        const total = Object.keys(data).length;
+        setTotalEntries(total);
+
         const logArray = Object.entries(data)
           .map(([id, log]) => ({ id, ...log }))
           .map((l) => ({
             ...l,
-            // precompute tsMs for stable sort + formatting
             tsMs: getTimestampMs(l.timestamp),
           }))
           .sort((a, b) => (b.tsMs || 0) - (a.tsMs || 0))
-          .slice(0, 500); // Limit to last 500 entries
+          .slice(0, 500);
         setLogs(logArray);
       } else {
         setLogs([]);
+        setTotalEntries(0);
       }
       setLoading(false);
     });
@@ -102,8 +101,8 @@ export default function Logs() {
     return q ? q.split(" ").filter(Boolean) : [];
   }, [search]);
 
-  // Filtered lines for display + export (same source of truth)
-  const filteredLines = useMemo(() => {
+  // Filtered logs with pre-computed formatted time
+  const filteredLogs = useMemo(() => {
     if (!logs.length) return [];
 
     return logs
@@ -111,36 +110,79 @@ export default function Logs() {
         const msg = log.message ?? "";
         const src = log.source ?? "";
         const tsMs = log.tsMs ?? getTimestampMs(log.timestamp);
-
-        // Build searchable "haystack": message + source + date string
         const dateStr = tsMs ? format(new Date(tsMs), "MMM dd, yyyy hh:mm:ss a") : "";
         const haystack = normalize(`${msg} ${src} ${dateStr}`);
 
         if (tokens.length === 0) return true;
-        // all tokens must match somewhere
         return tokens.every((t) => haystack.includes(t));
       })
       .map((log) => {
-        const tsMs = log.tsMs ?? getTimestampMs(log.timestamp);
-        const timeLabel = tsMs
-          ? format(new Date(tsMs), "MMM dd, yyyy │ hh:mm:ss a")
-          : "Unknown time";
+        const ts = log.tsMs ?? getTimestampMs(log.timestamp);
+        const formattedTime = ts
+          ? format(new Date(ts), "MMM dd, yyyy hh:mm:ss a")
+          : "Unknown";
 
-        return (
-          `${timeLabel}  ` +
-          `${sourceLabel(log.source)}  ` +
-          `${log.message ?? ""}`
-        );
+        return {
+          ...log,
+          formattedTime,
+          id: log.id || Date.now() + Math.random(),
+        };
       });
   }, [logs, tokens]);
 
+  const columns = [
+    {
+      field: "formattedTime",
+      headerName: "Time",
+      width: 190,
+      sortable: true,
+    },
+    {
+      field: "source",
+      headerName: "Source",
+      width: 130,
+      renderCell: (params) => (
+        <Chip
+          label={sourceLabel(params.row?.source)}
+          size="small"
+          color={params.row?.source === "esp32" ? "primary" : "default"}
+          variant="outlined"
+        />
+      ),
+    },
+    {
+      field: "message",
+      headerName: "Message",
+      flex: 1,
+      minWidth: 240,
+      renderCell: (params) => (
+        <Typography variant="body2" sx={{ whiteSpace: "normal", lineHeight: 1.4 }}>
+          {params.row?.message ?? ""}
+        </Typography>
+      ),
+    },
+  ];
+
   const exportLogs = () => {
-    const text = filteredLines.length ? filteredLines.join("\n") : "No matching logs.";
-    const blob = new Blob([text], { type: "text/plain" });
+    if (!filteredLogs.length) {
+      alert("No matching logs to export");
+      return;
+    }
+
+    const headers = ["Time", "Source", "Message"];
+    const lines = [
+      headers.join(","),
+      ...filteredLogs.map((log) => {
+        const timeStr = log.formattedTime || "";
+        return `"${timeStr}","${sourceLabel(log.source)}","${(log.message ?? "").replace(/"/g, '""')}"`;
+      }),
+    ];
+
+    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `chickulungan_logs_${format(new Date(), "yyyy-MM-dd_HHmm")}.txt`;
+    a.download = `chickulungan_logs_${format(new Date(), "yyyy-MM-dd_HHmm")}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -156,7 +198,7 @@ export default function Logs() {
     >
       <Paper
         sx={{
-          p: 3,
+          p: { xs: 2, sm: 3 },
           flex: 1,
           display: "flex",
           flexDirection: "column",
@@ -184,12 +226,12 @@ export default function Logs() {
             <Typography variant="h5" fontWeight="bold">
               System Logs
             </Typography>
-            <Chip label={`${logs.length} entries`} size="small" color="primary" />
+            <Chip label={`${totalEntries} total entries`} size="small" color="primary" />
             {search.trim() && (
               <Chip
-                label={`${filteredLines.length} match`}
+                label={`${filteredLogs.length} match`}
                 size="small"
-                color={filteredLines.length ? "success" : "warning"}
+                color={filteredLogs.length ? "success" : "warning"}
                 variant="outlined"
               />
             )}
@@ -229,13 +271,13 @@ export default function Logs() {
               onClick={exportLogs}
               sx={{ flex: { xs: "1 1 100%", sm: "unset" } }}
             >
-              Export ↓
+              Export CSV
             </Button>
           </Box>
         </Box>
 
         <TextField
-          label="Search logs (e.g. 'feed error', 'esp32 07:10 pm')"
+          label="Search logs (e.g. 'feed', 'esp32', 'low')"
           variant="outlined"
           fullWidth
           value={search}
@@ -254,18 +296,7 @@ export default function Logs() {
               </InputAdornment>
             ) : null,
           }}
-          sx={{
-            backgroundColor: theme.palette.mode === "dark" ? "#000" : "#f5f5f5",
-            color: theme.palette.mode === "dark" ? "#0f0" : "#000",
-            fontFamily: "monospace",
-            fontSize: "0.875rem",
-            "& .MuiOutlinedInput-root": {
-              color: theme.palette.mode === "dark" ? "#0f0" : "#000",
-            },
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: theme.palette.divider,
-            },
-          }}
+          sx={{ mb: 2 }}
         />
 
         {loading ? (
@@ -275,30 +306,39 @@ export default function Logs() {
         ) : logs.length === 0 ? (
           <Alert severity="info">No logs yet. System events will appear here.</Alert>
         ) : (
-          <TextField
-            multiline
-            fullWidth
-            value={filteredLines.length ? filteredLines.join("\n") : "No matching logs."}
-            InputProps={{ readOnly: true }}
-            sx={{
-              mt: 2,
-              flex: 1,
-              minHeight: 0,
-              backgroundColor: theme.palette.mode === "dark" ? "#000" : "#f5f5f5",
-              color: theme.palette.mode === "dark" ? "#0f0" : "#000",
-              fontFamily: "monospace",
-              fontSize: "0.875rem",
-              "& .MuiOutlinedInput-root": {
-                color: theme.palette.mode === "dark" ? "#0f0" : "#000",
-                height: "100%",
-                alignItems: "flex-start",
-                overflowY: "auto",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: theme.palette.divider,
-              },
-            }}
-          />
+          <Box sx={{ flex: 1, minHeight: 0 }}>
+            <DataGrid
+              rows={filteredLogs}
+              columns={columns}
+              pageSize={20}
+              rowsPerPageOptions={[10, 20, 50]}
+              disableSelectionOnClick
+              autoHeight={false}
+              density="compact"
+              sx={{
+                border: "none",
+                bgcolor: theme.palette.background.paper,
+                color: theme.palette.text.primary,
+                "& .MuiDataGrid-columnHeaders": {
+                  bgcolor:
+                    theme.palette.mode === "dark"
+                      ? "rgba(255,255,255,0.06)"
+                      : "rgba(0,0,0,0.04)",
+                  borderBottom: `1px solid ${theme.palette.divider}`,
+                },
+                "& .MuiDataGrid-cell": {
+                  borderBottom: `1px solid ${theme.palette.divider}`,
+                  py: 1,
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  borderTop: `1px solid ${theme.palette.divider}`,
+                },
+                "& .MuiDataGrid-row:hover": {
+                  backgroundColor: "rgba(25, 118, 210, 0.08)",
+                },
+              }}
+            />
+          </Box>
         )}
       </Paper>
     </Box>

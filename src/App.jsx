@@ -48,6 +48,7 @@ import Logs from "./Logs";
 import History from "./History";
 import { MqttProvider } from "./MqttProvider";
 import AlertEngine from "./AlertEngine";
+import SMSSettings from "./SMSSettings";
 
 const fullDrawerWidth = 260;
 const miniDrawerWidth = 56;
@@ -58,6 +59,7 @@ const menu = [
   { text: "Alerts", icon: <NotificationsIcon />, path: "/alerts" },
   { text: "Logs", icon: <DescriptionIcon />, path: "/logs" },
   { text: "History", icon: <HistoryIcon />, path: "/history" },
+  { text: "SMS Alerts", icon: <NotificationsIcon />, path: "/sms" },  // reuse NotificationsIcon for now
 ];
 
 const getTooltipText = (text) => {
@@ -68,6 +70,8 @@ const getTooltipText = (text) => {
       return "Schedule";
     case "Alerts":
       return "Alerts";
+    case "SMS Alerts":
+      return "SMS Alerts";
     case "Logs":
       return "Logs";
     default:
@@ -388,6 +392,7 @@ function Layout() {
               <Route path="/alerts" element={<Alerts />} />
               <Route path="/logs" element={<Logs />} />
               <Route path="/history" element={<History />} />
+              <Route path="/sms" element={<SMSSettings />} />
             </Routes>
           </Box>
         </Box>

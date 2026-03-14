@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, } from "react";
+// src/pages/Dashboard.jsx
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import {
   Paper,
   Typography,
@@ -7,6 +8,10 @@ import {
   Box,
   Grid,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   BarChart,
@@ -50,8 +55,13 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   // ==========================
-  // ✅ Instant load: cache sensors
+  // New filter states for live trends
   // ==========================
+  const [timeWindowMin, setTimeWindowMin] = useState(15);
+  const [tempDomain, setTempDomain] = useState([0, 50]);
+  const [humDomain, setHumDomain] = useState([0, 100]);
+
+  // ✅ Instant load: cache sensors
   useEffect(() => {
     try {
       const cached = JSON.parse(localStorage.getItem("lastSensors") || "{}");
@@ -77,7 +87,7 @@ export default function Dashboard() {
     sensorsRef.current = sensors;
   }, [sensors]);
 
-  // Helper to add to live chart (same logic, just safer)
+  // Updated helper: store full timestamp so time-window filtering works
   const addToHistory = useCallback((type, value, now) => {
     const time = new Date(now).toLocaleTimeString([], {
       hour: "2-digit",
@@ -85,25 +95,23 @@ export default function Dashboard() {
     });
 
     setHistory((prev) => {
-      const existingIdx = prev.findIndex((p) => p.time === time);
-      const updated = [...prev];
+      const last = prev[prev.length - 1] || {
+        temp: sensorsRef.current.temp,
+        humidity: sensorsRef.current.humidity,
+        timestamp: now - 5000,
+      };
 
-      if (existingIdx >= 0) {
-        updated[existingIdx] = { ...updated[existingIdx], [type]: value };
-      } else {
-        const last = prev[prev.length - 1] || {
-          temp: sensorsRef.current.temp,
-          humidity: sensorsRef.current.humidity,
-        };
+      const newItem = {
+        time,
+        timestamp: now,
+        temp: type === "temp" ? value : last.temp,
+        humidity: type === "humidity" ? value : last.humidity,
+      };
 
-        updated.push({
-          time,
-          temp: type === "temp" ? value : last.temp,
-          humidity: type === "humidity" ? value : last.humidity,
-        });
-      }
+      let updated = [...prev, newItem];
+      if (updated.length > 300) updated = updated.slice(-300); // allow longer history for filtering
 
-      return updated.slice(-10);
+      return updated;
     });
   }, []);
 
@@ -119,7 +127,6 @@ export default function Dashboard() {
       const p = pendingRef.current;
       pendingRef.current = {};
 
-      // One render for all sensor updates
       setSensors((prev) => ({ ...prev, ...p }));
 
       const now = Date.now();
@@ -139,9 +146,6 @@ export default function Dashboard() {
       } else if (topic === "chickulungan/sensor/water") {
         pendingRef.current.water = parseInt(payload, 10) || 0;
       }
-
-      // NOTE: If you want to display MQTT logs, render them somewhere.
-      // We intentionally do NOT keep a logText state here to avoid ESLint "unused" errors.
 
       if (!rafRef.current) {
         rafRef.current = requestAnimationFrame(flush);
@@ -256,7 +260,7 @@ export default function Dashboard() {
       const uptimeDataFormatted = Object.entries(dailyUptime)
         .map(([day, { activeMinutes }]) => ({
           day,
-          uptime: Number(Math.min(100, (activeMinutes / 1440) * 100).toFixed(1)), // ✅ number, not string
+          uptime: Number(Math.min(100, (activeMinutes / 1440) * 100).toFixed(1)),
         }))
         .slice(-7);
 
@@ -294,9 +298,22 @@ export default function Dashboard() {
     navigate("/schedules");
   };
 
-  // ✅ Memoize chart filters (avoids filtering on every render)
-  const tempHistory = useMemo(() => history.filter((h) => h.temp != null), [history]);
-  const humidityHistory = useMemo(() => history.filter((h) => h.humidity != null), [history]);
+  // ✅ Filtered history using time window (now supports minutes-scale view)
+  const tempHistory = useMemo(() => {
+    const cutoff = Date.now() - timeWindowMin * 60 * 1000;
+    return history
+      .filter((h) => h.timestamp >= cutoff)
+      .map((h) => ({ time: h.time, temp: h.temp }))
+      .sort((a, b) => a.timestamp - b.timestamp); // stable order
+  }, [history, timeWindowMin]);
+
+  const humidityHistory = useMemo(() => {
+    const cutoff = Date.now() - timeWindowMin * 60 * 1000;
+    return history
+      .filter((h) => h.timestamp >= cutoff)
+      .map((h) => ({ time: h.time, humidity: h.humidity }))
+      .sort((a, b) => a.timestamp - b.timestamp);
+  }, [history, timeWindowMin]);
 
   return (
     <Box sx={{ px: { xs: 1.5, sm: 3 }, py: { xs: 2, sm: 3 } }}>
@@ -322,162 +339,161 @@ export default function Dashboard() {
       </Box>
 
       <Box
-  sx={{
-    width: "100%",
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: { xs: 2, sm: 3, md: 4 },
-    alignItems: "stretch",
-  }}
->
-  {/* Temperature */}
-  <Paper
-    sx={{
-      p: 3,
-      textAlign: "center",
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      minWidth: 0,
-    }}
-  >
-    <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-      Temperature
-    </Typography>
-    <Gauge
-      value={sensors.temp}
-      startAngle={-110}
-      endAngle={110}
-      height={180}
-      sx={{ mb: 2 }}
-      valueFormatter={(v) => `${Number(v).toFixed(1)}°C`}
-    />
-    <Typography
-      variant="h4"
-      fontWeight={700}
-      color={sensors.temp > 35 ? "error" : "success"}
-    >
-      {Number(sensors.temp).toFixed(1)}°C
-    </Typography>
-  </Paper>
-
-  {/* Humidity */}
-  <Paper
-    sx={{
-      p: 3,
-      textAlign: "center",
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      minWidth: 0,
-    }}
-  >
-    <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-      Humidity
-    </Typography>
-    <Gauge
-      value={sensors.humidity}
-      startAngle={-110}
-      endAngle={110}
-      height={180}
-      sx={{ mb: 2 }}
-    />
-    <Typography
-      variant="h4"
-      fontWeight={700}
-      color={sensors.humidity > 80 ? "warning" : "primary"}
-    >
-      {Number(sensors.humidity).toFixed(1)}%
-    </Typography>
-  </Paper>
-
-  {/* Feed Level */}
-  <Paper
-    sx={{
-      p: 3,
-      textAlign: "center",
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      minWidth: 0,
-    }}
-  >
-    <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-      Feed Level
-    </Typography>
-    <Box sx={{ position: "relative", height: 180, mb: 2 }}>
-      <CircularProgress
-        variant="determinate"
-        value={sensors.feed}
-        size={160}
-        thickness={8}
-        sx={{ color: sensors.feed < 20 ? "#f44336" : "#ffb400" }}
-      />
-      <Box
         sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          textAlign: "center",
+          width: "100%",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: { xs: 2, sm: 3, md: 4 },
+          alignItems: "stretch",
         }}
       >
-        <Typography variant="h3" fontWeight={700}>
-          {sensors.feed}%
-        </Typography>
-      </Box>
-    </Box>
-    <Typography variant="h5" color={sensors.feed < 20 ? "error" : "inherit"}>
-      {sensors.feed < 20 ? "LOW!" : "Adequate"}
-    </Typography>
-  </Paper>
+        {/* Temperature */}
+        <Paper
+          sx={{
+            p: 3,
+            textAlign: "center",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            minWidth: 0,
+          }}
+        >
+          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+            Temperature
+          </Typography>
+          <Gauge
+            value={sensors.temp}
+            startAngle={-110}
+            endAngle={110}
+            height={180}
+            sx={{ mb: 2 }}
+            valueFormatter={(v) => `${Number(v).toFixed(1)}°C`}
+          />
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            color={sensors.temp > 35 ? "error" : "success"}
+          >
+            {Number(sensors.temp).toFixed(1)}°C
+          </Typography>
+        </Paper>
 
-  {/* Water Level */}
-  <Paper
-    sx={{
-      p: 3,
-      textAlign: "center",
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      minWidth: 0,
-    }}
-  >
-    <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-      Water Level
-    </Typography>
-    <Box sx={{ position: "relative", height: 180, mb: 2 }}>
-      <CircularProgress
-        variant="determinate"
-        value={sensors.water}
-        size={160}
-        thickness={8}
-        sx={{ color: sensors.water < 20 ? "#f44336" : "#1976d2" }}
-      />
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="h3" fontWeight={700}>
-          {sensors.water}%
-        </Typography>
-      </Box>
-    </Box>
-    <Typography variant="h5" color={sensors.water < 20 ? "error" : "inherit"}>
-      {sensors.water < 20 ? "LOW!" : "Adequate"}
-    </Typography>
-  </Paper>
-</Box>
+        {/* Humidity */}
+        <Paper
+          sx={{
+            p: 3,
+            textAlign: "center",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            minWidth: 0,
+          }}
+        >
+          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+            Humidity
+          </Typography>
+          <Gauge
+            value={sensors.humidity}
+            startAngle={-110}
+            endAngle={110}
+            height={180}
+            sx={{ mb: 2 }}
+          />
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            color={sensors.humidity > 80 ? "warning" : "primary"}
+          >
+            {Number(sensors.humidity).toFixed(1)}%
+          </Typography>
+        </Paper>
 
+        {/* Feed Level */}
+        <Paper
+          sx={{
+            p: 3,
+            textAlign: "center",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            minWidth: 0,
+          }}
+        >
+          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+            Feed Level
+          </Typography>
+          <Box sx={{ position: "relative", height: 180, mb: 2 }}>
+            <CircularProgress
+              variant="determinate"
+              value={sensors.feed}
+              size={160}
+              thickness={8}
+              sx={{ color: sensors.feed < 20 ? "#f44336" : "#ffb400" }}
+            />
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="h3" fontWeight={700}>
+                {sensors.feed}%
+              </Typography>
+            </Box>
+          </Box>
+          <Typography variant="h5" color={sensors.feed < 20 ? "error" : "inherit"}>
+            {sensors.feed < 20 ? "LOW!" : "Adequate"}
+          </Typography>
+        </Paper>
+
+        {/* Water Level */}
+        <Paper
+          sx={{
+            p: 3,
+            textAlign: "center",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            minWidth: 0,
+          }}
+        >
+          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+            Water Level
+          </Typography>
+          <Box sx={{ position: "relative", height: 180, mb: 2 }}>
+            <CircularProgress
+              variant="determinate"
+              value={sensors.water}
+              size={160}
+              thickness={8}
+              sx={{ color: sensors.water < 20 ? "#f44336" : "#1976d2" }}
+            />
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="h3" fontWeight={700}>
+                {sensors.water}%
+              </Typography>
+            </Box>
+          </Box>
+          <Typography variant="h5" color={sensors.water < 20 ? "error" : "inherit"}>
+            {sensors.water < 20 ? "LOW!" : "Adequate"}
+          </Typography>
+        </Paper>
+      </Box>
 
       {/* Control Buttons */}
       <Box
@@ -498,8 +514,72 @@ export default function Dashboard() {
         </Button>
       </Box>
 
+      {/* Live Trends Filters - this is the requested filtering feature */}
+      <Box
+        sx={{
+          mt: 4,
+          mb: 2,
+          display: "flex",
+          gap: 2,
+          flexWrap: "wrap",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
+          Live Trends Filters
+        </Typography>
+
+        <FormControl size="small" sx={{ minWidth: 160 }}>
+          <InputLabel>Time Window</InputLabel>
+          <Select
+            value={timeWindowMin}
+            label="Time Window"
+            onChange={(e) => setTimeWindowMin(Number(e.target.value))}
+          >
+            <MenuItem value={5}>Last 5 minutes</MenuItem>
+            <MenuItem value={10}>Last 10 minutes</MenuItem>
+            <MenuItem value={15}>Last 15 minutes</MenuItem>
+            <MenuItem value={30}>Last 30 minutes</MenuItem>
+            <MenuItem value={60}>Last 60 minutes</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl size="small" sx={{ minWidth: 140 }}>
+          <InputLabel>Temp Y Range</InputLabel>
+          <Select
+            value={`${tempDomain[0]}-${tempDomain[1]}`}
+            label="Temp Y Range"
+            onChange={(e) => {
+              const [min, max] = e.target.value.split("-").map(Number);
+              setTempDomain([min, max]);
+            }}
+          >
+            <MenuItem value="0-50">0-50 °C (wide)</MenuItem>
+            <MenuItem value="15-40">15-40 °C</MenuItem>
+            <MenuItem value="20-35">20-35 °C (zoom)</MenuItem>
+            <MenuItem value="25-32">25-32 °C</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl size="small" sx={{ minWidth: 160 }}>
+          <InputLabel>Humidity Y Range</InputLabel>
+          <Select
+            value={`${humDomain[0]}-${humDomain[1]}`}
+            label="Humidity Y Range"
+            onChange={(e) => {
+              const [min, max] = e.target.value.split("-").map(Number);
+              setHumDomain([min, max]);
+            }}
+          >
+            <MenuItem value="0-100">0-100 % (wide)</MenuItem>
+            <MenuItem value="40-80">40-80 %</MenuItem>
+            <MenuItem value="50-70">50-70 % (zoom)</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
       {/* Temperature Trend */}
-      <Paper sx={{ mt: 4, p: 3 }}>
+      <Paper sx={{ mt: 2, p: 3 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>
           Temperature Trend (Live)
         </Typography>
@@ -512,10 +592,7 @@ export default function Dashboard() {
             <LineChart data={tempHistory}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="time" />
-              <YAxis
-                domain={[0, 50]}
-                label={{ value: "Temp (°C)", angle: -90, position: "insideLeft" }}
-              />
+              <YAxis domain={tempDomain} label={{ value: "Temp (°C)", angle: -90, position: "insideLeft" }} />
               <Tooltip formatter={(v) => `${Number(v).toFixed(1)}°C`} />
               <Line
                 type="monotone"
@@ -543,10 +620,7 @@ export default function Dashboard() {
             <LineChart data={humidityHistory}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="time" />
-              <YAxis
-                domain={[0, 100]}
-                label={{ value: "Humidity (%)", angle: -90, position: "insideLeft" }}
-              />
+              <YAxis domain={humDomain} label={{ value: "Humidity (%)", angle: -90, position: "insideLeft" }} />
               <Tooltip formatter={(v) => `${Number(v).toFixed(1)}%`} />
               <Line
                 type="monotone"
@@ -632,8 +706,6 @@ export default function Dashboard() {
     </Box>
   );
 
-  
-
   // Helper component for log (limited query = faster)
   function LiveLog() {
     const [log, setLog] = useState("");
@@ -667,7 +739,7 @@ export default function Dashboard() {
         multiline
         rows={6}
         fullWidth
-        value={log}
+        value={log || "No logs yet"}
         InputProps={{ readOnly: true }}
         sx={{
           backgroundColor: theme.palette.mode === "dark" ? "#000" : "#f5f5f5",
