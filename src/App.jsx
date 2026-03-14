@@ -48,7 +48,7 @@ import Logs from "./Logs";
 import History from "./History";
 import { MqttProvider } from "./MqttProvider";
 import AlertEngine from "./AlertEngine";
-import SMSSettings from "./SMSSettings";
+
 
 const fullDrawerWidth = 260;
 const miniDrawerWidth = 56;
