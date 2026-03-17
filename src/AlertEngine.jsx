@@ -1,18 +1,33 @@
 // src/AlertEngine.jsx
 import { useEffect, useRef, useState, useCallback } from "react";
 import { db, ref, onValue, push, set } from "./firebase";
+import { format } from "date-fns";
 import { toast } from "./utils/feedback";
 
 const alertThresholds = {
   lowFeed: 20,
-  lowWater: 20,          // ← ADDED: triggers "Low Water" critical alert
+  criticalFeed: 10,
+  lowWater: 20,
+  criticalWater: 10,
   highTemp: 35,
   lowTemp: 18,
+  criticalHighTemp: 39,
+  criticalLowTemp: 15,
   highHumidity: 80,
   lowHumidity: 40,
+  rapidTempChange: 4,
+  rapidHumidityChange: 12,
+  rapidChangeWindowMs: 2 * 60 * 1000,
+  staleDataWarningMs: 45 * 1000,
 };
 
 const OFFLINE_AFTER_MS = 90 * 1000; // 90s offline threshold
+
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const SCHEDULE_TRIGGER_WINDOW_MS = 70 * 1000;
+const SCHEDULE_CONFIRM_WINDOW_MS = 4 * 60 * 1000;
+const SCHEDULE_EVAL_TICK_MS = 15 * 1000;
+const SCHEDULE_MIN_FEED_DROP = 1;
 
 // =====================
 // Reminders (unresolved)
@@ -123,6 +138,25 @@ function normalizeSeverity(sev) {
   return sev === "critical" ? "critical" : "warning";
 }
 
+function parseScheduleTimeToday(timeStr, nowMs = Date.now()) {
+  if (!timeStr || typeof timeStr !== "string") return null;
+
+  const m = timeStr.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!m) return null;
+
+  let hours = Number(m[1]);
+  const minutes = Number(m[2]);
+  const period = String(m[3]).toUpperCase();
+
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+  if (period === "PM" && hours !== 12) hours += 12;
+  if (period === "AM" && hours === 12) hours = 0;
+
+  const d = new Date(nowMs);
+  d.setHours(hours, minutes, 0, 0);
+  return d.getTime();
+}
+
 function summarizeUnresolved(alertsObj) {
   const list = Object.entries(alertsObj || {})
     .map(([id, a]) => ({ id, ...(a || {}) }))
@@ -146,9 +180,15 @@ export default function AlertEngine() {
   const hasRealDataRef = useRef(false);
 
   const sensorsRef = useRef({ temp: 0, humidity: 0, feed: 0, water: 0 });
+  const sensorTrendRef = useRef({
+    temp: { value: null, timestamp: null },
+    humidity: { value: null, timestamp: null },
+  });
   const lastUpdateMsRef = useRef(null);
 
   const alertsSnapshotRef = useRef({});
+  const schedulesSnapshotRef = useRef({});
+  const scheduleFeedChecksRef = useRef({});
   const resolvingIdsRef = useRef(new Set());
   const [ready, setReady] = useState(false);
 
@@ -170,7 +210,7 @@ export default function AlertEngine() {
     return () => unsubAlerts();
   }, []);
 
-  const shouldCreateAlert = useCallback((type, now) => {
+  const shouldCreateAlert = useCallback((type, now, dedupeKey = type) => {
     // 1) Debounce: one per 60s per type
     const last = lastAlertTimesRef.current[type] || 0;
     if (now - last < 60000) return false;
@@ -180,16 +220,17 @@ export default function AlertEngine() {
     const duplicate = Object.values(existing).some((a) => {
       if (!a) return false;
       const ts = Number(a.timestamp || 0);
-      return a.type === type && !a.resolved && now - ts < 3600000;
+      const key = String(a.dedupeKey || a.type || "");
+      return key === dedupeKey && !a.resolved && now - ts < 3600000;
     });
 
     return !duplicate;
   }, []);
 
   const createAlert = useCallback(
-    async ({ type, message, severity }) => {
+    async ({ type, message, severity, dedupeKey = type, meta = null }) => {
       const now = Date.now();
-      if (!shouldCreateAlert(type, now)) return;
+      if (!shouldCreateAlert(type, now, dedupeKey)) return;
 
       const newRef = push(ref(db, "alerts"));
       const payload = {
@@ -199,7 +240,10 @@ export default function AlertEngine() {
         timestamp: now,
         resolved: false,
         source: "web", // created by the web app engine
+        dedupeKey,
       };
+
+      if (meta && typeof meta === "object") payload.meta = meta;
 
       await set(newRef, payload);
       lastAlertTimesRef.current[type] = now;
@@ -210,6 +254,14 @@ export default function AlertEngine() {
     },
     [shouldCreateAlert]
   );
+
+  useEffect(() => {
+    const unsubSchedules = onValue(ref(db, "schedules"), (snap) => {
+      schedulesSnapshotRef.current = snap.val() || {};
+    });
+
+    return () => unsubSchedules();
+  }, []);
 
   const resolveAlertsByPredicate = useCallback(async (predicate) => {
     const entries = Object.entries(alertsSnapshotRef.current || {});
@@ -285,47 +337,132 @@ export default function AlertEngine() {
 
     const s = sensorsRef.current;
 
+    const feedValue = Number(s.feed);
+    const waterValue = Number(s.water);
+    const tempValue = Number(s.temp);
+    const humidityValue = Number(s.humidity);
+    const isStale = age > alertThresholds.staleDataWarningMs;
+
     const candidates = [
       {
-        condition: Number(s.feed) < alertThresholds.lowFeed,
+        condition: feedValue < alertThresholds.criticalFeed,
+        type: "Feed Critically Low",
+        message: `Feed level is critically low (${feedValue}%)`,
+        severity: "critical",
+      },
+      {
+        condition:
+          feedValue < alertThresholds.lowFeed && feedValue >= alertThresholds.criticalFeed,
         type: "Low Feed",
-        message: `Feed level is low (${s.feed}%)`,
+        message: `Feed level is low (${feedValue}%)`,
+        severity: "warning",
+      },
+      {
+        condition: waterValue < alertThresholds.criticalWater,
+        type: "Water Critically Low",
+        message: `Water level is critically low (${waterValue}%)`,
         severity: "critical",
       },
       {
-        condition: Number(s.water) < alertThresholds.lowWater,   // ← NEW Low Water alert
+        condition:
+          waterValue < alertThresholds.lowWater && waterValue >= alertThresholds.criticalWater,
         type: "Low Water",
-        message: `Water level is low (${s.water}%)`,
+        message: `Water level is low (${waterValue}%)`,
+        severity: "warning",
+      },
+      {
+        condition: tempValue >= alertThresholds.criticalHighTemp,
+        type: "Critical High Temperature",
+        message: `Temperature is critically high (${tempValue}°C)`,
         severity: "critical",
       },
       {
-        condition: Number(s.temp) > alertThresholds.highTemp,
+        condition:
+          tempValue > alertThresholds.highTemp && tempValue < alertThresholds.criticalHighTemp,
         type: "High Temperature",
-        message: `Temperature too high (${s.temp}°C)`,
+        message: `Temperature too high (${tempValue}°C)`,
+        severity: "warning",
+      },
+      {
+        condition: tempValue <= alertThresholds.criticalLowTemp,
+        type: "Critical Low Temperature",
+        message: `Temperature is critically low (${tempValue}°C)`,
         severity: "critical",
       },
       {
-        condition: Number(s.temp) < alertThresholds.lowTemp,
+        condition: tempValue < alertThresholds.lowTemp && tempValue > alertThresholds.criticalLowTemp,
         type: "Low Temperature",
-        message: `Temperature too low (${s.temp}°C)`,
+        message: `Temperature too low (${tempValue}°C)`,
         severity: "warning",
       },
       {
-        condition: Number(s.humidity) > alertThresholds.highHumidity,
+        condition: humidityValue > alertThresholds.highHumidity,
         type: "High Humidity",
-        message: `Humidity too high (${s.humidity}%)`,
+        message: `Humidity too high (${humidityValue}%)`,
         severity: "warning",
       },
       {
-        condition: Number(s.humidity) < alertThresholds.lowHumidity,
+        condition: humidityValue < alertThresholds.lowHumidity,
         type: "Low Humidity",
-        message: `Humidity too low (${s.humidity}%)`,
+        message: `Humidity too low (${humidityValue}%)`,
+        severity: "warning",
+      },
+      {
+        condition: isStale,
+        type: "Sensor Data Stale",
+        message: `No fresh sensor payload for ${formatElapsed(age)}.`,
         severity: "warning",
       },
     ];
 
     for (const a of candidates) {
       if (a.condition) await createAlert(a);
+    }
+  }, [createAlert]);
+
+  const evaluateRapidChanges = useCallback(async () => {
+    const now = Number(lastUpdateMsRef.current || Date.now());
+    const trend = sensorTrendRef.current;
+    const current = sensorsRef.current;
+
+    const checks = [
+      {
+        key: "temp",
+        type: "Rapid Temperature Change",
+        units: "°C",
+        threshold: alertThresholds.rapidTempChange,
+        severity: "warning",
+      },
+      {
+        key: "humidity",
+        type: "Rapid Humidity Change",
+        units: "%",
+        threshold: alertThresholds.rapidHumidityChange,
+        severity: "warning",
+      },
+    ];
+
+    for (const check of checks) {
+      const previous = trend[check.key];
+      const currentValue = Number(current[check.key]);
+      if (!Number.isFinite(currentValue)) continue;
+
+      if (previous?.timestamp && now - previous.timestamp <= alertThresholds.rapidChangeWindowMs) {
+        const delta = Math.abs(currentValue - Number(previous.value));
+        if (delta >= check.threshold) {
+          await createAlert({
+            type: check.type,
+            message: `${check.key === "temp" ? "Temperature" : "Humidity"} shifted by ${delta.toFixed(
+              1
+            )}${check.units} in under ${Math.round(
+              alertThresholds.rapidChangeWindowMs / 60000
+            )} minutes.`,
+            severity: check.severity,
+          });
+        }
+      }
+
+      trend[check.key] = { value: currentValue, timestamp: now };
     }
   }, [createAlert]);
 
@@ -340,6 +477,104 @@ export default function AlertEngine() {
         message: `No ESP32 update for ${formatElapsed(age)}`,
         severity: "critical",
       });
+    }
+  }, [createAlert]);
+
+  const evaluateScheduledFeedChecks = useCallback(async () => {
+    const schedulesObj = schedulesSnapshotRef.current || {};
+    const now = Date.now();
+    const dayName = DAYS[new Date(now).getDay()];
+    const feedNow = Number(sensorsRef.current.feed);
+
+    for (const [id, schedule] of Object.entries(schedulesObj)) {
+      if (!schedule?.enabled) continue;
+
+      const days = Array.isArray(schedule.days) ? schedule.days : [];
+      if (!days.includes(dayName)) continue;
+
+      const scheduledTs = parseScheduleTimeToday(schedule.time, now);
+      if (!scheduledTs) continue;
+
+      const occurrenceKey = `${id}:${format(new Date(now), "yyyy-MM-dd")}:${schedule.time}`;
+      const existing = scheduleFeedChecksRef.current[occurrenceKey];
+
+      const withinTriggerWindow = now >= scheduledTs && now - scheduledTs <= SCHEDULE_TRIGGER_WINDOW_MS;
+      if (withinTriggerWindow && !existing) {
+        scheduleFeedChecksRef.current[occurrenceKey] = {
+          createdAt: now,
+          scheduledTs,
+          deadline: scheduledTs + SCHEDULE_CONFIRM_WINDOW_MS,
+          baselineFeed: feedNow,
+          scheduleId: id,
+          scheduleTime: schedule.time,
+        };
+
+        await createAlert({
+          type: "Scheduled Feeding Triggered",
+          message: `Schedule ${schedule.time} was reached. Waiting for feed drop confirmation.`,
+          severity: "warning",
+          dedupeKey: `scheduled-trigger:${occurrenceKey}`,
+          meta: { scheduleId: id, scheduleTime: schedule.time, scheduledTs },
+        });
+      }
+    }
+
+    const pending = { ...(scheduleFeedChecksRef.current || {}) };
+    for (const [occurrenceKey, state] of Object.entries(pending)) {
+      const baseline = Number(state.baselineFeed);
+      const drop = Number((baseline - feedNow).toFixed(2));
+
+      const lastUpdate = Number(lastUpdateMsRef.current || 0);
+      const offlineAge = lastUpdate ? now - lastUpdate : Infinity;
+
+      if (drop >= SCHEDULE_MIN_FEED_DROP) {
+        await createAlert({
+          type: "Scheduled Feeding Confirmed",
+          message: `Feed dropped by ${drop}% after schedule ${state.scheduleTime}. Dispense verified.`,
+          severity: "warning",
+          dedupeKey: `scheduled-confirm:${occurrenceKey}`,
+          meta: {
+            scheduleId: state.scheduleId,
+            scheduleTime: state.scheduleTime,
+            drop,
+            baseline,
+            currentFeed: feedNow,
+          },
+        });
+        delete scheduleFeedChecksRef.current[occurrenceKey];
+        continue;
+      }
+
+      if (offlineAge > OFFLINE_AFTER_MS && now >= state.scheduledTs && now <= state.deadline + 60 * 1000) {
+        await createAlert({
+          type: "Feeding Process Disrupted",
+          message: `Device went offline while verifying scheduled feed (${state.scheduleTime}).`,
+          severity: "critical",
+          dedupeKey: `scheduled-disrupted-offline:${occurrenceKey}`,
+          meta: { scheduleId: state.scheduleId, scheduleTime: state.scheduleTime, offlineAge },
+        });
+        delete scheduleFeedChecksRef.current[occurrenceKey];
+        continue;
+      }
+
+      if (now > state.deadline) {
+        await createAlert({
+          type: "Feeding Process Disrupted",
+          message: `No feed drop detected within ${Math.round(
+            SCHEDULE_CONFIRM_WINDOW_MS / 60000
+          )} minutes after schedule ${state.scheduleTime}.`,
+          severity: "critical",
+          dedupeKey: `scheduled-disrupted-timeout:${occurrenceKey}`,
+          meta: {
+            scheduleId: state.scheduleId,
+            scheduleTime: state.scheduleTime,
+            baseline,
+            currentFeed: feedNow,
+            expectedDrop: SCHEDULE_MIN_FEED_DROP,
+          },
+        });
+        delete scheduleFeedChecksRef.current[occurrenceKey];
+      }
     }
   }, [createAlert]);
 
@@ -419,7 +654,9 @@ export default function AlertEngine() {
       }
 
       evaluateAlerts();
+      evaluateRapidChanges();
       evaluateOffline();
+      evaluateScheduledFeedChecks();
       autoResolveStabilizedAlerts();
       autoResolveOfflineAlertsIfRecovered();
     });
@@ -429,6 +666,8 @@ export default function AlertEngine() {
     ready,
     evaluateAlerts,
     evaluateOffline,
+    evaluateRapidChanges,
+    evaluateScheduledFeedChecks,
     autoResolveStabilizedAlerts,
     autoResolveOfflineAlertsIfRecovered,
   ]);
@@ -444,14 +683,17 @@ export default function AlertEngine() {
       if (topic === "chickulungan/sensor/temp") {
         sensorsRef.current.temp = parseFloat(payload) || 0;
         evaluateAlerts();
+        evaluateRapidChanges();
         autoResolveStabilizedAlerts();
       } else if (topic === "chickulungan/sensor/humidity") {
         sensorsRef.current.humidity = parseFloat(payload) || 0;
         evaluateAlerts();
+        evaluateRapidChanges();
         autoResolveStabilizedAlerts();
       } else if (topic === "chickulungan/sensor/feed") {
         sensorsRef.current.feed = parseInt(payload, 10) || 0;
         evaluateAlerts();
+        evaluateScheduledFeedChecks();
         autoResolveStabilizedAlerts();
       } else if (topic === "chickulungan/sensor/water") {
         sensorsRef.current.water = parseInt(payload, 10) || 0;
@@ -464,17 +706,27 @@ export default function AlertEngine() {
 
     window.addEventListener("mqtt-message", handler);
     return () => window.removeEventListener("mqtt-message", handler);
-  }, [ready, evaluateAlerts, autoResolveStabilizedAlerts]);
+  }, [ready, evaluateAlerts, evaluateRapidChanges, evaluateScheduledFeedChecks, autoResolveStabilizedAlerts]);
 
   // Periodic offline check even if nothing changes
   useEffect(() => {
     if (!ready) return;
     const t = setInterval(() => {
       evaluateOffline();
+      evaluateScheduledFeedChecks();
       autoResolveOfflineAlertsIfRecovered();
     }, 5000);
     return () => clearInterval(t);
-  }, [ready, evaluateOffline, autoResolveOfflineAlertsIfRecovered]);
+  }, [ready, evaluateOffline, evaluateScheduledFeedChecks, autoResolveOfflineAlertsIfRecovered]);
+
+  // Scheduled feed verification tick
+  useEffect(() => {
+    if (!ready) return;
+    const t = setInterval(() => {
+      evaluateScheduledFeedChecks();
+    }, SCHEDULE_EVAL_TICK_MS);
+    return () => clearInterval(t);
+  }, [ready, evaluateScheduledFeedChecks]);
 
   // ✅ Periodic reminder tick
   useEffect(() => {

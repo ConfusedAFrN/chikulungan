@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Chip,
 } from "@mui/material";
 import {
   BarChart,
@@ -24,6 +25,7 @@ import {
   LineChart,
   Line,
   ResponsiveContainer,
+  ReferenceLine,
 } from "recharts";
 import { Gauge } from "@mui/x-charts/Gauge";
 import { useTheme } from "@mui/material/styles";
@@ -58,8 +60,16 @@ export default function Dashboard() {
   // New filter states for live trends
   // ==========================
   const [timeWindowMin, setTimeWindowMin] = useState(15);
+  const [trendResolutionSec, setTrendResolutionSec] = useState(10);
   const [tempDomain, setTempDomain] = useState([0, 50]);
   const [humDomain, setHumDomain] = useState([0, 100]);
+
+  const thresholds = {
+    tempLow: 18,
+    tempHigh: 35,
+    humidityLow: 40,
+    humidityHigh: 80,
+  };
 
   // ✅ Instant load: cache sensors
   useEffect(() => {
@@ -89,11 +99,6 @@ export default function Dashboard() {
 
   // Updated helper: store full timestamp so time-window filtering works
   const addToHistory = useCallback((type, value, now) => {
-    const time = new Date(now).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
     setHistory((prev) => {
       const last = prev[prev.length - 1] || {
         temp: sensorsRef.current.temp,
@@ -102,14 +107,13 @@ export default function Dashboard() {
       };
 
       const newItem = {
-        time,
         timestamp: now,
         temp: type === "temp" ? value : last.temp,
         humidity: type === "humidity" ? value : last.humidity,
       };
 
       let updated = [...prev, newItem];
-      if (updated.length > 300) updated = updated.slice(-300); // allow longer history for filtering
+      if (updated.length > 21600) updated = updated.slice(-21600);
 
       return updated;
     });
@@ -298,22 +302,113 @@ export default function Dashboard() {
     navigate("/schedules");
   };
 
-  // ✅ Filtered history using time window (now supports minutes-scale view)
-  const tempHistory = useMemo(() => {
+  const makeBucketedHistory = useCallback((key) => {
     const cutoff = Date.now() - timeWindowMin * 60 * 1000;
-    return history
+    const filtered = history
       .filter((h) => h.timestamp >= cutoff)
-      .map((h) => ({ time: h.time, temp: h.temp }))
-      .sort((a, b) => a.timestamp - b.timestamp); // stable order
-  }, [history, timeWindowMin]);
-
-  const humidityHistory = useMemo(() => {
-    const cutoff = Date.now() - timeWindowMin * 60 * 1000;
-    return history
-      .filter((h) => h.timestamp >= cutoff)
-      .map((h) => ({ time: h.time, humidity: h.humidity }))
       .sort((a, b) => a.timestamp - b.timestamp);
-  }, [history, timeWindowMin]);
+
+    if (trendResolutionSec <= 1) {
+      return filtered.map((h) => ({
+        timestamp: h.timestamp,
+        [key]: h[key],
+      }));
+    }
+
+    const bucketMs = trendResolutionSec * 1000;
+    const buckets = new Map();
+
+    filtered.forEach((h) => {
+      const bucketStart = Math.floor(h.timestamp / bucketMs) * bucketMs;
+      if (!buckets.has(bucketStart)) {
+        buckets.set(bucketStart, { sum: 0, count: 0 });
+      }
+      const bucket = buckets.get(bucketStart);
+      bucket.sum += Number(h[key]) || 0;
+      bucket.count += 1;
+    });
+
+    return Array.from(buckets.entries()).map(([timestamp, stats]) => ({
+      timestamp,
+      [key]: Number((stats.sum / Math.max(stats.count, 1)).toFixed(2)),
+    }));
+  }, [history, timeWindowMin, trendResolutionSec]);
+
+  const tempHistory = useMemo(() => makeBucketedHistory("temp"), [makeBucketedHistory]);
+  const humidityHistory = useMemo(() => makeBucketedHistory("humidity"), [makeBucketedHistory]);
+
+  const tickFormatter = useCallback((ts) => {
+    if (!Number.isFinite(ts)) return "";
+    if (trendResolutionSec >= 3600) return format(new Date(ts), "MMM dd HH:mm");
+    if (trendResolutionSec >= 60) return format(new Date(ts), "HH:mm");
+    return format(new Date(ts), "HH:mm:ss");
+  }, [trendResolutionSec]);
+
+  const alertCandidates = useMemo(() => {
+    const now = Date.now();
+    const staleSeconds = lastUpdateMs ? Math.max(0, Math.floor((now - Number(lastUpdateMs)) / 1000)) : null;
+
+    return [
+      {
+        key: "feed",
+        label: sensors.feed < 10 ? "Feed Critically Low" : "Low Feed",
+        active: sensors.feed < 20,
+        severity: sensors.feed < 10 ? "critical" : "warning",
+        detail: `Feed level at ${sensors.feed}%`,
+      },
+      {
+        key: "water",
+        label: sensors.water < 10 ? "Water Critically Low" : "Low Water",
+        active: sensors.water < 20,
+        severity: sensors.water < 10 ? "critical" : "warning",
+        detail: `Water level at ${sensors.water}%`,
+      },
+      {
+        key: "temp-high",
+        label: sensors.temp >= 39 ? "Critical High Temperature" : "High Temperature",
+        active: sensors.temp > 35,
+        severity: sensors.temp >= 39 ? "critical" : "warning",
+        detail: `Temperature at ${Number(sensors.temp).toFixed(1)}°C`,
+      },
+      {
+        key: "temp-low",
+        label: sensors.temp <= 15 ? "Critical Low Temperature" : "Low Temperature",
+        active: sensors.temp < 18,
+        severity: sensors.temp <= 15 ? "critical" : "warning",
+        detail: `Temperature at ${Number(sensors.temp).toFixed(1)}°C`,
+      },
+      {
+        key: "humidity-high",
+        label: "High Humidity",
+        active: sensors.humidity > 80,
+        severity: "warning",
+        detail: `Humidity at ${Number(sensors.humidity).toFixed(1)}%`,
+      },
+      {
+        key: "humidity-low",
+        label: "Low Humidity",
+        active: sensors.humidity < 40,
+        severity: "warning",
+        detail: `Humidity at ${Number(sensors.humidity).toFixed(1)}%`,
+      },
+      {
+        key: "stale",
+        label: "Sensor Data Stale",
+        active: staleSeconds != null && staleSeconds > 45 && staleSeconds <= 90,
+        severity: "warning",
+        detail: staleSeconds == null ? "No device timestamp yet" : `No fresh payload for ${staleSeconds}s`,
+      },
+      {
+        key: "offline",
+        label: "Device Offline",
+        active: staleSeconds != null && staleSeconds > 90,
+        severity: "critical",
+        detail: staleSeconds == null ? "No device timestamp yet" : `No ESP32 update for ${staleSeconds}s`,
+      },
+    ];
+  }, [sensors, lastUpdateMs]);
+
+  const activeAlertCandidates = alertCandidates.filter((item) => item.active);
 
   return (
     <Box sx={{ px: { xs: 1.5, sm: 3 }, py: { xs: 2, sm: 3 } }}>
@@ -514,6 +609,54 @@ export default function Dashboard() {
         </Button>
       </Box>
 
+      <Paper sx={{ mt: 4, p: 3 }}>
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          Alert Opportunities (Current Conditions)
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          These are alert types the current telemetry can produce. Active items are likely to fire in the Alert Center if they stay unresolved.
+        </Typography>
+
+        {activeAlertCandidates.length === 0 ? (
+          <Typography color="success.main" fontWeight={600}>
+            All monitored values are currently within normal range.
+          </Typography>
+        ) : (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}>
+            {activeAlertCandidates.map((item) => (
+              <Box
+                key={item.key}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 2,
+                  p: 1.25,
+                  borderRadius: 1.5,
+                  border: `1px solid ${theme.palette.divider}`,
+                  backgroundColor:
+                    item.severity === "critical"
+                      ? theme.palette.error.light + "22"
+                      : theme.palette.warning.light + "22",
+                }}
+              >
+                <Box>
+                  <Typography fontWeight={600}>{item.label}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.detail}
+                  </Typography>
+                </Box>
+                <Chip
+                  size="small"
+                  label={item.severity === "critical" ? "Critical" : "Warning"}
+                  color={item.severity === "critical" ? "error" : "warning"}
+                />
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Paper>
+
       {/* Live Trends Filters - this is the requested filtering feature */}
       <Box
         sx={{
@@ -541,6 +684,25 @@ export default function Dashboard() {
             <MenuItem value={15}>Last 15 minutes</MenuItem>
             <MenuItem value={30}>Last 30 minutes</MenuItem>
             <MenuItem value={60}>Last 60 minutes</MenuItem>
+            <MenuItem value={120}>Last 2 hours</MenuItem>
+            <MenuItem value={360}>Last 6 hours</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl size="small" sx={{ minWidth: 140 }}>
+          <InputLabel>Resolution</InputLabel>
+          <Select
+            value={trendResolutionSec}
+            label="Resolution"
+            onChange={(e) => setTrendResolutionSec(Number(e.target.value))}
+          >
+            <MenuItem value={1}>Every second (raw)</MenuItem>
+            <MenuItem value={10}>10-second average</MenuItem>
+            <MenuItem value={30}>30-second average</MenuItem>
+            <MenuItem value={60}>1-minute average</MenuItem>
+            <MenuItem value={300}>5-minute average</MenuItem>
+            <MenuItem value={900}>15-minute average</MenuItem>
+            <MenuItem value={3600}>1-hour average</MenuItem>
           </Select>
         </FormControl>
 
@@ -591,15 +753,46 @@ export default function Dashboard() {
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={tempHistory}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="time" />
+              <XAxis
+                dataKey="timestamp"
+                type="number"
+                domain={["dataMin", "dataMax"]}
+                tickFormatter={tickFormatter}
+              />
               <YAxis domain={tempDomain} label={{ value: "Temp (°C)", angle: -90, position: "insideLeft" }} />
-              <Tooltip formatter={(v) => `${Number(v).toFixed(1)}°C`} />
+              <Tooltip
+                labelFormatter={(value) => format(new Date(Number(value)), "MMM dd, HH:mm:ss")}
+                formatter={(v) => `${Number(v).toFixed(1)}°C`}
+                contentStyle={{
+                  backgroundColor: theme.palette.background.paper,
+                  color: theme.palette.text.primary,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: theme.shape.borderRadius,
+                }}
+                labelStyle={{ color: theme.palette.text.primary, fontWeight: 600 }}
+                itemStyle={{ color: theme.palette.text.primary }}
+              />
+              <ReferenceLine
+                y={thresholds.tempLow}
+                stroke="#0288d1"
+                strokeDasharray="6 4"
+                ifOverflow="extendDomain"
+                label={{ value: `Too Low (${thresholds.tempLow}°C)`, position: "insideTopLeft", fill: "#0288d1", fontSize: 11 }}
+              />
+              <ReferenceLine
+                y={thresholds.tempHigh}
+                stroke="#d32f2f"
+                strokeDasharray="6 4"
+                ifOverflow="extendDomain"
+                label={{ value: `Too High (${thresholds.tempHigh}°C)`, position: "insideBottomLeft", fill: "#d32f2f", fontSize: 11 }}
+              />
               <Line
                 type="monotone"
                 dataKey="temp"
                 stroke="#ffb400"
                 strokeWidth={3}
                 dot={false}
+                isAnimationActive={false}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -619,15 +812,46 @@ export default function Dashboard() {
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={humidityHistory}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="time" />
+              <XAxis
+                dataKey="timestamp"
+                type="number"
+                domain={["dataMin", "dataMax"]}
+                tickFormatter={tickFormatter}
+              />
               <YAxis domain={humDomain} label={{ value: "Humidity (%)", angle: -90, position: "insideLeft" }} />
-              <Tooltip formatter={(v) => `${Number(v).toFixed(1)}%`} />
+              <Tooltip
+                labelFormatter={(value) => format(new Date(Number(value)), "MMM dd, HH:mm:ss")}
+                formatter={(v) => `${Number(v).toFixed(1)}%`}
+                contentStyle={{
+                  backgroundColor: theme.palette.background.paper,
+                  color: theme.palette.text.primary,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: theme.shape.borderRadius,
+                }}
+                labelStyle={{ color: theme.palette.text.primary, fontWeight: 600 }}
+                itemStyle={{ color: theme.palette.text.primary }}
+              />
+              <ReferenceLine
+                y={thresholds.humidityLow}
+                stroke="#0288d1"
+                strokeDasharray="6 4"
+                ifOverflow="extendDomain"
+                label={{ value: `Too Low (${thresholds.humidityLow}%)`, position: "insideTopLeft", fill: "#0288d1", fontSize: 11 }}
+              />
+              <ReferenceLine
+                y={thresholds.humidityHigh}
+                stroke="#d32f2f"
+                strokeDasharray="6 4"
+                ifOverflow="extendDomain"
+                label={{ value: `Too High (${thresholds.humidityHigh}%)`, position: "insideBottomLeft", fill: "#d32f2f", fontSize: 11 }}
+              />
               <Line
                 type="monotone"
                 dataKey="humidity"
                 stroke="#1976d2"
                 strokeWidth={3}
                 dot={false}
+                isAnimationActive={false}
               />
             </LineChart>
           </ResponsiveContainer>
