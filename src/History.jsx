@@ -1,200 +1,295 @@
-// src/pages/History.jsx
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
-  Paper,
-  Typography,
-  Box,
-  Button,
-  Chip,
-  Stack,
   Alert,
+  Box,
+  Chip,
+  Paper,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
 } from "@mui/material";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
+  Line,
+  LineChart,
   CartesianGrid,
   ResponsiveContainer,
-  LineChart,
-  Line,
+  Tooltip,
+  XAxis,
+  YAxis,
+  Bar,
+  BarChart,
 } from "recharts";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { toast } from "./utils/feedback";
+import { db, onValue, ref } from "./firebase";
 import { useTheme } from "@mui/material/styles";
-import { db, ref, onValue } from "./firebase";
-import { format, parseISO, isAfter, isBefore, subDays } from "date-fns";
 
-function toDateObj(yyyyMmDd) {
-  try {
-    return parseISO(yyyyMmDd);
-  } catch {
-    return null;
+const FEED_CAPACITY_GRAMS = 2000;
+const WATER_CAPACITY_ML = 4000;
+const TEMP_THRESHOLD = 35;
+const HUMIDITY_THRESHOLD = 80;
+
+function getDateTimePartsInZone(ts, timeZone) {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  });
+
+  const parts = formatter.formatToParts(new Date(ts));
+  const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+
+  return {
+    dayKey: `${map.year}-${map.month}-${map.day}`,
+    hour: Number(map.hour),
+    hourKey: map.hour,
+    hhmm: `${map.hour}:${map.minute}`,
+  };
+}
+
+function buildHourSeries(hourlyObj) {
+  const list = Array.from({ length: 24 }, (_, hour) => ({
+    hour,
+    label: `${String(hour).padStart(2, "0")}:00`,
+    temp: null,
+    humidity: null,
+    feedLevel: null,
+    waterLevel: null,
+  }));
+
+  Object.entries(hourlyObj || {}).forEach(([hourKey, item]) => {
+    const hour = Number(hourKey);
+    if (!Number.isInteger(hour) || hour < 0 || hour > 23) return;
+
+    list[hour] = {
+      ...list[hour],
+      temp: Number(item?.temp ?? 0),
+      humidity: Number(item?.humidity ?? 0),
+      feedLevel: Number(item?.feedLevel ?? 0),
+      waterLevel: Number(item?.waterLevel ?? 0),
+    };
+  });
+
+  return list;
+}
+
+function findPeak(rows, key) {
+  let peak = null;
+
+  rows.forEach((r) => {
+    const value = Number(r[key]);
+    if (!Number.isFinite(value)) return;
+    if (!peak || value > peak.value) {
+      peak = { value, hour: r.hour, label: r.label };
+    }
+  });
+
+  return peak;
+}
+
+function findAboveThresholdRanges(rows, key, threshold) {
+  const ranges = [];
+  let startHour = null;
+  let lastHour = null;
+
+  rows.forEach((r) => {
+    const value = Number(r[key]);
+    const above = Number.isFinite(value) && value > threshold;
+
+    if (above && startHour == null) {
+      startHour = r.hour;
+      lastHour = r.hour;
+      return;
+    }
+
+    if (above) {
+      lastHour = r.hour;
+      return;
+    }
+
+    if (!above && startHour != null) {
+      ranges.push({ startHour, endHour: lastHour });
+      startHour = null;
+      lastHour = null;
+    }
+  });
+
+  if (startHour != null && lastHour != null) {
+    ranges.push({ startHour, endHour: lastHour });
   }
+
+  return ranges;
 }
 
-function clamp(n, lo, hi) {
-  return Math.max(lo, Math.min(hi, n));
+function formatHourRange(startHour, endHour) {
+  const start = `${String(startHour).padStart(2, "0")}:00`;
+  const end = `${String(Math.min(endHour + 1, 24)).padStart(2, "0")}:00`;
+  return `${start} - ${end}`;
 }
 
-
-// (Level Change Analytics helpers removed for now)
-
+function asDayKeyFromDate(date, timeZone) {
+  const ts = date?.getTime?.();
+  if (!Number.isFinite(ts)) return "";
+  return getDateTimePartsInZone(ts, timeZone).dayKey;
+}
 
 export default function History() {
   const theme = useTheme();
+  const [tab, setTab] = useState(0);
+  const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [range, setRange] = useState("24h"); // 24h | 7d | 30d | all
 
-  // date filters: keep pending to avoid instant re-render while picking
-  const [pendingStart, setPendingStart] = useState(null);
-  const [pendingEnd, setPendingEnd] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-
-  // quick range filter
-  const [range, setRange] = useState("30"); // "7" | "30" | "60" | "all"
-
-  const [historyData, setHistoryData] = useState([]);
+  const [hourlyByDay, setHourlyByDay] = useState({});
+  const [consumptionEvents, setConsumptionEvents] = useState([]);
 
   useEffect(() => {
-    const end = new Date();
-    const start = subDays(end, 30);
-    setStartDate(start);
-    setEndDate(end);
-    setPendingStart(start);
-    setPendingEnd(end);
-  }, []);
-
-  const summary = useMemo(() => {
-    if (!historyData.length) {
-      return {
-        totalDays: 0,
-        avgTemp: "-",
-        avgHumidity: "-",
-        latestFeed: "-",
-        latestWater: "-",
-      };
-    }
-
-    const avgTemp =
-      historyData.reduce((sum, item) => sum + item.temp, 0) / historyData.length;
-    const avgHumidity =
-      historyData.reduce((sum, item) => sum + item.humidity, 0) / historyData.length;
-    const latest = historyData[historyData.length - 1];
-
-    return {
-      totalDays: historyData.length,
-      avgTemp: `${avgTemp.toFixed(1)}°C`,
-      avgHumidity: `${avgHumidity.toFixed(1)}%`,
-      latestFeed: `${latest.feed.toFixed(0)}%`,
-      latestWater: `${latest.water.toFixed(0)}%`,
-    };
-  }, [historyData]);
-
-  useEffect(() => {
-    const historyRef = ref(db, "/history/daily");
-    const unsubscribe = onValue(historyRef, (snapshot) => {
-      const data = snapshot.val();
-
-      if (!data) {
-        setHistoryData([]);
-        return;
-      }
-
-      const parsed = Object.values(data)
-        .map((d) => ({
-          date: d.date,
-          temp: Number(d.tempAvg ?? 0),
-          tempMin: Number(d.tempMin ?? 0),
-          tempMax: Number(d.tempMax ?? 0),
-          humidity: Number(d.humAvg ?? 0),
-
-          // End-of-day levels (0..100 expected)
-          feed: clamp(Number(d.feedEnd ?? 0), 0, 100),
-          water: clamp(Number(d.waterEnd ?? 0), 0, 100),
-
-          // keep for compatibility, but we won’t claim it's true consumption
-          feedUsed: Number(d.feedUsed ?? 0),
-          waterUsed: Number(d.waterUsed ?? 0),
-
-          samples: Number(d.samples ?? 0),
-        }))
-        .filter((x) => x.date)
-        .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-      // keep more data locally so range toggles work without refetch
-      setHistoryData(parsed.slice(-120));
+    const unsubTz = onValue(ref(db, "settings/farm/timeZone"), (snap) => {
+      const tz = String(snap.val() || "").trim();
+      if (tz) setTimeZone(tz);
     });
 
-    return () => unsubscribe();
+    return () => unsubTz();
   }, []);
 
-  const handleApplyDates = () => {
-    if (pendingStart && pendingEnd && isAfter(pendingStart, pendingEnd)) {
-      toast("Start date cannot be later than end date", "warning");
-      return;
-    }
+  useEffect(() => {
+    const unsubHourly = onValue(ref(db, "history/hourly"), (snap) => {
+      setHourlyByDay(snap.val() || {});
+    });
 
-    setStartDate(pendingStart);
-    setEndDate(pendingEnd);
-    setRange("custom");
-    toast("Filter applied", "success");
-  };
+    return () => unsubHourly();
+  }, []);
 
-  const handleResetFilters = () => {
-    setRange("30");
-    applyRange("30");
-    toast("Filters reset", "info");
-  };
+  useEffect(() => {
+    const unsubConsumption = onValue(ref(db, "history/consumptionEvents"), (snap) => {
+      const obj = snap.val() || {};
+      const rows = Object.entries(obj)
+        .map(([id, e]) => ({
+          id,
+          timestamp: Number(e?.timestamp ?? 0),
+          type: String(e?.type || ""),
+          amount: Number(e?.amount ?? 0),
+          unit: String(e?.unit || ""),
+          dropPercent: Number(e?.dropPercent ?? 0),
+          dayKey: String(e?.dayKey || ""),
+          hourKey: String(e?.hourKey || ""),
+        }))
+        .filter((e) => e.timestamp > 0)
+        .sort((a, b) => a.timestamp - b.timestamp);
 
-  // Apply quick range -> pre-fills date pickers (optional but explainable)
-  const applyRange = (r) => {
-    setRange(r);
+      setConsumptionEvents(rows);
+    });
 
-    if (r === "all") {
-      setStartDate(null);
-      setEndDate(null);
-      setPendingStart(null);
-      setPendingEnd(null);
-      return;
-    }
+    return () => unsubConsumption();
+  }, []);
 
-    const days = Number(r);
-    const end = new Date();
-    const start = subDays(end, days);
+  const selectedDayKey = useMemo(
+    () => asDayKeyFromDate(selectedDate, timeZone),
+    [selectedDate, timeZone]
+  );
 
-    setStartDate(start);
-    setEndDate(end);
-    setPendingStart(start);
-    setPendingEnd(end);
-  };
+  const hourlyRows = useMemo(() => {
+    const dayObj = hourlyByDay[selectedDayKey] || {};
+    return buildHourSeries(dayObj);
+  }, [hourlyByDay, selectedDayKey]);
 
-  const baseFiltered = useMemo(() => {
-    if (!historyData.length) return [];
+  const dailyConsumptionRows = useMemo(() => {
+    const byDay = {};
 
-    let rows = [...historyData];
+    consumptionEvents.forEach((e) => {
+      const dayKey = e.dayKey || getDateTimePartsInZone(e.timestamp, timeZone).dayKey;
+      if (!byDay[dayKey]) {
+        byDay[dayKey] = { dayKey, feedG: 0, waterMl: 0 };
+      }
 
-    if (startDate) {
-      rows = rows.filter((r) => {
-        const d = toDateObj(r.date);
-        return d && (isAfter(d, startDate) || d.toDateString() === startDate.toDateString());
-      });
-    }
+      if (e.type === "feed") byDay[dayKey].feedG += Number(e.amount || 0);
+      if (e.type === "water") byDay[dayKey].waterMl += Number(e.amount || 0);
+    });
 
-    if (endDate) {
-      rows = rows.filter((r) => {
-        const d = toDateObj(r.date);
-        return d && (isBefore(d, endDate) || d.toDateString() === endDate.toDateString());
-      });
-    }
+    return Object.values(byDay).sort((a, b) => a.dayKey.localeCompare(b.dayKey));
+  }, [consumptionEvents, timeZone]);
 
-    return rows;
-  }, [historyData, startDate, endDate]);
+  const visibleDailyConsumption = useMemo(() => {
+    if (range === "all") return dailyConsumptionRows;
 
-  // Outlier filtering disabled for now (feature under review)
-  const filteredHistory = baseFiltered;
+    const days = range === "7d" ? 7 : range === "30d" ? 30 : 1;
+    return dailyConsumptionRows.slice(-days);
+  }, [dailyConsumptionRows, range]);
+
+  const selectedDayEvents = useMemo(() => {
+    return consumptionEvents.filter((e) => {
+      const dayKey = e.dayKey || getDateTimePartsInZone(e.timestamp, timeZone).dayKey;
+      return dayKey === selectedDayKey;
+    });
+  }, [consumptionEvents, selectedDayKey, timeZone]);
+
+  const selectedDayConsumptionByHour = useMemo(() => {
+    const rows = Array.from({ length: 24 }, (_, hour) => ({
+      hour,
+      label: `${String(hour).padStart(2, "0")}:00`,
+      feedG: 0,
+      waterMl: 0,
+    }));
+
+    selectedDayEvents.forEach((e) => {
+      const hour = Number.isFinite(Number(e.hourKey))
+        ? Number(e.hourKey)
+        : getDateTimePartsInZone(e.timestamp, timeZone).hour;
+
+      if (!Number.isInteger(hour) || hour < 0 || hour > 23) return;
+      if (e.type === "feed") rows[hour].feedG += Number(e.amount || 0);
+      if (e.type === "water") rows[hour].waterMl += Number(e.amount || 0);
+    });
+
+    return rows.map((r) => ({
+      ...r,
+      feedG: Number(r.feedG.toFixed(2)),
+      waterMl: Number(r.waterMl.toFixed(2)),
+    }));
+  }, [selectedDayEvents, timeZone]);
+
+  const consumptionSummary = useMemo(() => {
+    const totalFeedG = selectedDayConsumptionByHour.reduce((sum, r) => sum + Number(r.feedG || 0), 0);
+    const totalWaterMl = selectedDayConsumptionByHour.reduce((sum, r) => sum + Number(r.waterMl || 0), 0);
+
+    const feedPeak = selectedDayConsumptionByHour.reduce(
+      (peak, row) => (row.feedG > (peak?.value ?? -1) ? { hour: row.label, value: row.feedG } : peak),
+      null
+    );
+
+    const waterPeak = selectedDayConsumptionByHour.reduce(
+      (peak, row) => (row.waterMl > (peak?.value ?? -1) ? { hour: row.label, value: row.waterMl } : peak),
+      null
+    );
+
+    return {
+      totalFeedG: Number(totalFeedG.toFixed(2)),
+      totalWaterMl: Number(totalWaterMl.toFixed(2)),
+      avgFeedPerHour: Number((totalFeedG / 24).toFixed(2)),
+      avgWaterPerHour: Number((totalWaterMl / 24).toFixed(2)),
+      feedPeak,
+      waterPeak,
+    };
+  }, [selectedDayConsumptionByHour]);
+
+  const tempPeak = useMemo(() => findPeak(hourlyRows, "temp"), [hourlyRows]);
+  const humidityPeak = useMemo(() => findPeak(hourlyRows, "humidity"), [hourlyRows]);
+
+  const tempRanges = useMemo(
+    () => findAboveThresholdRanges(hourlyRows, "temp", TEMP_THRESHOLD),
+    [hourlyRows]
+  );
+
+  const humidityRanges = useMemo(
+    () => findAboveThresholdRanges(hourlyRows, "humidity", HUMIDITY_THRESHOLD),
+    [hourlyRows]
+  );
 
   const tooltipStyle = useMemo(
     () => ({
@@ -208,216 +303,174 @@ export default function History() {
     [theme]
   );
 
-  const handleExport = () => {
-    if (!filteredHistory.length) {
-      toast("No data to export", "warning");
-      return;
-    }
-
-    const headers = ["date", "tempAvg", "tempMin", "tempMax", "humAvg", "feedEnd", "waterEnd", "samples"];
-    const lines = [
-      headers.join(","),
-      ...filteredHistory.map((d) =>
-        [
-          d.date,
-          d.temp,
-          d.tempMin,
-          d.tempMax,
-          d.humidity,
-          d.feed,
-          d.water,
-          d.samples,
-        ].join(",")
-      ),
-    ];
-
-    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `history_${format(new Date(), "yyyy-MM-dd_HHmm")}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-
-    toast("Exported CSV", "success");
-  };
+  const hasHourlyData = hourlyRows.some(
+    (r) => Number.isFinite(Number(r.temp)) || Number.isFinite(Number(r.humidity))
+  );
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={{ p: { xs: 2, sm: 3 } }}>
         <Typography variant="h4" fontWeight={700} gutterBottom>
-          Historical Data & Analytics
+          Consumption & Environment History
         </Typography>
 
         <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-          This page shows <b>daily averages</b> (temperature & humidity) and <b>end-of-day levels</b> (feed & water).
+          Farm timezone: <b>{timeZone}</b>. Baselines used: <b>{FEED_CAPACITY_GRAMS}g</b> feed and <b>{WATER_CAPACITY_ML}ml</b> water.
         </Typography>
 
-        <Box
-          sx={{
-            mb: 2,
-            display: "grid",
-            gap: 2,
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "repeat(2, minmax(0, 1fr))",
-              lg: "repeat(5, minmax(0, 1fr))",
-            },
-          }}
-        >
-          {[
-            ["Tracked Days", summary.totalDays],
-            ["Avg Temperature", summary.avgTemp],
-            ["Avg Humidity", summary.avgHumidity],
-            ["Latest Feed", summary.latestFeed],
-            ["Latest Water", summary.latestWater],
-          ].map(([label, value]) => (
-            <Box key={label}>
-              <Paper sx={{ p: 2 }}>
-                <Typography variant="body2" color="text.secondary">
-                  {label}
-                </Typography>
-                <Typography variant="h6" fontWeight={700}>
-                  {value}
-                </Typography>
-              </Paper>
-            </Box>
-          ))}
-        </Box>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mb: 2, alignItems: "center" }}>
+          <DatePicker
+            label="Calendar Day"
+            value={selectedDate}
+            onChange={(d) => d && setSelectedDate(d)}
+            slotProps={{ textField: { size: "small" } }}
+          />
 
-        {/* Quick Range + Outlier Filter */}
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={1}
-          sx={{ mb: 2, alignItems: { sm: "center" } }}
-        >
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-            <Chip
-              label="Last 7 days"
-              color={range === "7" ? "primary" : "default"}
-              onClick={() => applyRange("7")}
-            />
-            <Chip
-              label="Last 30 days"
-              color={range === "30" ? "primary" : "default"}
-              onClick={() => applyRange("30")}
-            />
-            <Chip
-              label="Last 60 days"
-              color={range === "60" ? "primary" : "default"}
-              onClick={() => applyRange("60")}
-            />
-            <Chip
-              label="All"
-              color={range === "all" ? "primary" : "default"}
-              onClick={() => applyRange("all")}
-            />
-            <Chip
-              label="Reset"
-              variant="outlined"
-              onClick={handleResetFilters}
-            />
+            <Chip label="24h" color={range === "24h" ? "primary" : "default"} onClick={() => setRange("24h")} />
+            <Chip label="7d" color={range === "7d" ? "primary" : "default"} onClick={() => setRange("7d")} />
+            <Chip label="30d" color={range === "30d" ? "primary" : "default"} onClick={() => setRange("30d")} />
+            <Chip label="All" color={range === "all" ? "primary" : "default"} onClick={() => setRange("all")} />
           </Box>
         </Stack>
 
-        {/* Date Filter (kept for proctor: explicit and explainable) */}
-        <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
-          <DatePicker
-            label="Start Date"
-            value={pendingStart}
-            onChange={setPendingStart}
-            slotProps={{ textField: { size: "small" } }}
-          />
-          <DatePicker
-            label="End Date"
-            value={pendingEnd}
-            onChange={setPendingEnd}
-            slotProps={{ textField: { size: "small" } }}
-          />
+        <Paper sx={{ mb: 3 }}>
+          <Tabs value={tab} onChange={(_, v) => setTab(v)}>
+            <Tab label="Consumption" />
+            <Tab label="Temperature & Humidity" />
+          </Tabs>
+        </Paper>
 
-          <Button variant="contained" onClick={handleApplyDates}>
-            Apply
-          </Button>
-          <Button variant="outlined" onClick={handleExport}>
-            Export CSV
-          </Button>
-        </Box>
-
-        {!filteredHistory.length ? (
-          <Alert severity="info">
-            No history data yet. Once daily history is written to <code>/history/daily</code>, charts will appear here.
-          </Alert>
-        ) : null}
-
-        {/* Tab 0 */}
-        {filteredHistory.length > 0 && (
+        {tab === 0 && (
           <Box>
-            <Typography variant="h6" sx={{ mb: 2, mt: 1 }}>
-              Environmental Trends (Daily Averages)
-            </Typography>
+            <Box
+              sx={{
+                mb: 2,
+                display: "grid",
+                gap: 2,
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  md: "repeat(3, minmax(0, 1fr))",
+                },
+              }}
+            >
+              <Paper sx={{ p: 2 }}>
+                <Typography variant="body2" color="text.secondary">Total Consumed (Day)</Typography>
+                <Typography variant="h6" fontWeight={700}>
+                  Feed: {consumptionSummary.totalFeedG} g | Water: {consumptionSummary.totalWaterMl} ml
+                </Typography>
+              </Paper>
+
+              <Paper sx={{ p: 2 }}>
+                <Typography variant="body2" color="text.secondary">Average per Hour (Day)</Typography>
+                <Typography variant="h6" fontWeight={700}>
+                  Feed: {consumptionSummary.avgFeedPerHour} g/hr | Water: {consumptionSummary.avgWaterPerHour} ml/hr
+                </Typography>
+              </Paper>
+
+              <Paper sx={{ p: 2 }}>
+                <Typography variant="body2" color="text.secondary">Peak Consumption Hour (Day)</Typography>
+                <Typography variant="h6" fontWeight={700}>
+                  Feed: {consumptionSummary.feedPeak?.hour || "-"} ({consumptionSummary.feedPeak?.value ?? 0} g)
+                </Typography>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Water: {consumptionSummary.waterPeak?.hour || "-"} ({consumptionSummary.waterPeak?.value ?? 0} ml)
+                </Typography>
+              </Paper>
+            </Box>
 
             <Paper sx={{ p: 3, mb: 3 }}>
               <Typography variant="subtitle1" sx={{ mb: 2 }}>
-                Temperature Over Time (Avg)
+                Consumption by Hour ({selectedDayKey})
               </Typography>
-              <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={filteredHistory}>
+              <ResponsiveContainer width="100%" height={280}>
+                <LineChart data={selectedDayConsumptionByHour}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={[0, 50]} />
+                  <XAxis dataKey="label" />
+                  <YAxis yAxisId="feed" orientation="left" />
+                  <YAxis yAxisId="water" orientation="right" />
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Line type="monotone" dataKey="temp" stroke="#ffb400" />
+                  <Line yAxisId="feed" type="monotone" dataKey="feedG" stroke="#ffb400" name="Feed (g)" dot={false} />
+                  <Line yAxisId="water" type="monotone" dataKey="waterMl" stroke="#1976d2" name="Water (ml)" dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </Paper>
 
             <Paper sx={{ p: 3 }}>
               <Typography variant="subtitle1" sx={{ mb: 2 }}>
-                Humidity Over Time (Avg)
+                Consumption Totals ({range.toUpperCase()})
               </Typography>
-              <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={filteredHistory}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={[0, 100]} />
-                  <Tooltip contentStyle={tooltipStyle} />
-                  <Line type="monotone" dataKey="humidity" stroke="#1976d2" />
-                </LineChart>
-              </ResponsiveContainer>
+              {visibleDailyConsumption.length === 0 ? (
+                <Alert severity="info">No consumption records yet. Records appear after sensor-level drops are detected.</Alert>
+              ) : (
+                <ResponsiveContainer width="100%" height={280}>
+                  <BarChart data={visibleDailyConsumption}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="dayKey" />
+                    <YAxis />
+                    <Tooltip contentStyle={tooltipStyle} />
+                    <Bar dataKey="feedG" fill="#ffb400" name="Feed (g)" />
+                    <Bar dataKey="waterMl" fill="#1976d2" name="Water (ml)" />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </Paper>
+          </Box>
+        )}
 
-            <Typography variant="h6" sx={{ mb: 2, mt: 4 }}>
-              Resource Levels (End of Day)
-            </Typography>
+        {tab === 1 && (
+          <Box>
+            <Box
+              sx={{
+                mb: 2,
+                display: "grid",
+                gap: 2,
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  md: "repeat(2, minmax(0, 1fr))",
+                },
+              }}
+            >
+              <Paper sx={{ p: 2 }}>
+                <Typography variant="body2" color="text.secondary">Temperature Peak</Typography>
+                <Typography variant="h6" fontWeight={700}>
+                  {tempPeak ? `${tempPeak.value} degC at ${tempPeak.label}` : "-"}
+                </Typography>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Above {TEMP_THRESHOLD} degC: {tempRanges.length ? tempRanges.map((r) => formatHourRange(r.startHour, r.endHour)).join(", ") : "No spikes"}
+                </Typography>
+              </Paper>
 
-            <Paper sx={{ p: 3, mb: 3 }}>
-              <Typography variant="subtitle1" sx={{ mb: 2 }}>
-                Feed Level (End of Day)
-              </Typography>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={filteredHistory}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={[0, 100]} />
-                  <Tooltip contentStyle={tooltipStyle} />
-                  <Bar dataKey="feed" fill="#ffb400" />
-                </BarChart>
-              </ResponsiveContainer>
-            </Paper>
+              <Paper sx={{ p: 2 }}>
+                <Typography variant="body2" color="text.secondary">Humidity Peak</Typography>
+                <Typography variant="h6" fontWeight={700}>
+                  {humidityPeak ? `${humidityPeak.value}% at ${humidityPeak.label}` : "-"}
+                </Typography>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Above {HUMIDITY_THRESHOLD}%: {humidityRanges.length ? humidityRanges.map((r) => formatHourRange(r.startHour, r.endHour)).join(", ") : "No spikes"}
+                </Typography>
+              </Paper>
+            </Box>
 
             <Paper sx={{ p: 3 }}>
               <Typography variant="subtitle1" sx={{ mb: 2 }}>
-                Water Level (End of Day)
+                24-hour Temperature & Humidity ({selectedDayKey})
               </Typography>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={filteredHistory}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={[0, 100]} />
-                  <Tooltip contentStyle={tooltipStyle} />
-                  <Bar dataKey="water" fill="#1976d2" />
-                </BarChart>
-              </ResponsiveContainer>
+              {!hasHourlyData ? (
+                <Alert severity="info">No hourly history yet. Hourly rows are created automatically from incoming sensors.</Alert>
+              ) : (
+                <ResponsiveContainer width="100%" height={320}>
+                  <LineChart data={hourlyRows}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="label" />
+                    <YAxis yAxisId="temp" orientation="left" domain={[0, 50]} />
+                    <YAxis yAxisId="humidity" orientation="right" domain={[0, 100]} />
+                    <Tooltip contentStyle={tooltipStyle} />
+                    <Line yAxisId="temp" type="monotone" dataKey="temp" stroke="#ff7043" name="Temperature ( degC)" connectNulls />
+                    <Line yAxisId="humidity" type="monotone" dataKey="humidity" stroke="#42a5f5" name="Humidity (%)" connectNulls />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </Paper>
           </Box>
         )}

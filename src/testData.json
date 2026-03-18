@@ -1,306 +1,2508 @@
 {
+  "settings": {
+    "farm": {
+      "timeZone": "Asia/Manila"
+    }
+  },
   "history": {
-    "daily": {
-      "2026-01-01": {
-        "date": "2026-01-01",
-        "tempAvg": 26.0,
-        "tempMin": 23.9,
-        "tempMax": 28.9,
-        "humAvg": 71.7,
-        "feedEnd": 89.2,
-        "waterEnd": 90.7,
-        "samples": 96
+    "hourly": {
+      "2026-03-17": {
+        "00": {
+          "timestamp": 1773705600000,
+          "temp": 23.5,
+          "humidity": 72.1,
+          "feedLevel": 87.8,
+          "waterLevel": 89.8,
+          "timeZone": "Asia/Manila"
+        },
+        "01": {
+          "timestamp": 1773709200000,
+          "temp": 23.1,
+          "humidity": 73.7,
+          "feedLevel": 87.6,
+          "waterLevel": 89.6,
+          "timeZone": "Asia/Manila"
+        },
+        "02": {
+          "timestamp": 1773712800000,
+          "temp": 23.0,
+          "humidity": 74.7,
+          "feedLevel": 87.4,
+          "waterLevel": 89.4,
+          "timeZone": "Asia/Manila"
+        },
+        "03": {
+          "timestamp": 1773716400000,
+          "temp": 23.1,
+          "humidity": 75.0,
+          "feedLevel": 87.2,
+          "waterLevel": 89.2,
+          "timeZone": "Asia/Manila"
+        },
+        "04": {
+          "timestamp": 1773720000000,
+          "temp": 23.5,
+          "humidity": 74.7,
+          "feedLevel": 87.0,
+          "waterLevel": 89.0,
+          "timeZone": "Asia/Manila"
+        },
+        "05": {
+          "timestamp": 1773723600000,
+          "temp": 24.2,
+          "humidity": 73.7,
+          "feedLevel": 86.8,
+          "waterLevel": 88.8,
+          "timeZone": "Asia/Manila"
+        },
+        "06": {
+          "timestamp": 1773727200000,
+          "temp": 25.0,
+          "humidity": 72.1,
+          "feedLevel": 86.6,
+          "waterLevel": 88.6,
+          "timeZone": "Asia/Manila"
+        },
+        "07": {
+          "timestamp": 1773730800000,
+          "temp": 26.0,
+          "humidity": 70.0,
+          "feedLevel": 85.5,
+          "waterLevel": 88.4,
+          "timeZone": "Asia/Manila"
+        },
+        "08": {
+          "timestamp": 1773734400000,
+          "temp": 27.0,
+          "humidity": 67.6,
+          "feedLevel": 85.3,
+          "waterLevel": 88.2,
+          "timeZone": "Asia/Manila"
+        },
+        "09": {
+          "timestamp": 1773738000000,
+          "temp": 28.0,
+          "humidity": 65.0,
+          "feedLevel": 85.1,
+          "waterLevel": 86.6,
+          "timeZone": "Asia/Manila"
+        },
+        "10": {
+          "timestamp": 1773741600000,
+          "temp": 29.0,
+          "humidity": 62.4,
+          "feedLevel": 84.9,
+          "waterLevel": 86.4,
+          "timeZone": "Asia/Manila"
+        },
+        "11": {
+          "timestamp": 1773745200000,
+          "temp": 29.8,
+          "humidity": 60.0,
+          "feedLevel": 84.8,
+          "waterLevel": 86.2,
+          "timeZone": "Asia/Manila"
+        },
+        "12": {
+          "timestamp": 1773748800000,
+          "temp": 32.3,
+          "humidity": 57.9,
+          "feedLevel": 83.7,
+          "waterLevel": 86.0,
+          "timeZone": "Asia/Manila"
+        },
+        "13": {
+          "timestamp": 1773752400000,
+          "temp": 32.7,
+          "humidity": 65.3,
+          "feedLevel": 83.5,
+          "waterLevel": 85.8,
+          "timeZone": "Asia/Manila"
+        },
+        "14": {
+          "timestamp": 1773756000000,
+          "temp": 32.8,
+          "humidity": 64.3,
+          "feedLevel": 83.3,
+          "waterLevel": 84.2,
+          "timeZone": "Asia/Manila"
+        },
+        "15": {
+          "timestamp": 1773759600000,
+          "temp": 32.7,
+          "humidity": 64.0,
+          "feedLevel": 83.1,
+          "waterLevel": 84.0,
+          "timeZone": "Asia/Manila"
+        },
+        "16": {
+          "timestamp": 1773763200000,
+          "temp": 30.5,
+          "humidity": 64.3,
+          "feedLevel": 82.9,
+          "waterLevel": 83.8,
+          "timeZone": "Asia/Manila"
+        },
+        "17": {
+          "timestamp": 1773766800000,
+          "temp": 29.8,
+          "humidity": 56.3,
+          "feedLevel": 82.8,
+          "waterLevel": 83.6,
+          "timeZone": "Asia/Manila"
+        },
+        "18": {
+          "timestamp": 1773770400000,
+          "temp": 29.0,
+          "humidity": 57.9,
+          "feedLevel": 81.7,
+          "waterLevel": 83.4,
+          "timeZone": "Asia/Manila"
+        },
+        "19": {
+          "timestamp": 1773774000000,
+          "temp": 28.0,
+          "humidity": 60.0,
+          "feedLevel": 81.5,
+          "waterLevel": 83.2,
+          "timeZone": "Asia/Manila"
+        },
+        "20": {
+          "timestamp": 1773777600000,
+          "temp": 27.0,
+          "humidity": 62.4,
+          "feedLevel": 81.3,
+          "waterLevel": 81.6,
+          "timeZone": "Asia/Manila"
+        },
+        "21": {
+          "timestamp": 1773781200000,
+          "temp": 26.0,
+          "humidity": 65.0,
+          "feedLevel": 81.1,
+          "waterLevel": 81.4,
+          "timeZone": "Asia/Manila"
+        },
+        "22": {
+          "timestamp": 1773784800000,
+          "temp": 25.0,
+          "humidity": 67.6,
+          "feedLevel": 80.9,
+          "waterLevel": 81.2,
+          "timeZone": "Asia/Manila"
+        },
+        "23": {
+          "timestamp": 1773788400000,
+          "temp": 24.2,
+          "humidity": 70.0,
+          "feedLevel": 80.8,
+          "waterLevel": 81.0,
+          "timeZone": "Asia/Manila"
+        }
       },
-      "2026-01-02": {
-        "date": "2026-01-02",
-        "tempAvg": 26.8,
-        "tempMin": 24.6,
-        "tempMax": 29.7,
-        "humAvg": 72.6,
-        "feedEnd": 85.9,
-        "waterEnd": 86.5,
-        "samples": 96
+      "2026-03-18": {
+        "00": {
+          "timestamp": 1773792000000,
+          "temp": 23.5,
+          "humidity": 72.1,
+          "feedLevel": 83.8,
+          "waterLevel": 86.8,
+          "timeZone": "Asia/Manila"
+        },
+        "01": {
+          "timestamp": 1773795600000,
+          "temp": 23.1,
+          "humidity": 73.7,
+          "feedLevel": 83.6,
+          "waterLevel": 86.6,
+          "timeZone": "Asia/Manila"
+        },
+        "02": {
+          "timestamp": 1773799200000,
+          "temp": 23.0,
+          "humidity": 74.7,
+          "feedLevel": 83.4,
+          "waterLevel": 86.4,
+          "timeZone": "Asia/Manila"
+        },
+        "03": {
+          "timestamp": 1773802800000,
+          "temp": 23.1,
+          "humidity": 75.0,
+          "feedLevel": 83.2,
+          "waterLevel": 86.2,
+          "timeZone": "Asia/Manila"
+        },
+        "04": {
+          "timestamp": 1773806400000,
+          "temp": 23.5,
+          "humidity": 74.7,
+          "feedLevel": 83.0,
+          "waterLevel": 86.0,
+          "timeZone": "Asia/Manila"
+        },
+        "05": {
+          "timestamp": 1773810000000,
+          "temp": 24.2,
+          "humidity": 73.7,
+          "feedLevel": 82.8,
+          "waterLevel": 85.8,
+          "timeZone": "Asia/Manila"
+        },
+        "06": {
+          "timestamp": 1773813600000,
+          "temp": 25.0,
+          "humidity": 72.1,
+          "feedLevel": 82.6,
+          "waterLevel": 95.0,
+          "timeZone": "Asia/Manila"
+        },
+        "07": {
+          "timestamp": 1773817200000,
+          "temp": 26.0,
+          "humidity": 70.0,
+          "feedLevel": 81.5,
+          "waterLevel": 94.8,
+          "timeZone": "Asia/Manila"
+        },
+        "08": {
+          "timestamp": 1773820800000,
+          "temp": 27.0,
+          "humidity": 67.6,
+          "feedLevel": 81.3,
+          "waterLevel": 94.6,
+          "timeZone": "Asia/Manila"
+        },
+        "09": {
+          "timestamp": 1773824400000,
+          "temp": 28.0,
+          "humidity": 65.0,
+          "feedLevel": 81.1,
+          "waterLevel": 93.0,
+          "timeZone": "Asia/Manila"
+        },
+        "10": {
+          "timestamp": 1773828000000,
+          "temp": 29.0,
+          "humidity": 62.4,
+          "feedLevel": 80.9,
+          "waterLevel": 92.8,
+          "timeZone": "Asia/Manila"
+        },
+        "11": {
+          "timestamp": 1773831600000,
+          "temp": 29.8,
+          "humidity": 60.0,
+          "feedLevel": 80.8,
+          "waterLevel": 92.6,
+          "timeZone": "Asia/Manila"
+        },
+        "12": {
+          "timestamp": 1773835200000,
+          "temp": 32.3,
+          "humidity": 57.9,
+          "feedLevel": 79.7,
+          "waterLevel": 92.4,
+          "timeZone": "Asia/Manila"
+        },
+        "13": {
+          "timestamp": 1773838800000,
+          "temp": 32.7,
+          "humidity": 65.3,
+          "feedLevel": 79.5,
+          "waterLevel": 92.2,
+          "timeZone": "Asia/Manila"
+        },
+        "14": {
+          "timestamp": 1773842400000,
+          "temp": 32.8,
+          "humidity": 64.3,
+          "feedLevel": 79.3,
+          "waterLevel": 90.6,
+          "timeZone": "Asia/Manila"
+        },
+        "15": {
+          "timestamp": 1773846000000,
+          "temp": 32.7,
+          "humidity": 64.0,
+          "feedLevel": 79.1,
+          "waterLevel": 90.4,
+          "timeZone": "Asia/Manila"
+        },
+        "16": {
+          "timestamp": 1773849600000,
+          "temp": 30.5,
+          "humidity": 64.3,
+          "feedLevel": 78.9,
+          "waterLevel": 90.2,
+          "timeZone": "Asia/Manila"
+        },
+        "17": {
+          "timestamp": 1773853200000,
+          "temp": 29.8,
+          "humidity": 56.3,
+          "feedLevel": 78.8,
+          "waterLevel": 90.0,
+          "timeZone": "Asia/Manila"
+        },
+        "18": {
+          "timestamp": 1773856800000,
+          "temp": 29.0,
+          "humidity": 57.9,
+          "feedLevel": 77.7,
+          "waterLevel": 89.8,
+          "timeZone": "Asia/Manila"
+        },
+        "19": {
+          "timestamp": 1773860400000,
+          "temp": 28.0,
+          "humidity": 60.0,
+          "feedLevel": 77.5,
+          "waterLevel": 89.6,
+          "timeZone": "Asia/Manila"
+        },
+        "20": {
+          "timestamp": 1773864000000,
+          "temp": 27.0,
+          "humidity": 62.4,
+          "feedLevel": 77.3,
+          "waterLevel": 88.0,
+          "timeZone": "Asia/Manila"
+        },
+        "21": {
+          "timestamp": 1773867600000,
+          "temp": 26.0,
+          "humidity": 65.0,
+          "feedLevel": 77.1,
+          "waterLevel": 87.8,
+          "timeZone": "Asia/Manila"
+        },
+        "22": {
+          "timestamp": 1773871200000,
+          "temp": 25.0,
+          "humidity": 67.6,
+          "feedLevel": 76.9,
+          "waterLevel": 87.6,
+          "timeZone": "Asia/Manila"
+        },
+        "23": {
+          "timestamp": 1773874800000,
+          "temp": 24.2,
+          "humidity": 70.0,
+          "feedLevel": 76.8,
+          "waterLevel": 87.4,
+          "timeZone": "Asia/Manila"
+        }
       },
-      "2026-01-03": {
-        "date": "2026-01-03",
-        "tempAvg": 27.5,
-        "tempMin": 25.1,
-        "tempMax": 30.3,
-        "humAvg": 72.9,
-        "feedEnd": 82.2,
-        "waterEnd": 82.5,
-        "samples": 96
-      },
-      "2026-01-04": {
-        "date": "2026-01-04",
-        "tempAvg": 28.0,
-        "tempMin": 25.5,
-        "tempMax": 30.7,
-        "humAvg": 72.7,
-        "feedEnd": 78.4,
-        "waterEnd": 78.8,
-        "samples": 96
-      },
-      "2026-01-05": {
-        "date": "2026-01-05",
-        "tempAvg": 28.2,
-        "tempMin": 25.6,
-        "tempMax": 30.8,
-        "humAvg": 72.1,
-        "feedEnd": 74.5,
-        "waterEnd": 75.5,
-        "samples": 96
-      },
-      "2026-01-06": {
-        "date": "2026-01-06",
-        "tempAvg": 28.2,
-        "tempMin": 25.6,
-        "tempMax": 30.7,
-        "humAvg": 71.1,
-        "feedEnd": 70.9,
-        "waterEnd": 71.8,
-        "samples": 96
-      },
-      "2026-01-07": {
-        "date": "2026-01-07",
-        "tempAvg": 28.0,
-        "tempMin": 25.4,
-        "tempMax": 30.4,
-        "humAvg": 69.9,
-        "feedEnd": 67.6,
-        "waterEnd": 67.7,
-        "samples": 96
-      },
-      "2026-01-08": {
-        "date": "2026-01-08",
-        "tempAvg": 27.8,
-        "tempMin": 25.2,
-        "tempMax": 30.1,
-        "humAvg": 68.7,
-        "feedEnd": 64.8,
-        "waterEnd": 63.5,
-        "samples": 96
-      },
-      "2026-01-09": {
-        "date": "2026-01-09",
-        "tempAvg": 27.5,
-        "tempMin": 25.1,
-        "tempMax": 29.7,
-        "humAvg": 67.4,
-        "feedEnd": 61.5,
-        "waterEnd": 59.2,
-        "samples": 96
-      },
-      "2026-01-10": {
-        "date": "2026-01-10",
-        "tempAvg": 27.4,
-        "tempMin": 25.0,
-        "tempMax": 29.5,
-        "humAvg": 66.2,
-        "feedEnd": 57.8,
-        "waterEnd": 55.0,
-        "samples": 96
-      },
-      "2026-01-11": {
-        "date": "2026-01-11",
-        "tempAvg": 27.2,
-        "tempMin": 25.0,
-        "tempMax": 29.2,
-        "humAvg": 65.2,
-        "feedEnd": 53.9,
-        "waterEnd": 51.0,
-        "samples": 96
-      },
-      "2026-01-12": {
-        "date": "2026-01-12",
-        "tempAvg": 27.1,
-        "tempMin": 25.0,
-        "tempMax": 29.0,
-        "humAvg": 64.2,
-        "feedEnd": 50.0,
-        "waterEnd": 47.4,
-        "samples": 96
-      },
-      "2026-01-13": {
-        "date": "2026-01-13",
-        "tempAvg": 26.8,
-        "tempMin": 24.9,
-        "tempMax": 28.7,
-        "humAvg": 63.3,
-        "feedEnd": 46.4,
-        "waterEnd": 44.1,
-        "samples": 96
-      },
-      "2026-01-14": {
-        "date": "2026-01-14",
-        "tempAvg": 26.4,
-        "tempMin": 24.6,
-        "tempMax": 28.3,
-        "humAvg": 62.5,
-        "feedEnd": 43.2,
-        "waterEnd": 40.3,
-        "samples": 96
-      },
-      "2026-01-15": {
-        "date": "2026-01-15",
-        "tempAvg": 28.9,
-        "tempMin": 24.2,
-        "tempMax": 31.3,
-        "humAvg": 68.2,
-        "feedEnd": 40.3,
-        "waterEnd": 36.2,
-        "samples": 96
-      },
-      "2026-01-16": {
-        "date": "2026-01-16",
-        "tempAvg": 28.2,
-        "tempMin": 23.6,
-        "tempMax": 30.7,
-        "humAvg": 67.3,
-        "feedEnd": 37.0,
-        "waterEnd": 31.9,
-        "samples": 96
-      },
-      "2026-01-17": {
-        "date": "2026-01-17",
-        "tempAvg": 27.5,
-        "tempMin": 22.9,
-        "tempMax": 30.1,
-        "humAvg": 66.4,
-        "feedEnd": 33.2,
-        "waterEnd": 27.7,
-        "samples": 96
-      },
-      "2026-01-18": {
-        "date": "2026-01-18",
-        "tempAvg": 23.9,
-        "tempMin": 22.3,
-        "tempMax": 26.0,
-        "humAvg": 59.0,
-        "feedEnd": 29.4,
-        "waterEnd": 23.5,
-        "samples": 96
-      },
-      "2026-01-19": {
-        "date": "2026-01-19",
-        "tempAvg": 23.5,
-        "tempMin": 21.8,
-        "tempMax": 25.7,
-        "humAvg": 58.0,
-        "feedEnd": 25.5,
-        "waterEnd": 90.0,
-        "samples": 96
-      },
-      "2026-01-20": {
-        "date": "2026-01-20",
-        "tempAvg": 23.3,
-        "tempMin": 21.5,
-        "tempMax": 25.7,
-        "humAvg": 57.1,
-        "feedEnd": 21.9,
-        "waterEnd": 86.4,
-        "samples": 96
-      },
-      "2026-01-21": {
-        "date": "2026-01-21",
-        "tempAvg": 23.5,
-        "tempMin": 21.6,
-        "tempMax": 26.0,
-        "humAvg": 56.4,
-        "feedEnd": 18.8,
-        "waterEnd": 83.0,
-        "samples": 96
-      },
-      "2026-01-22": {
-        "date": "2026-01-22",
-        "tempAvg": 23.9,
-        "tempMin": 21.8,
-        "tempMax": 26.5,
-        "humAvg": 55.9,
-        "feedEnd": 89.0,
-        "waterEnd": 79.2,
-        "samples": 96
-      },
-      "2026-01-23": {
-        "date": "2026-01-23",
-        "tempAvg": 24.4,
-        "tempMin": 22.2,
-        "tempMax": 27.2,
-        "humAvg": 55.8,
-        "feedEnd": 85.6,
-        "waterEnd": 75.1,
-        "samples": 96
-      },
-      "2026-01-24": {
-        "date": "2026-01-24",
-        "tempAvg": 25.0,
-        "tempMin": 22.7,
-        "tempMax": 27.9,
-        "humAvg": 56.1,
-        "feedEnd": 81.9,
-        "waterEnd": 70.8,
-        "samples": 96
-      },
-      "2026-01-25": {
-        "date": "2026-01-25",
-        "tempAvg": 25.6,
-        "tempMin": 23.1,
-        "tempMax": 28.5,
-        "humAvg": 57.0,
-        "feedEnd": 78.0,
-        "waterEnd": 66.5,
-        "samples": 96
-      },
-      "2026-01-26": {
-        "date": "2026-01-26",
-        "tempAvg": 26.0,
-        "tempMin": 23.5,
-        "tempMax": 28.9,
-        "humAvg": 58.3,
-        "feedEnd": 74.1,
-        "waterEnd": 62.4,
-        "samples": 96
-      },
-      "2026-01-27": {
-        "date": "2026-01-27",
-        "tempAvg": 26.3,
-        "tempMin": 23.7,
-        "tempMax": 29.2,
-        "humAvg": 60.1,
-        "feedEnd": 70.6,
-        "waterEnd": 58.5,
-        "samples": 96
-      },
-      "2026-01-28": {
-        "date": "2026-01-28",
-        "tempAvg": 26.6,
-        "tempMin": 24.0,
-        "tempMax": 29.4,
-        "humAvg": 62.2,
-        "feedEnd": 67.5,
-        "waterEnd": 55.0,
-        "samples": 96
-      },
-      "2026-01-29": {
-        "date": "2026-01-29",
-        "tempAvg": 26.8,
-        "tempMin": 24.2,
-        "tempMax": 29.6,
-        "humAvg": 64.5,
-        "feedEnd": 64.5,
-        "waterEnd": 51.5,
-        "samples": 96
-      },
-      "2026-01-30": {
-        "date": "2026-01-30",
-        "tempAvg": 27.1,
-        "tempMin": 24.6,
-        "tempMax": 29.8,
-        "humAvg": 66.8,
-        "feedEnd": 61.1,
-        "waterEnd": 47.6,
-        "samples": 96
+      "2026-03-19": {
+        "00": {
+          "timestamp": 1773878400000,
+          "temp": 23.5,
+          "humidity": 72.1,
+          "feedLevel": 79.8,
+          "waterLevel": 83.8,
+          "timeZone": "Asia/Manila"
+        },
+        "01": {
+          "timestamp": 1773882000000,
+          "temp": 23.1,
+          "humidity": 73.7,
+          "feedLevel": 79.6,
+          "waterLevel": 83.6,
+          "timeZone": "Asia/Manila"
+        },
+        "02": {
+          "timestamp": 1773885600000,
+          "temp": 23.0,
+          "humidity": 74.7,
+          "feedLevel": 79.4,
+          "waterLevel": 83.4,
+          "timeZone": "Asia/Manila"
+        },
+        "03": {
+          "timestamp": 1773889200000,
+          "temp": 23.1,
+          "humidity": 75.0,
+          "feedLevel": 79.2,
+          "waterLevel": 83.2,
+          "timeZone": "Asia/Manila"
+        },
+        "04": {
+          "timestamp": 1773892800000,
+          "temp": 23.5,
+          "humidity": 74.7,
+          "feedLevel": 79.0,
+          "waterLevel": 83.0,
+          "timeZone": "Asia/Manila"
+        },
+        "05": {
+          "timestamp": 1773896400000,
+          "temp": 24.2,
+          "humidity": 73.7,
+          "feedLevel": 78.8,
+          "waterLevel": 82.8,
+          "timeZone": "Asia/Manila"
+        },
+        "06": {
+          "timestamp": 1773900000000,
+          "temp": 25.0,
+          "humidity": 72.1,
+          "feedLevel": 78.6,
+          "waterLevel": 82.6,
+          "timeZone": "Asia/Manila"
+        },
+        "07": {
+          "timestamp": 1773903600000,
+          "temp": 26.0,
+          "humidity": 70.0,
+          "feedLevel": 77.5,
+          "waterLevel": 82.4,
+          "timeZone": "Asia/Manila"
+        },
+        "08": {
+          "timestamp": 1773907200000,
+          "temp": 27.0,
+          "humidity": 67.6,
+          "feedLevel": 92.0,
+          "waterLevel": 82.2,
+          "timeZone": "Asia/Manila"
+        },
+        "09": {
+          "timestamp": 1773910800000,
+          "temp": 28.0,
+          "humidity": 65.0,
+          "feedLevel": 91.8,
+          "waterLevel": 80.6,
+          "timeZone": "Asia/Manila"
+        },
+        "10": {
+          "timestamp": 1773914400000,
+          "temp": 29.0,
+          "humidity": 62.4,
+          "feedLevel": 91.6,
+          "waterLevel": 80.4,
+          "timeZone": "Asia/Manila"
+        },
+        "11": {
+          "timestamp": 1773918000000,
+          "temp": 29.8,
+          "humidity": 60.0,
+          "feedLevel": 91.4,
+          "waterLevel": 80.2,
+          "timeZone": "Asia/Manila"
+        },
+        "12": {
+          "timestamp": 1773921600000,
+          "temp": 32.3,
+          "humidity": 57.9,
+          "feedLevel": 90.3,
+          "waterLevel": 80.0,
+          "timeZone": "Asia/Manila"
+        },
+        "13": {
+          "timestamp": 1773925200000,
+          "temp": 32.7,
+          "humidity": 65.3,
+          "feedLevel": 90.1,
+          "waterLevel": 79.8,
+          "timeZone": "Asia/Manila"
+        },
+        "14": {
+          "timestamp": 1773928800000,
+          "temp": 32.8,
+          "humidity": 64.3,
+          "feedLevel": 89.9,
+          "waterLevel": 78.2,
+          "timeZone": "Asia/Manila"
+        },
+        "15": {
+          "timestamp": 1773932400000,
+          "temp": 32.7,
+          "humidity": 64.0,
+          "feedLevel": 89.8,
+          "waterLevel": 78.0,
+          "timeZone": "Asia/Manila"
+        },
+        "16": {
+          "timestamp": 1773936000000,
+          "temp": 30.5,
+          "humidity": 64.3,
+          "feedLevel": 89.6,
+          "waterLevel": 77.8,
+          "timeZone": "Asia/Manila"
+        },
+        "17": {
+          "timestamp": 1773939600000,
+          "temp": 29.8,
+          "humidity": 56.3,
+          "feedLevel": 89.4,
+          "waterLevel": 77.6,
+          "timeZone": "Asia/Manila"
+        },
+        "18": {
+          "timestamp": 1773943200000,
+          "temp": 29.0,
+          "humidity": 57.9,
+          "feedLevel": 88.3,
+          "waterLevel": 77.4,
+          "timeZone": "Asia/Manila"
+        },
+        "19": {
+          "timestamp": 1773946800000,
+          "temp": 28.0,
+          "humidity": 60.0,
+          "feedLevel": 88.1,
+          "waterLevel": 77.2,
+          "timeZone": "Asia/Manila"
+        },
+        "20": {
+          "timestamp": 1773950400000,
+          "temp": 27.0,
+          "humidity": 62.4,
+          "feedLevel": 87.9,
+          "waterLevel": 75.6,
+          "timeZone": "Asia/Manila"
+        },
+        "21": {
+          "timestamp": 1773954000000,
+          "temp": 26.0,
+          "humidity": 65.0,
+          "feedLevel": 87.8,
+          "waterLevel": 75.4,
+          "timeZone": "Asia/Manila"
+        },
+        "22": {
+          "timestamp": 1773957600000,
+          "temp": 25.0,
+          "humidity": 67.6,
+          "feedLevel": 87.6,
+          "waterLevel": 75.2,
+          "timeZone": "Asia/Manila"
+        },
+        "23": {
+          "timestamp": 1773961200000,
+          "temp": 24.2,
+          "humidity": 70.0,
+          "feedLevel": 87.4,
+          "waterLevel": 75.0,
+          "timeZone": "Asia/Manila"
+        }
       }
+    },
+    "consumptionEvents": {
+      "evt_0001": {
+        "timestamp": 1773709200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "01",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0002": {
+        "timestamp": 1773709200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "01",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0003": {
+        "timestamp": 1773712800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "02",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0004": {
+        "timestamp": 1773712800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "02",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0005": {
+        "timestamp": 1773716400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "03",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0006": {
+        "timestamp": 1773716400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "03",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0007": {
+        "timestamp": 1773720000000,
+        "dayKey": "2026-03-17",
+        "hourKey": "04",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0008": {
+        "timestamp": 1773720000000,
+        "dayKey": "2026-03-17",
+        "hourKey": "04",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0009": {
+        "timestamp": 1773723600000,
+        "dayKey": "2026-03-17",
+        "hourKey": "05",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0010": {
+        "timestamp": 1773723600000,
+        "dayKey": "2026-03-17",
+        "hourKey": "05",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0011": {
+        "timestamp": 1773727200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "06",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0012": {
+        "timestamp": 1773727200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "06",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0013": {
+        "timestamp": 1773730800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "07",
+        "type": "feed",
+        "dropPercent": 1.1,
+        "amount": 22.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0014": {
+        "timestamp": 1773730800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "07",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0015": {
+        "timestamp": 1773734400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "08",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0016": {
+        "timestamp": 1773734400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "08",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0017": {
+        "timestamp": 1773738000000,
+        "dayKey": "2026-03-17",
+        "hourKey": "09",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0018": {
+        "timestamp": 1773738000000,
+        "dayKey": "2026-03-17",
+        "hourKey": "09",
+        "type": "water",
+        "dropPercent": 1.6,
+        "amount": 64.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0019": {
+        "timestamp": 1773741600000,
+        "dayKey": "2026-03-17",
+        "hourKey": "10",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0020": {
+        "timestamp": 1773741600000,
+        "dayKey": "2026-03-17",
+        "hourKey": "10",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0021": {
+        "timestamp": 1773745200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "11",
+        "type": "feed",
+        "dropPercent": 0.1,
+        "amount": 2.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0022": {
+        "timestamp": 1773745200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "11",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0023": {
+        "timestamp": 1773748800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "12",
+        "type": "feed",
+        "dropPercent": 1.1,
+        "amount": 22.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0024": {
+        "timestamp": 1773748800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "12",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0025": {
+        "timestamp": 1773752400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "13",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0026": {
+        "timestamp": 1773752400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "13",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0027": {
+        "timestamp": 1773756000000,
+        "dayKey": "2026-03-17",
+        "hourKey": "14",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0028": {
+        "timestamp": 1773756000000,
+        "dayKey": "2026-03-17",
+        "hourKey": "14",
+        "type": "water",
+        "dropPercent": 1.6,
+        "amount": 64.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0029": {
+        "timestamp": 1773759600000,
+        "dayKey": "2026-03-17",
+        "hourKey": "15",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0030": {
+        "timestamp": 1773759600000,
+        "dayKey": "2026-03-17",
+        "hourKey": "15",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0031": {
+        "timestamp": 1773763200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "16",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0032": {
+        "timestamp": 1773763200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "16",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0033": {
+        "timestamp": 1773766800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "17",
+        "type": "feed",
+        "dropPercent": 0.1,
+        "amount": 2.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0034": {
+        "timestamp": 1773766800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "17",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0035": {
+        "timestamp": 1773770400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "18",
+        "type": "feed",
+        "dropPercent": 1.1,
+        "amount": 22.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0036": {
+        "timestamp": 1773770400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "18",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0037": {
+        "timestamp": 1773774000000,
+        "dayKey": "2026-03-17",
+        "hourKey": "19",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0038": {
+        "timestamp": 1773774000000,
+        "dayKey": "2026-03-17",
+        "hourKey": "19",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0039": {
+        "timestamp": 1773777600000,
+        "dayKey": "2026-03-17",
+        "hourKey": "20",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0040": {
+        "timestamp": 1773777600000,
+        "dayKey": "2026-03-17",
+        "hourKey": "20",
+        "type": "water",
+        "dropPercent": 1.6,
+        "amount": 64.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0041": {
+        "timestamp": 1773781200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "21",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0042": {
+        "timestamp": 1773781200000,
+        "dayKey": "2026-03-17",
+        "hourKey": "21",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0043": {
+        "timestamp": 1773784800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "22",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0044": {
+        "timestamp": 1773784800000,
+        "dayKey": "2026-03-17",
+        "hourKey": "22",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0045": {
+        "timestamp": 1773788400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "23",
+        "type": "feed",
+        "dropPercent": 0.1,
+        "amount": 2.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0046": {
+        "timestamp": 1773788400000,
+        "dayKey": "2026-03-17",
+        "hourKey": "23",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0047": {
+        "timestamp": 1773795600000,
+        "dayKey": "2026-03-18",
+        "hourKey": "01",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0048": {
+        "timestamp": 1773795600000,
+        "dayKey": "2026-03-18",
+        "hourKey": "01",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0049": {
+        "timestamp": 1773799200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "02",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0050": {
+        "timestamp": 1773799200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "02",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0051": {
+        "timestamp": 1773802800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "03",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0052": {
+        "timestamp": 1773802800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "03",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0053": {
+        "timestamp": 1773806400000,
+        "dayKey": "2026-03-18",
+        "hourKey": "04",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0054": {
+        "timestamp": 1773806400000,
+        "dayKey": "2026-03-18",
+        "hourKey": "04",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0055": {
+        "timestamp": 1773810000000,
+        "dayKey": "2026-03-18",
+        "hourKey": "05",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0056": {
+        "timestamp": 1773810000000,
+        "dayKey": "2026-03-18",
+        "hourKey": "05",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0057": {
+        "timestamp": 1773813600000,
+        "dayKey": "2026-03-18",
+        "hourKey": "06",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0058": {
+        "timestamp": 1773817200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "07",
+        "type": "feed",
+        "dropPercent": 1.1,
+        "amount": 22.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0059": {
+        "timestamp": 1773817200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "07",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0060": {
+        "timestamp": 1773820800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "08",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0061": {
+        "timestamp": 1773820800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "08",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0062": {
+        "timestamp": 1773824400000,
+        "dayKey": "2026-03-18",
+        "hourKey": "09",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0063": {
+        "timestamp": 1773824400000,
+        "dayKey": "2026-03-18",
+        "hourKey": "09",
+        "type": "water",
+        "dropPercent": 1.6,
+        "amount": 64.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0064": {
+        "timestamp": 1773828000000,
+        "dayKey": "2026-03-18",
+        "hourKey": "10",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0065": {
+        "timestamp": 1773828000000,
+        "dayKey": "2026-03-18",
+        "hourKey": "10",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0066": {
+        "timestamp": 1773831600000,
+        "dayKey": "2026-03-18",
+        "hourKey": "11",
+        "type": "feed",
+        "dropPercent": 0.1,
+        "amount": 2.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0067": {
+        "timestamp": 1773831600000,
+        "dayKey": "2026-03-18",
+        "hourKey": "11",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0068": {
+        "timestamp": 1773835200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "12",
+        "type": "feed",
+        "dropPercent": 1.1,
+        "amount": 22.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0069": {
+        "timestamp": 1773835200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "12",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0070": {
+        "timestamp": 1773838800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "13",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0071": {
+        "timestamp": 1773838800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "13",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0072": {
+        "timestamp": 1773842400000,
+        "dayKey": "2026-03-18",
+        "hourKey": "14",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0073": {
+        "timestamp": 1773842400000,
+        "dayKey": "2026-03-18",
+        "hourKey": "14",
+        "type": "water",
+        "dropPercent": 1.6,
+        "amount": 64.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0074": {
+        "timestamp": 1773846000000,
+        "dayKey": "2026-03-18",
+        "hourKey": "15",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0075": {
+        "timestamp": 1773846000000,
+        "dayKey": "2026-03-18",
+        "hourKey": "15",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0076": {
+        "timestamp": 1773849600000,
+        "dayKey": "2026-03-18",
+        "hourKey": "16",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0077": {
+        "timestamp": 1773849600000,
+        "dayKey": "2026-03-18",
+        "hourKey": "16",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0078": {
+        "timestamp": 1773853200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "17",
+        "type": "feed",
+        "dropPercent": 0.1,
+        "amount": 2.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0079": {
+        "timestamp": 1773853200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "17",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0080": {
+        "timestamp": 1773856800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "18",
+        "type": "feed",
+        "dropPercent": 1.1,
+        "amount": 22.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0081": {
+        "timestamp": 1773856800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "18",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0082": {
+        "timestamp": 1773860400000,
+        "dayKey": "2026-03-18",
+        "hourKey": "19",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0083": {
+        "timestamp": 1773860400000,
+        "dayKey": "2026-03-18",
+        "hourKey": "19",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0084": {
+        "timestamp": 1773864000000,
+        "dayKey": "2026-03-18",
+        "hourKey": "20",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0085": {
+        "timestamp": 1773864000000,
+        "dayKey": "2026-03-18",
+        "hourKey": "20",
+        "type": "water",
+        "dropPercent": 1.6,
+        "amount": 64.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0086": {
+        "timestamp": 1773867600000,
+        "dayKey": "2026-03-18",
+        "hourKey": "21",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0087": {
+        "timestamp": 1773867600000,
+        "dayKey": "2026-03-18",
+        "hourKey": "21",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0088": {
+        "timestamp": 1773871200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "22",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0089": {
+        "timestamp": 1773871200000,
+        "dayKey": "2026-03-18",
+        "hourKey": "22",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0090": {
+        "timestamp": 1773874800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "23",
+        "type": "feed",
+        "dropPercent": 0.1,
+        "amount": 2.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0091": {
+        "timestamp": 1773874800000,
+        "dayKey": "2026-03-18",
+        "hourKey": "23",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0092": {
+        "timestamp": 1773882000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "01",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0093": {
+        "timestamp": 1773882000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "01",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0094": {
+        "timestamp": 1773885600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "02",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0095": {
+        "timestamp": 1773885600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "02",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0096": {
+        "timestamp": 1773889200000,
+        "dayKey": "2026-03-19",
+        "hourKey": "03",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0097": {
+        "timestamp": 1773889200000,
+        "dayKey": "2026-03-19",
+        "hourKey": "03",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0098": {
+        "timestamp": 1773892800000,
+        "dayKey": "2026-03-19",
+        "hourKey": "04",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0099": {
+        "timestamp": 1773892800000,
+        "dayKey": "2026-03-19",
+        "hourKey": "04",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0100": {
+        "timestamp": 1773896400000,
+        "dayKey": "2026-03-19",
+        "hourKey": "05",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0101": {
+        "timestamp": 1773896400000,
+        "dayKey": "2026-03-19",
+        "hourKey": "05",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0102": {
+        "timestamp": 1773900000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "06",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0103": {
+        "timestamp": 1773900000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "06",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0104": {
+        "timestamp": 1773903600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "07",
+        "type": "feed",
+        "dropPercent": 1.1,
+        "amount": 22.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0105": {
+        "timestamp": 1773903600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "07",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0106": {
+        "timestamp": 1773907200000,
+        "dayKey": "2026-03-19",
+        "hourKey": "08",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0107": {
+        "timestamp": 1773910800000,
+        "dayKey": "2026-03-19",
+        "hourKey": "09",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0108": {
+        "timestamp": 1773910800000,
+        "dayKey": "2026-03-19",
+        "hourKey": "09",
+        "type": "water",
+        "dropPercent": 1.6,
+        "amount": 64.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0109": {
+        "timestamp": 1773914400000,
+        "dayKey": "2026-03-19",
+        "hourKey": "10",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0110": {
+        "timestamp": 1773914400000,
+        "dayKey": "2026-03-19",
+        "hourKey": "10",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0111": {
+        "timestamp": 1773918000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "11",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0112": {
+        "timestamp": 1773918000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "11",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0113": {
+        "timestamp": 1773921600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "12",
+        "type": "feed",
+        "dropPercent": 1.1,
+        "amount": 22.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0114": {
+        "timestamp": 1773921600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "12",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0115": {
+        "timestamp": 1773925200000,
+        "dayKey": "2026-03-19",
+        "hourKey": "13",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0116": {
+        "timestamp": 1773925200000,
+        "dayKey": "2026-03-19",
+        "hourKey": "13",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0117": {
+        "timestamp": 1773928800000,
+        "dayKey": "2026-03-19",
+        "hourKey": "14",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0118": {
+        "timestamp": 1773928800000,
+        "dayKey": "2026-03-19",
+        "hourKey": "14",
+        "type": "water",
+        "dropPercent": 1.6,
+        "amount": 64.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0119": {
+        "timestamp": 1773932400000,
+        "dayKey": "2026-03-19",
+        "hourKey": "15",
+        "type": "feed",
+        "dropPercent": 0.1,
+        "amount": 2.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0120": {
+        "timestamp": 1773932400000,
+        "dayKey": "2026-03-19",
+        "hourKey": "15",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0121": {
+        "timestamp": 1773936000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "16",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0122": {
+        "timestamp": 1773936000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "16",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0123": {
+        "timestamp": 1773939600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "17",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0124": {
+        "timestamp": 1773939600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "17",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0125": {
+        "timestamp": 1773943200000,
+        "dayKey": "2026-03-19",
+        "hourKey": "18",
+        "type": "feed",
+        "dropPercent": 1.1,
+        "amount": 22.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0126": {
+        "timestamp": 1773943200000,
+        "dayKey": "2026-03-19",
+        "hourKey": "18",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0127": {
+        "timestamp": 1773946800000,
+        "dayKey": "2026-03-19",
+        "hourKey": "19",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0128": {
+        "timestamp": 1773946800000,
+        "dayKey": "2026-03-19",
+        "hourKey": "19",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0129": {
+        "timestamp": 1773950400000,
+        "dayKey": "2026-03-19",
+        "hourKey": "20",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0130": {
+        "timestamp": 1773950400000,
+        "dayKey": "2026-03-19",
+        "hourKey": "20",
+        "type": "water",
+        "dropPercent": 1.6,
+        "amount": 64.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0131": {
+        "timestamp": 1773954000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "21",
+        "type": "feed",
+        "dropPercent": 0.1,
+        "amount": 2.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0132": {
+        "timestamp": 1773954000000,
+        "dayKey": "2026-03-19",
+        "hourKey": "21",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0133": {
+        "timestamp": 1773957600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "22",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0134": {
+        "timestamp": 1773957600000,
+        "dayKey": "2026-03-19",
+        "hourKey": "22",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      },
+      "evt_0135": {
+        "timestamp": 1773961200000,
+        "dayKey": "2026-03-19",
+        "hourKey": "23",
+        "type": "feed",
+        "dropPercent": 0.2,
+        "amount": 4.0,
+        "unit": "g",
+        "source": "natural_drop"
+      },
+      "evt_0136": {
+        "timestamp": 1773961200000,
+        "dayKey": "2026-03-19",
+        "hourKey": "23",
+        "type": "water",
+        "dropPercent": 0.2,
+        "amount": 8.0,
+        "unit": "ml",
+        "source": "natural_drop"
+      }
+    },
+    "daily": {
+      "2026-03-17": {
+        "date": "2026-03-17",
+        "tempAvg": 27.3,
+        "tempMin": 23.0,
+        "tempMax": 32.8,
+        "humAvg": 66.5,
+        "feedEnd": 80.8,
+        "waterEnd": 81.0,
+        "samples": 24
+      },
+      "2026-03-18": {
+        "date": "2026-03-18",
+        "tempAvg": 27.3,
+        "tempMin": 23.0,
+        "tempMax": 32.8,
+        "humAvg": 66.5,
+        "feedEnd": 76.8,
+        "waterEnd": 87.4,
+        "samples": 24
+      },
+      "2026-03-19": {
+        "date": "2026-03-19",
+        "tempAvg": 27.3,
+        "tempMin": 23.0,
+        "tempMax": 32.8,
+        "humAvg": 66.5,
+        "feedEnd": 87.4,
+        "waterEnd": 75.0,
+        "samples": 24
+      }
+    }
+  },
+  "sensors": {
+    "temperature": 24.2,
+    "humidity": 70.0,
+    "feedLevel": 87.4,
+    "waterLevel": 75.0,
+    "lastUpdate": 1773961200000
+  },
+  "alerts": {
+    "-OA1alert001": {
+      "type": "Low Feed",
+      "message": "Feed level is low (18%)",
+      "severity": "warning",
+      "timestamp": 1773832800000,
+      "resolved": false,
+      "source": "web",
+      "dedupeKey": "low-feed"
+    },
+    "-OA1alert002": {
+      "type": "Water Critically Low",
+      "message": "Water level is critically low (9%)",
+      "severity": "critical",
+      "timestamp": 1773834000000,
+      "resolved": false,
+      "source": "web",
+      "dedupeKey": "critical-water"
+    },
+    "-OA1alert003": {
+      "type": "High Temperature",
+      "message": "Temperature too high (36.8 degC)",
+      "severity": "warning",
+      "timestamp": 1773824400000,
+      "resolved": true,
+      "resolvedAt": 1773829800000,
+      "resolvedBy": "auto",
+      "source": "web",
+      "dedupeKey": "high-temp"
+    },
+    "-OA1alert004": {
+      "type": "Schedule Disrupted",
+      "message": "No feed drop detected after schedule 06:00 AM.",
+      "severity": "warning",
+      "timestamp": 1773817200000,
+      "resolved": false,
+      "source": "web",
+      "dedupeKey": "scheduled-disrupted:sample",
+      "meta": {
+        "scheduleId": "-OAsched001",
+        "scheduleTime": "06:00 AM"
+      }
+    }
+  },
+  "schedules": {
+    "-OAsched001": {
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "time": "06:00 AM",
+      "enabled": true,
+      "createdAt": 1772971200000,
+      "group": "starter"
+    },
+    "-OAsched002": {
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "time": "12:00 PM",
+      "enabled": true,
+      "createdAt": 1772971200000,
+      "group": "starter"
+    },
+    "-OAsched003": {
+      "days": [
+        "Monday",
+        "Wednesday",
+        "Friday"
+      ],
+      "time": "05:30 PM",
+      "enabled": false,
+      "createdAt": 1773662400000,
+      "group": "custom"
+    }
+  },
+  "logs": {
+    "-OAlog001": {
+      "message": "ESP32 heartbeat",
+      "source": "esp32",
+      "timestamp": 1773834480000
+    },
+    "-OAlog002": {
+      "message": "Feed command sent from Dashboard",
+      "source": "web",
+      "timestamp": 1773833760000
+    },
+    "-OAlog003": {
+      "message": "Added schedule: Monday, Wednesday, Friday at 05:30 PM",
+      "source": "web",
+      "timestamp": 1773833040000
+    },
+    "-OAlog004": {
+      "message": "Schedule enabled: ID -OAsched001",
+      "source": "web",
+      "timestamp": 1773832320000
+    },
+    "-OAlog005": {
+      "message": "Low water alert triggered by AlertEngine",
+      "source": "web",
+      "timestamp": 1773831600000
+    },
+    "-OAlog006": {
+      "message": "MQTT reconnect successful",
+      "source": "system",
+      "timestamp": 1773830880000
+    },
+    "-OAbeat001": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773834900000
+    },
+    "-OAbeat002": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773834600000
+    },
+    "-OAbeat003": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773834300000
+    },
+    "-OAbeat004": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773834000000
+    },
+    "-OAbeat005": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773833700000
+    },
+    "-OAbeat006": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773833400000
+    },
+    "-OAbeat007": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773833100000
+    },
+    "-OAbeat008": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773832800000
+    },
+    "-OAbeat009": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773832500000
+    },
+    "-OAbeat010": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773832200000
+    },
+    "-OAbeat011": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773831900000
+    },
+    "-OAbeat012": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773831600000
+    },
+    "-OAbeat013": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773831300000
+    },
+    "-OAbeat014": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773831000000
+    },
+    "-OAbeat015": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773830700000
+    },
+    "-OAbeat016": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773830400000
+    },
+    "-OAbeat017": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773830100000
+    },
+    "-OAbeat018": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773829800000
+    },
+    "-OAbeat019": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773829500000
+    },
+    "-OAbeat020": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773829200000
+    },
+    "-OAbeat021": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773828900000
+    },
+    "-OAbeat022": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773828600000
+    },
+    "-OAbeat023": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773828300000
+    },
+    "-OAbeat024": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773828000000
+    },
+    "-OAbeat025": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773827700000
+    },
+    "-OAbeat026": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773827400000
+    },
+    "-OAbeat027": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773827100000
+    },
+    "-OAbeat028": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773826800000
+    },
+    "-OAbeat029": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773826500000
+    },
+    "-OAbeat030": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773826200000
+    },
+    "-OAbeat031": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773825900000
+    },
+    "-OAbeat032": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773825600000
+    },
+    "-OAbeat033": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773825300000
+    },
+    "-OAbeat034": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773825000000
+    },
+    "-OAbeat035": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773824700000
+    },
+    "-OAbeat036": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773824400000
+    },
+    "-OAbeat037": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773824100000
+    },
+    "-OAbeat038": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773823800000
+    },
+    "-OAbeat039": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773823500000
+    },
+    "-OAbeat040": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773823200000
+    },
+    "-OAbeat041": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773822900000
+    },
+    "-OAbeat042": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773822600000
+    },
+    "-OAbeat043": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773822300000
+    },
+    "-OAbeat044": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773822000000
+    },
+    "-OAbeat045": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773821700000
+    },
+    "-OAbeat046": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773821400000
+    },
+    "-OAbeat047": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773821100000
+    },
+    "-OAbeat048": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773820800000
+    },
+    "-OAbeat049": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773820500000
+    },
+    "-OAbeat050": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773820200000
+    },
+    "-OAbeat051": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773819900000
+    },
+    "-OAbeat052": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773819600000
+    },
+    "-OAbeat053": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773819300000
+    },
+    "-OAbeat054": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773819000000
+    },
+    "-OAbeat055": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773818700000
+    },
+    "-OAbeat056": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773818400000
+    },
+    "-OAbeat057": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773818100000
+    },
+    "-OAbeat058": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773817800000
+    },
+    "-OAbeat059": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773817500000
+    },
+    "-OAbeat060": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773817200000
+    },
+    "-OAbeat061": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773816900000
+    },
+    "-OAbeat062": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773816600000
+    },
+    "-OAbeat063": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773816300000
+    },
+    "-OAbeat064": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773816000000
+    },
+    "-OAbeat065": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773815700000
+    },
+    "-OAbeat066": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773815400000
+    },
+    "-OAbeat067": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773815100000
+    },
+    "-OAbeat068": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773814800000
+    },
+    "-OAbeat069": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773814500000
+    },
+    "-OAbeat070": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773814200000
+    },
+    "-OAbeat071": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773813900000
+    },
+    "-OAbeat072": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773813600000
+    },
+    "-OAbeat073": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773813300000
+    },
+    "-OAbeat074": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773813000000
+    },
+    "-OAbeat075": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773812700000
+    },
+    "-OAbeat076": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773812400000
+    },
+    "-OAbeat077": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773812100000
+    },
+    "-OAbeat078": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773811800000
+    },
+    "-OAbeat079": {
+      "message": "Device status heartbeat",
+      "source": "esp32",
+      "timestamp": 1773811500000
     }
   }
 }

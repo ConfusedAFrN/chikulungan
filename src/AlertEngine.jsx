@@ -39,6 +39,25 @@ const REMINDER_STORAGE_KEY = "alertReminderState_v1";
 
 // If true, only reminds when tab is not focused (less annoying while actively using app)
 const REMIND_ONLY_WHEN_HIDDEN = true;
+const FEED_CAPACITY_GRAMS = 2000;
+const WATER_CAPACITY_ML = 4000;
+const MIN_CONSUMPTION_DROP_PERCENT = 0.1;
+
+function getDateTimePartsInZone(ts, timeZone) {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    hourCycle: "h23",
+  });
+  const parts = formatter.formatToParts(new Date(ts));
+  const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+  const dayKey = `${map.year}-${map.month}-${map.day}`;
+  const hourKey = map.hour;
+  return { dayKey, hourKey };
+}
 
 function ensureNotificationPermissionOnce() {
   try {
@@ -178,6 +197,9 @@ function summarizeUnresolved(alertsObj) {
 
 export default function AlertEngine() {
   const hasRealDataRef = useRef(false);
+  const farmTimeZoneRef = useRef(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
+  const prevLevelsRef = useRef({ feed: null, water: null, timestamp: null });
+  const lastWrittenHourRef = useRef("");
 
   const sensorsRef = useRef({ temp: 0, humidity: 0, feed: 0, water: 0 });
   const sensorTrendRef = useRef({
@@ -263,6 +285,78 @@ export default function AlertEngine() {
     return () => unsubSchedules();
   }, []);
 
+  useEffect(() => {
+    const unsubFarmTz = onValue(ref(db, "settings/farm/timeZone"), (snap) => {
+      const tz = String(snap.val() || "").trim();
+      if (!tz) return;
+      farmTimeZoneRef.current = tz;
+    });
+
+    return () => unsubFarmTz();
+  }, []);
+
+  const persistHourlyAndConsumption = useCallback(async () => {
+    const now = Date.now();
+    const timeZone = farmTimeZoneRef.current || "UTC";
+    const s = sensorsRef.current;
+    const { dayKey, hourKey } = getDateTimePartsInZone(now, timeZone);
+
+    const hourPath = `history/hourly/${dayKey}/${hourKey}`;
+    const hourStampKey = `${dayKey}-${hourKey}`;
+
+    if (lastWrittenHourRef.current !== hourStampKey) {
+      lastWrittenHourRef.current = hourStampKey;
+      await set(ref(db, hourPath), {
+        timestamp: now,
+        temp: Number(s.temp ?? 0),
+        humidity: Number(s.humidity ?? 0),
+        feedLevel: Number(s.feed ?? 0),
+        waterLevel: Number(s.water ?? 0),
+        timeZone,
+      });
+    }
+
+    const prev = prevLevelsRef.current;
+    const currentFeed = Number(s.feed ?? 0);
+    const currentWater = Number(s.water ?? 0);
+
+    if (prev.feed == null || prev.water == null) {
+      prevLevelsRef.current = { feed: currentFeed, water: currentWater, timestamp: now };
+      return;
+    }
+
+    const feedDropPercent = Number((prev.feed - currentFeed).toFixed(3));
+    const waterDropPercent = Number((prev.water - currentWater).toFixed(3));
+
+    if (feedDropPercent >= MIN_CONSUMPTION_DROP_PERCENT) {
+      await push(ref(db, "history/consumptionEvents"), {
+        timestamp: now,
+        dayKey,
+        hourKey,
+        type: "feed",
+        dropPercent: feedDropPercent,
+        amount: Number(((feedDropPercent / 100) * FEED_CAPACITY_GRAMS).toFixed(2)),
+        unit: "g",
+        source: "natural_drop",
+      });
+    }
+
+    if (waterDropPercent >= MIN_CONSUMPTION_DROP_PERCENT) {
+      await push(ref(db, "history/consumptionEvents"), {
+        timestamp: now,
+        dayKey,
+        hourKey,
+        type: "water",
+        dropPercent: waterDropPercent,
+        amount: Number(((waterDropPercent / 100) * WATER_CAPACITY_ML).toFixed(2)),
+        unit: "ml",
+        source: "natural_drop",
+      });
+    }
+
+    prevLevelsRef.current = { feed: currentFeed, water: currentWater, timestamp: now };
+  }, []);
+
   const resolveAlertsByPredicate = useCallback(async (predicate) => {
     const entries = Object.entries(alertsSnapshotRef.current || {});
 
@@ -303,7 +397,7 @@ export default function AlertEngine() {
       Number(s.humidity) >= alertThresholds.lowHumidity &&
       Number(s.humidity) <= alertThresholds.highHumidity;
     const isFeedNormal = Number.isFinite(Number(s.feed)) && Number(s.feed) >= alertThresholds.lowFeed;
-    const isWaterNormal = Number.isFinite(Number(s.water)) && Number(s.water) >= alertThresholds.lowWater; // ← UPDATED
+    const isWaterNormal = Number.isFinite(Number(s.water)) && Number(s.water) >= alertThresholds.lowWater; // <- UPDATED
 
     await resolveAlertsByPredicate((a) => {
       const type = String(a.type || "").toLowerCase();
@@ -311,7 +405,7 @@ export default function AlertEngine() {
       if (type.includes("temperature")) return isTempNormal;
       if (type.includes("humidity")) return isHumidityNormal;
       if (type.includes("feed")) return isFeedNormal;
-      if (type.includes("water")) return isWaterNormal;   // ← ADDED
+      if (type.includes("water")) return isWaterNormal;   // <- ADDED
 
       return false;
     });
@@ -373,26 +467,26 @@ export default function AlertEngine() {
       {
         condition: tempValue >= alertThresholds.criticalHighTemp,
         type: "Critical High Temperature",
-        message: `Temperature is critically high (${tempValue}°C)`,
+        message: `Temperature is critically high (${tempValue} degC)`,
         severity: "critical",
       },
       {
         condition:
           tempValue > alertThresholds.highTemp && tempValue < alertThresholds.criticalHighTemp,
         type: "High Temperature",
-        message: `Temperature too high (${tempValue}°C)`,
+        message: `Temperature too high (${tempValue} degC)`,
         severity: "warning",
       },
       {
         condition: tempValue <= alertThresholds.criticalLowTemp,
         type: "Critical Low Temperature",
-        message: `Temperature is critically low (${tempValue}°C)`,
+        message: `Temperature is critically low (${tempValue} degC)`,
         severity: "critical",
       },
       {
         condition: tempValue < alertThresholds.lowTemp && tempValue > alertThresholds.criticalLowTemp,
         type: "Low Temperature",
-        message: `Temperature too low (${tempValue}°C)`,
+        message: `Temperature too low (${tempValue} degC)`,
         severity: "warning",
       },
       {
@@ -429,7 +523,7 @@ export default function AlertEngine() {
       {
         key: "temp",
         type: "Rapid Temperature Change",
-        units: "°C",
+        units: " degC",
         threshold: alertThresholds.rapidTempChange,
         severity: "warning",
       },
@@ -578,7 +672,7 @@ export default function AlertEngine() {
     }
   }, [createAlert]);
 
-  // ✅ NEW: Remind unresolved alerts on a schedule until resolved
+  // [ok] NEW: Remind unresolved alerts on a schedule until resolved
   const remindUnresolvedAlerts = useCallback(() => {
     if (!ready) return;
 
@@ -609,7 +703,7 @@ export default function AlertEngine() {
           ? "ChicKulungan: Critical Alert Reminder"
           : "ChicKulungan: Alert Reminder";
 
-      const body = `${a.type || "Alert"} — ${a.message || ""}`.slice(0, 160);
+      const body = `${a.type || "Alert"} - ${a.message || ""}`.slice(0, 160);
 
       toast(
         `REMINDER (${sev.toUpperCase()}): ${a.type}: ${a.message}`,
@@ -634,7 +728,7 @@ export default function AlertEngine() {
     saveReminderState(cleaned);
   }, [ready]);
 
-  // ✅ Firebase sensors listener (works even if MQTT is dead)
+  // [ok] Firebase sensors listener (works even if MQTT is dead)
   useEffect(() => {
     if (!ready) return;
 
@@ -659,6 +753,9 @@ export default function AlertEngine() {
       evaluateScheduledFeedChecks();
       autoResolveStabilizedAlerts();
       autoResolveOfflineAlertsIfRecovered();
+      persistHourlyAndConsumption().catch(() => {
+        /* noop */
+      });
     });
 
     return () => unsub();
@@ -670,9 +767,10 @@ export default function AlertEngine() {
     evaluateScheduledFeedChecks,
     autoResolveStabilizedAlerts,
     autoResolveOfflineAlertsIfRecovered,
+    persistHourlyAndConsumption,
   ]);
 
-  // ✅ MQTT listener (fast updates)
+  // [ok] MQTT listener (fast updates)
   useEffect(() => {
     if (!ready) return;
 
@@ -685,20 +783,32 @@ export default function AlertEngine() {
         evaluateAlerts();
         evaluateRapidChanges();
         autoResolveStabilizedAlerts();
+        persistHourlyAndConsumption().catch(() => {
+          /* noop */
+        });
       } else if (topic === "chickulungan/sensor/humidity") {
         sensorsRef.current.humidity = parseFloat(payload) || 0;
         evaluateAlerts();
         evaluateRapidChanges();
         autoResolveStabilizedAlerts();
+        persistHourlyAndConsumption().catch(() => {
+          /* noop */
+        });
       } else if (topic === "chickulungan/sensor/feed") {
         sensorsRef.current.feed = parseInt(payload, 10) || 0;
         evaluateAlerts();
         evaluateScheduledFeedChecks();
         autoResolveStabilizedAlerts();
+        persistHourlyAndConsumption().catch(() => {
+          /* noop */
+        });
       } else if (topic === "chickulungan/sensor/water") {
         sensorsRef.current.water = parseInt(payload, 10) || 0;
-        evaluateAlerts();                    // ← NOW triggers Low Water check
+        evaluateAlerts();                    // <- NOW triggers Low Water check
         autoResolveStabilizedAlerts();
+        persistHourlyAndConsumption().catch(() => {
+          /* noop */
+        });
       } else if (topic === "chickulungan/status") {
         // optional: online/offline by MQTT LWT can be added later
       }
@@ -706,7 +816,7 @@ export default function AlertEngine() {
 
     window.addEventListener("mqtt-message", handler);
     return () => window.removeEventListener("mqtt-message", handler);
-  }, [ready, evaluateAlerts, evaluateRapidChanges, evaluateScheduledFeedChecks, autoResolveStabilizedAlerts]);
+  }, [ready, evaluateAlerts, evaluateRapidChanges, evaluateScheduledFeedChecks, autoResolveStabilizedAlerts, persistHourlyAndConsumption]);
 
   // Periodic offline check even if nothing changes
   useEffect(() => {
@@ -728,7 +838,7 @@ export default function AlertEngine() {
     return () => clearInterval(t);
   }, [ready, evaluateScheduledFeedChecks]);
 
-  // ✅ Periodic reminder tick
+  // [ok] Periodic reminder tick
   useEffect(() => {
     if (!ready) return;
     const t = setInterval(() => {
