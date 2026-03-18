@@ -29,23 +29,24 @@ import { refreshSchedules } from "./mqtt";
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 const presetConfigs = {
-  starter: [
+  starter: [  // 0–3 weeks: high frequency (matches frequent-access recommendations)
     { time: "6:00 AM", days: DAYS },
     { time: "8:30 AM", days: DAYS },
     { time: "11:00 AM", days: DAYS },
     { time: "1:30 PM", days: DAYS },
-    { time: "4:00 PM", days: DAYS },
-    { time: "6:00 PM", days: DAYS },
+    { time: "3:30 PM", days: DAYS },  // added for better coverage
+    { time: "5:30 PM", days: DAYS },
+    { time: "7:00 PM", days: DAYS },  // optional 7th if 24h light
   ],
-  grower: [
+  grower: [   // 3–6 weeks: 4 feeds (standard reduction)
     { time: "7:00 AM", days: DAYS },
     { time: "11:00 AM", days: DAYS },
     { time: "3:00 PM", days: DAYS },
-    { time: "6:00 PM", days: DAYS },
+    { time: "6:30 PM", days: DAYS },
   ],
-  maintenance: [
+  maintenance: [  // 6+ weeks / finisher: 2 feeds
     { time: "7:00 AM", days: DAYS },
-    { time: "5:00 PM", days: DAYS },
+    { time: "5:30 PM", days: DAYS },
   ],
 };
 

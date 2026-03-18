@@ -6,13 +6,15 @@ import {
   Button,
   TextField,
   Box,
-  Grid,
   CircularProgress,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
   Chip,
+  Collapse,
+  Stack,
+  Divider,
 } from "@mui/material";
 import {
   BarChart,
@@ -28,6 +30,9 @@ import {
   ReferenceLine,
 } from "recharts";
 import { Gauge } from "@mui/x-charts/Gauge";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
+import RestartAltRoundedIcon from "@mui/icons-material/RestartAltRounded";
 import { useTheme } from "@mui/material/styles";
 import { publishFeed } from "./mqtt";
 import { db, ref, onValue, push } from "./firebase";
@@ -63,12 +68,13 @@ export default function Dashboard() {
   const [trendResolutionSec, setTrendResolutionSec] = useState(10);
   const [tempDomain, setTempDomain] = useState([0, 50]);
   const [humDomain, setHumDomain] = useState([0, 100]);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const thresholds = {
-    tempLow: 18,
-    tempHigh: 35,
-    humidityLow: 40,
-    humidityHigh: 80,
+    tempLow: 22,
+    tempHigh: 30,
+    humidityLow: 45,
+    humidityHigh: 75,
   };
 
   // ✅ Instant load: cache sensors
@@ -343,6 +349,36 @@ export default function Dashboard() {
     if (trendResolutionSec >= 60) return format(new Date(ts), "HH:mm");
     return format(new Date(ts), "HH:mm:ss");
   }, [trendResolutionSec]);
+
+  const updateNumericDomain = useCallback((setter, index, rawValue, bounds) => {
+    setter((prev) => {
+      const next = [...prev];
+      const parsedValue = Number(rawValue);
+      const fallbackValue = prev[index];
+      const boundedValue = Number.isFinite(parsedValue)
+        ? Math.min(bounds.max, Math.max(bounds.min, parsedValue))
+        : fallbackValue;
+
+      next[index] = boundedValue;
+
+      if (index === 0 && next[0] >= next[1]) {
+        next[1] = Math.min(bounds.max, boundedValue + bounds.step);
+      }
+
+      if (index === 1 && next[1] <= next[0]) {
+        next[0] = Math.max(bounds.min, boundedValue - bounds.step);
+      }
+
+      return next;
+    });
+  }, []);
+
+  const resetTrendFilters = useCallback(() => {
+    setTimeWindowMin(15);
+    setTrendResolutionSec(10);
+    setTempDomain([0, 50]);
+    setHumDomain([0, 100]);
+  }, []);
 
   const alertCandidates = useMemo(() => {
     const now = Date.now();
@@ -657,88 +693,170 @@ export default function Dashboard() {
         )}
       </Paper>
 
-      {/* Live Trends Filters - this is the requested filtering feature */}
-      <Box
-        sx={{
-          mt: 4,
-          mb: 2,
-          display: "flex",
-          gap: 2,
-          flexWrap: "wrap",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
-          Live Trends Filters
-        </Typography>
+      <Paper sx={{ mt: 4, mb: 2, overflow: "hidden" }}>
+        <Box
+          sx={{
+            px: { xs: 2, sm: 3 },
+            py: 2,
+            display: "flex",
+            alignItems: { xs: "flex-start", sm: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+            flexWrap: "wrap",
+          }}
+        >
+          <Box sx={{ flex: "1 1 320px", minWidth: 0 }}>
+            <Typography variant="h6">Live Trends Filters</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Adjust time, resolution, and custom chart ranges without crowding the dashboard on smaller screens.
+            </Typography>
+            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1.5 }}>
+              <Chip size="small" label={`Window: ${timeWindowMin} min`} />
+              <Chip size="small" label={`Resolution: ${trendResolutionSec >= 60 ? `${trendResolutionSec / 60} min` : `${trendResolutionSec}s`}`} />
+              <Chip size="small" label={`Temp: ${tempDomain[0]}–${tempDomain[1]}°C`} />
+              <Chip size="small" label={`Humidity: ${humDomain[0]}–${humDomain[1]}%`} />
+            </Stack>
+          </Box>
 
-        <FormControl size="small" sx={{ minWidth: 160 }}>
-          <InputLabel>Time Window</InputLabel>
-          <Select
-            value={timeWindowMin}
-            label="Time Window"
-            onChange={(e) => setTimeWindowMin(Number(e.target.value))}
-          >
-            <MenuItem value={5}>Last 5 minutes</MenuItem>
-            <MenuItem value={10}>Last 10 minutes</MenuItem>
-            <MenuItem value={15}>Last 15 minutes</MenuItem>
-            <MenuItem value={30}>Last 30 minutes</MenuItem>
-            <MenuItem value={60}>Last 60 minutes</MenuItem>
-            <MenuItem value={120}>Last 2 hours</MenuItem>
-            <MenuItem value={360}>Last 6 hours</MenuItem>
-          </Select>
-        </FormControl>
+          <Stack direction="row" spacing={1} sx={{ width: { xs: "100%", sm: "auto" }, justifyContent: "flex-end" }}>
+            <Button
+              variant="text"
+              color="inherit"
+              size="small"
+              startIcon={<RestartAltRoundedIcon />}
+              onClick={resetTrendFilters}
+            >
+              Reset
+            </Button>
+            <Button
+              variant={filtersOpen ? "contained" : "outlined"}
+              endIcon={filtersOpen ? <ExpandLessRoundedIcon /> : <ExpandMoreRoundedIcon />}
+              onClick={() => setFiltersOpen((prev) => !prev)}
+            >
+              {filtersOpen ? "Hide Filters" : "Show Filters"}
+            </Button>
+          </Stack>
+        </Box>
 
-        <FormControl size="small" sx={{ minWidth: 140 }}>
-          <InputLabel>Resolution</InputLabel>
-          <Select
-            value={trendResolutionSec}
-            label="Resolution"
-            onChange={(e) => setTrendResolutionSec(Number(e.target.value))}
-          >
-            <MenuItem value={1}>Every second (raw)</MenuItem>
-            <MenuItem value={10}>10-second average</MenuItem>
-            <MenuItem value={30}>30-second average</MenuItem>
-            <MenuItem value={60}>1-minute average</MenuItem>
-            <MenuItem value={300}>5-minute average</MenuItem>
-            <MenuItem value={900}>15-minute average</MenuItem>
-            <MenuItem value={3600}>1-hour average</MenuItem>
-          </Select>
-        </FormControl>
-
-        <FormControl size="small" sx={{ minWidth: 140 }}>
-          <InputLabel>Temp Y Range</InputLabel>
-          <Select
-            value={`${tempDomain[0]}-${tempDomain[1]}`}
-            label="Temp Y Range"
-            onChange={(e) => {
-              const [min, max] = e.target.value.split("-").map(Number);
-              setTempDomain([min, max]);
+        <Collapse in={filtersOpen} timeout="auto" unmountOnExit>
+          <Divider />
+          <Box
+            sx={{
+              px: { xs: 2, sm: 3 },
+              py: { xs: 2, sm: 3 },
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, minmax(0, 1fr))",
+                lg: "repeat(4, minmax(0, 1fr))",
+              },
+              gap: 2,
             }}
           >
-            <MenuItem value="0-50">0-50 °C (wide)</MenuItem>
-            <MenuItem value="15-40">15-40 °C</MenuItem>
-            <MenuItem value="20-35">20-35 °C (zoom)</MenuItem>
-            <MenuItem value="25-32">25-32 °C</MenuItem>
-          </Select>
-        </FormControl>
+            <FormControl size="small" fullWidth>
+              <InputLabel>Time Window</InputLabel>
+              <Select
+                value={timeWindowMin}
+                label="Time Window"
+                onChange={(e) => setTimeWindowMin(Number(e.target.value))}
+              >
+                <MenuItem value={5}>Last 5 minutes</MenuItem>
+                <MenuItem value={10}>Last 10 minutes</MenuItem>
+                <MenuItem value={15}>Last 15 minutes</MenuItem>
+                <MenuItem value={30}>Last 30 minutes</MenuItem>
+                <MenuItem value={60}>Last 60 minutes</MenuItem>
+                <MenuItem value={120}>Last 2 hours</MenuItem>
+                <MenuItem value={360}>Last 6 hours</MenuItem>
+              </Select>
+            </FormControl>
 
-        <FormControl size="small" sx={{ minWidth: 160 }}>
-          <InputLabel>Humidity Y Range</InputLabel>
-          <Select
-            value={`${humDomain[0]}-${humDomain[1]}`}
-            label="Humidity Y Range"
-            onChange={(e) => {
-              const [min, max] = e.target.value.split("-").map(Number);
-              setHumDomain([min, max]);
-            }}
-          >
-            <MenuItem value="0-100">0-100 % (wide)</MenuItem>
-            <MenuItem value="40-80">40-80 %</MenuItem>
-            <MenuItem value="50-70">50-70 % (zoom)</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+            <FormControl size="small" fullWidth>
+              <InputLabel>Resolution</InputLabel>
+              <Select
+                value={trendResolutionSec}
+                label="Resolution"
+                onChange={(e) => setTrendResolutionSec(Number(e.target.value))}
+              >
+                <MenuItem value={1}>Every second (raw)</MenuItem>
+                <MenuItem value={10}>10-second average</MenuItem>
+                <MenuItem value={30}>30-second average</MenuItem>
+                <MenuItem value={60}>1-minute average</MenuItem>
+                <MenuItem value={300}>5-minute average</MenuItem>
+                <MenuItem value={900}>15-minute average</MenuItem>
+                <MenuItem value={3600}>1-hour average</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Box
+              sx={{
+                p: 2,
+                border: `1px solid ${theme.palette.divider}`,
+                borderRadius: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1.5,
+              }}
+            >
+              <Typography variant="subtitle2">Temperature Range (°C)</Typography>
+              <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 1.5 }}>
+                <TextField
+                  size="small"
+                  type="number"
+                  label="Min"
+                  value={tempDomain[0]}
+                  onChange={(e) => updateNumericDomain(setTempDomain, 0, e.target.value, { min: -20, max: 80, step: 1 })}
+                  inputProps={{ step: 1, min: -20, max: 80 }}
+                />
+                <TextField
+                  size="small"
+                  type="number"
+                  label="Max"
+                  value={tempDomain[1]}
+                  onChange={(e) => updateNumericDomain(setTempDomain, 1, e.target.value, { min: -20, max: 80, step: 1 })}
+                  inputProps={{ step: 1, min: -20, max: 80 }}
+                />
+              </Box>
+              <Typography variant="caption" color="text.secondary">
+                Fine-tune the temperature chart to match your preferred viewing range.
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                p: 2,
+                border: `1px solid ${theme.palette.divider}`,
+                borderRadius: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1.5,
+              }}
+            >
+              <Typography variant="subtitle2">Humidity Range (%)</Typography>
+              <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 1.5 }}>
+                <TextField
+                  size="small"
+                  type="number"
+                  label="Min"
+                  value={humDomain[0]}
+                  onChange={(e) => updateNumericDomain(setHumDomain, 0, e.target.value, { min: 0, max: 100, step: 1 })}
+                  inputProps={{ step: 1, min: 0, max: 100 }}
+                />
+                <TextField
+                  size="small"
+                  type="number"
+                  label="Max"
+                  value={humDomain[1]}
+                  onChange={(e) => updateNumericDomain(setHumDomain, 1, e.target.value, { min: 0, max: 100, step: 1 })}
+                  inputProps={{ step: 1, min: 0, max: 100 }}
+                />
+              </Box>
+              <Typography variant="caption" color="text.secondary">
+                Set a custom humidity band instead of switching between fixed presets.
+              </Typography>
+            </Box>
+          </Box>
+        </Collapse>
+      </Paper>
 
       {/* Temperature Trend */}
       <Paper sx={{ mt: 2, p: 3 }}>

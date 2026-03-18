@@ -5,17 +5,17 @@ import { format } from "date-fns";
 import { toast } from "./utils/feedback";
 
 const alertThresholds = {
-  lowFeed: 20,
-  criticalFeed: 10,
+  lowFeed: 20,      // unchanged (good)
+  criticalFeed: 10, // unchanged
   lowWater: 20,
   criticalWater: 10,
-  highTemp: 35,
-  lowTemp: 18,
-  criticalHighTemp: 39,
-  criticalLowTemp: 15,
-  highHumidity: 80,
-  lowHumidity: 40,
-  rapidTempChange: 4,
+  highTemp: 30,           // ← was 35; stress onset ~30°C (Aviagen/UGA)
+  lowTemp: 22,            // ← was 18; protects young birds (needs 28+ early)
+  criticalHighTemp: 35,   // ← tightened from 39; heat stress rapid above this
+  criticalLowTemp: 18,    // ← was 15; hypothermia risk clear
+  highHumidity: 75,       // ← was 80; prevents wet litter/ammonia (target <70–75%)
+  lowHumidity: 45,        // ← was 40; avoids dust/dehydration (target >50%)
+  rapidTempChange: 4,     // keep (engineering)
   rapidHumidityChange: 12,
   rapidChangeWindowMs: 2 * 60 * 1000,
   staleDataWarningMs: 45 * 1000,
