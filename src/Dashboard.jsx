@@ -71,8 +71,8 @@ export default function Dashboard() {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const thresholds = {
-    tempLow: 22,
-    tempHigh: 30,
+    tempLow: 18,
+    tempHigh: 35,
     humidityLow: 45,
     humidityHigh: 75,
   };
@@ -401,29 +401,29 @@ export default function Dashboard() {
       },
       {
         key: "temp-high",
-        label: sensors.temp >= 39 ? "Critical High Temperature" : "High Temperature",
+        label: sensors.temp >= 35 ? "Critical High Temperature" : "High Temperature",
         active: sensors.temp > 35,
-        severity: sensors.temp >= 39 ? "critical" : "warning",
+        severity: sensors.temp >= 35 ? "critical" : "warning",
         detail: `Temperature at ${Number(sensors.temp).toFixed(1)}°C`,
       },
       {
         key: "temp-low",
-        label: sensors.temp <= 15 ? "Critical Low Temperature" : "Low Temperature",
-        active: sensors.temp < 18,
-        severity: sensors.temp <= 15 ? "critical" : "warning",
+        label: sensors.temp <= 22 ? "Critical Low Temperature" : "Low Temperature",
+        active: sensors.temp < 22,
+        severity: sensors.temp <= 22 ? "critical" : "warning",
         detail: `Temperature at ${Number(sensors.temp).toFixed(1)}°C`,
       },
       {
         key: "humidity-high",
         label: "High Humidity",
-        active: sensors.humidity > 80,
+        active: sensors.humidity > 75,
         severity: "warning",
         detail: `Humidity at ${Number(sensors.humidity).toFixed(1)}%`,
       },
       {
         key: "humidity-low",
         label: "Low Humidity",
-        active: sensors.humidity < 40,
+        active: sensors.humidity < 45,
         severity: "warning",
         detail: `Humidity at ${Number(sensors.humidity).toFixed(1)}%`,
       },

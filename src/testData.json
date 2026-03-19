@@ -2,1956 +2,3040 @@
   "settings": {
     "farm": {
       "timeZone": "Asia/Manila",
-      "name": "Chikulungan Demo Farm",
-      "location": "San Pablo City, Laguna"
+      "name": "Chikulungan Demo Farm - Laguna",
+      "location": "Barangay San Vicente, San Pablo City, Laguna, Philippines",
+      "caretaker": "Mang Joel Ramirez",
+      "houseType": "semi-open broiler house"
     }
   },
   "history": {
     "hourly": {
+      "2026-03-05": {
+        "00": {
+          "timestamp": 1772668800000,
+          "temp": 24.8,
+          "humidity": 84.0,
+          "feedLevel": 94.0,
+          "waterLevel": 96.0,
+          "timeZone": "Asia/Manila"
+        },
+        "01": {
+          "timestamp": 1772672400000,
+          "temp": 24.9,
+          "humidity": 82.6,
+          "feedLevel": 94.0,
+          "waterLevel": 96.0,
+          "timeZone": "Asia/Manila"
+        },
+        "02": {
+          "timestamp": 1772676000000,
+          "temp": 25.0,
+          "humidity": 81.2,
+          "feedLevel": 94.0,
+          "waterLevel": 96.0,
+          "timeZone": "Asia/Manila"
+        },
+        "03": {
+          "timestamp": 1772679600000,
+          "temp": 25.2,
+          "humidity": 79.8,
+          "feedLevel": 94.0,
+          "waterLevel": 96.0,
+          "timeZone": "Asia/Manila"
+        },
+        "04": {
+          "timestamp": 1772683200000,
+          "temp": 25.3,
+          "humidity": 78.4,
+          "feedLevel": 94.0,
+          "waterLevel": 96.0,
+          "timeZone": "Asia/Manila"
+        },
+        "05": {
+          "timestamp": 1772686800000,
+          "temp": 26.0,
+          "humidity": 77.0,
+          "feedLevel": 94.0,
+          "waterLevel": 96.0,
+          "timeZone": "Asia/Manila"
+        },
+        "06": {
+          "timestamp": 1772690400000,
+          "temp": 27.1,
+          "humidity": 76.0,
+          "feedLevel": 92.5,
+          "waterLevel": 96.0,
+          "timeZone": "Asia/Manila"
+        },
+        "07": {
+          "timestamp": 1772694000000,
+          "temp": 28.2,
+          "humidity": 73.4,
+          "feedLevel": 92.5,
+          "waterLevel": 93.8,
+          "timeZone": "Asia/Manila"
+        },
+        "08": {
+          "timestamp": 1772697600000,
+          "temp": 29.3,
+          "humidity": 70.8,
+          "feedLevel": 92.5,
+          "waterLevel": 93.8,
+          "timeZone": "Asia/Manila"
+        },
+        "09": {
+          "timestamp": 1772701200000,
+          "temp": 29.7,
+          "humidity": 68.2,
+          "feedLevel": 92.5,
+          "waterLevel": 93.8,
+          "timeZone": "Asia/Manila"
+        },
+        "10": {
+          "timestamp": 1772704800000,
+          "temp": 31.0,
+          "humidity": 65.6,
+          "feedLevel": 92.5,
+          "waterLevel": 93.8,
+          "timeZone": "Asia/Manila"
+        },
+        "11": {
+          "timestamp": 1772708400000,
+          "temp": 32.6,
+          "humidity": 63.0,
+          "feedLevel": 92.5,
+          "waterLevel": 93.8,
+          "timeZone": "Asia/Manila"
+        },
+        "12": {
+          "timestamp": 1772712000000,
+          "temp": 34.2,
+          "humidity": 61.0,
+          "feedLevel": 90.7,
+          "waterLevel": 93.8,
+          "timeZone": "Asia/Manila"
+        },
+        "13": {
+          "timestamp": 1772715600000,
+          "temp": 33.5,
+          "humidity": 62.8,
+          "feedLevel": 90.7,
+          "waterLevel": 91.6,
+          "timeZone": "Asia/Manila"
+        },
+        "14": {
+          "timestamp": 1772719200000,
+          "temp": 32.4,
+          "humidity": 64.6,
+          "feedLevel": 90.7,
+          "waterLevel": 91.6,
+          "timeZone": "Asia/Manila"
+        },
+        "15": {
+          "timestamp": 1772722800000,
+          "temp": 31.4,
+          "humidity": 66.4,
+          "feedLevel": 90.7,
+          "waterLevel": 91.6,
+          "timeZone": "Asia/Manila"
+        },
+        "16": {
+          "timestamp": 1772726400000,
+          "temp": 30.2,
+          "humidity": 70.0,
+          "feedLevel": 90.7,
+          "waterLevel": 91.6,
+          "timeZone": "Asia/Manila"
+        },
+        "17": {
+          "timestamp": 1772730000000,
+          "temp": 29.0,
+          "humidity": 73.1,
+          "feedLevel": 90.7,
+          "waterLevel": 89.4,
+          "timeZone": "Asia/Manila"
+        },
+        "18": {
+          "timestamp": 1772733600000,
+          "temp": 27.8,
+          "humidity": 76.2,
+          "feedLevel": 89.2,
+          "waterLevel": 89.4,
+          "timeZone": "Asia/Manila"
+        },
+        "19": {
+          "timestamp": 1772737200000,
+          "temp": 27.4,
+          "humidity": 79.3,
+          "feedLevel": 89.2,
+          "waterLevel": 89.4,
+          "timeZone": "Asia/Manila"
+        },
+        "20": {
+          "timestamp": 1772740800000,
+          "temp": 26.8,
+          "humidity": 80.0,
+          "feedLevel": 89.2,
+          "waterLevel": 89.4,
+          "timeZone": "Asia/Manila"
+        },
+        "21": {
+          "timestamp": 1772744400000,
+          "temp": 26.2,
+          "humidity": 80.7,
+          "feedLevel": 89.2,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        },
+        "22": {
+          "timestamp": 1772748000000,
+          "temp": 25.6,
+          "humidity": 81.4,
+          "feedLevel": 89.2,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        },
+        "23": {
+          "timestamp": 1772751600000,
+          "temp": 25.0,
+          "humidity": 82.1,
+          "feedLevel": 89.2,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        }
+      },
+      "2026-03-06": {
+        "00": {
+          "timestamp": 1772755200000,
+          "temp": 24.3,
+          "humidity": 88.0,
+          "feedLevel": 89.2,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        },
+        "01": {
+          "timestamp": 1772758800000,
+          "temp": 24.4,
+          "humidity": 86.6,
+          "feedLevel": 89.2,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        },
+        "02": {
+          "timestamp": 1772762400000,
+          "temp": 24.5,
+          "humidity": 85.2,
+          "feedLevel": 89.2,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        },
+        "03": {
+          "timestamp": 1772766000000,
+          "temp": 24.7,
+          "humidity": 83.8,
+          "feedLevel": 89.2,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        },
+        "04": {
+          "timestamp": 1772769600000,
+          "temp": 24.8,
+          "humidity": 82.4,
+          "feedLevel": 89.2,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        },
+        "05": {
+          "timestamp": 1772773200000,
+          "temp": 25.5,
+          "humidity": 81.0,
+          "feedLevel": 89.2,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        },
+        "06": {
+          "timestamp": 1772776800000,
+          "temp": 26.6,
+          "humidity": 80.0,
+          "feedLevel": 87.7,
+          "waterLevel": 87.2,
+          "timeZone": "Asia/Manila"
+        },
+        "07": {
+          "timestamp": 1772780400000,
+          "temp": 27.7,
+          "humidity": 77.4,
+          "feedLevel": 87.7,
+          "waterLevel": 85.0,
+          "timeZone": "Asia/Manila"
+        },
+        "08": {
+          "timestamp": 1772784000000,
+          "temp": 28.8,
+          "humidity": 74.8,
+          "feedLevel": 87.7,
+          "waterLevel": 85.0,
+          "timeZone": "Asia/Manila"
+        },
+        "09": {
+          "timestamp": 1772787600000,
+          "temp": 27.9,
+          "humidity": 72.2,
+          "feedLevel": 87.7,
+          "waterLevel": 85.0,
+          "timeZone": "Asia/Manila"
+        },
+        "10": {
+          "timestamp": 1772791200000,
+          "temp": 29.2,
+          "humidity": 69.6,
+          "feedLevel": 87.7,
+          "waterLevel": 85.0,
+          "timeZone": "Asia/Manila"
+        },
+        "11": {
+          "timestamp": 1772794800000,
+          "temp": 30.8,
+          "humidity": 67.0,
+          "feedLevel": 87.7,
+          "waterLevel": 85.0,
+          "timeZone": "Asia/Manila"
+        },
+        "12": {
+          "timestamp": 1772798400000,
+          "temp": 32.4,
+          "humidity": 69.0,
+          "feedLevel": 85.9,
+          "waterLevel": 85.0,
+          "timeZone": "Asia/Manila"
+        },
+        "13": {
+          "timestamp": 1772802000000,
+          "temp": 31.7,
+          "humidity": 70.8,
+          "feedLevel": 85.9,
+          "waterLevel": 82.8,
+          "timeZone": "Asia/Manila"
+        },
+        "14": {
+          "timestamp": 1772805600000,
+          "temp": 30.6,
+          "humidity": 72.6,
+          "feedLevel": 85.9,
+          "waterLevel": 82.8,
+          "timeZone": "Asia/Manila"
+        },
+        "15": {
+          "timestamp": 1772809200000,
+          "temp": 27.8,
+          "humidity": 82.9,
+          "feedLevel": 85.9,
+          "waterLevel": 82.8,
+          "timeZone": "Asia/Manila"
+        },
+        "16": {
+          "timestamp": 1772812800000,
+          "temp": 26.6,
+          "humidity": 86.5,
+          "feedLevel": 85.9,
+          "waterLevel": 82.8,
+          "timeZone": "Asia/Manila"
+        },
+        "17": {
+          "timestamp": 1772816400000,
+          "temp": 25.4,
+          "humidity": 89.6,
+          "feedLevel": 85.9,
+          "waterLevel": 80.6,
+          "timeZone": "Asia/Manila"
+        },
+        "18": {
+          "timestamp": 1772820000000,
+          "temp": 26.0,
+          "humidity": 84.2,
+          "feedLevel": 84.4,
+          "waterLevel": 80.6,
+          "timeZone": "Asia/Manila"
+        },
+        "19": {
+          "timestamp": 1772823600000,
+          "temp": 26.9,
+          "humidity": 87.3,
+          "feedLevel": 84.4,
+          "waterLevel": 80.6,
+          "timeZone": "Asia/Manila"
+        },
+        "20": {
+          "timestamp": 1772827200000,
+          "temp": 26.3,
+          "humidity": 84.0,
+          "feedLevel": 84.4,
+          "waterLevel": 80.6,
+          "timeZone": "Asia/Manila"
+        },
+        "21": {
+          "timestamp": 1772830800000,
+          "temp": 25.7,
+          "humidity": 84.7,
+          "feedLevel": 84.4,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        },
+        "22": {
+          "timestamp": 1772834400000,
+          "temp": 25.1,
+          "humidity": 85.4,
+          "feedLevel": 84.4,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        },
+        "23": {
+          "timestamp": 1772838000000,
+          "temp": 24.5,
+          "humidity": 86.1,
+          "feedLevel": 84.4,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        }
+      },
+      "2026-03-07": {
+        "00": {
+          "timestamp": 1772841600000,
+          "temp": 25.5,
+          "humidity": 81.0,
+          "feedLevel": 84.4,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        },
+        "01": {
+          "timestamp": 1772845200000,
+          "temp": 25.6,
+          "humidity": 79.6,
+          "feedLevel": 84.4,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        },
+        "02": {
+          "timestamp": 1772848800000,
+          "temp": 25.7,
+          "humidity": 78.2,
+          "feedLevel": 84.4,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        },
+        "03": {
+          "timestamp": 1772852400000,
+          "temp": 25.9,
+          "humidity": 76.8,
+          "feedLevel": 84.4,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        },
+        "04": {
+          "timestamp": 1772856000000,
+          "temp": 26.0,
+          "humidity": 75.4,
+          "feedLevel": 84.4,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        },
+        "05": {
+          "timestamp": 1772859600000,
+          "temp": 26.7,
+          "humidity": 74.0,
+          "feedLevel": 84.4,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        },
+        "06": {
+          "timestamp": 1772863200000,
+          "temp": 27.8,
+          "humidity": 73.0,
+          "feedLevel": 83.2,
+          "waterLevel": 78.4,
+          "timeZone": "Asia/Manila"
+        },
+        "07": {
+          "timestamp": 1772866800000,
+          "temp": 28.9,
+          "humidity": 70.4,
+          "feedLevel": 83.2,
+          "waterLevel": 76.2,
+          "timeZone": "Asia/Manila"
+        },
+        "08": {
+          "timestamp": 1772870400000,
+          "temp": 30.0,
+          "humidity": 67.8,
+          "feedLevel": 83.2,
+          "waterLevel": 76.2,
+          "timeZone": "Asia/Manila"
+        },
+        "09": {
+          "timestamp": 1772874000000,
+          "temp": 32.3,
+          "humidity": 65.2,
+          "feedLevel": 83.2,
+          "waterLevel": 76.2,
+          "timeZone": "Asia/Manila"
+        },
+        "10": {
+          "timestamp": 1772877600000,
+          "temp": 33.6,
+          "humidity": 62.6,
+          "feedLevel": 83.2,
+          "waterLevel": 76.2,
+          "timeZone": "Asia/Manila"
+        },
+        "11": {
+          "timestamp": 1772881200000,
+          "temp": 35.2,
+          "humidity": 60.0,
+          "feedLevel": 83.2,
+          "waterLevel": 73.4,
+          "timeZone": "Asia/Manila"
+        },
+        "12": {
+          "timestamp": 1772884800000,
+          "temp": 36.8,
+          "humidity": 56.0,
+          "feedLevel": 81.8,
+          "waterLevel": 73.4,
+          "timeZone": "Asia/Manila"
+        },
+        "13": {
+          "timestamp": 1772888400000,
+          "temp": 36.1,
+          "humidity": 57.8,
+          "feedLevel": 81.8,
+          "waterLevel": 71.2,
+          "timeZone": "Asia/Manila"
+        },
+        "14": {
+          "timestamp": 1772892000000,
+          "temp": 35.0,
+          "humidity": 59.6,
+          "feedLevel": 81.8,
+          "waterLevel": 68.4,
+          "timeZone": "Asia/Manila"
+        },
+        "15": {
+          "timestamp": 1772895600000,
+          "temp": 34.0,
+          "humidity": 61.4,
+          "feedLevel": 81.8,
+          "waterLevel": 68.4,
+          "timeZone": "Asia/Manila"
+        },
+        "16": {
+          "timestamp": 1772899200000,
+          "temp": 32.8,
+          "humidity": 65.0,
+          "feedLevel": 81.8,
+          "waterLevel": 68.4,
+          "timeZone": "Asia/Manila"
+        },
+        "17": {
+          "timestamp": 1772902800000,
+          "temp": 31.6,
+          "humidity": 68.1,
+          "feedLevel": 81.8,
+          "waterLevel": 65.6,
+          "timeZone": "Asia/Manila"
+        },
+        "18": {
+          "timestamp": 1772906400000,
+          "temp": 30.4,
+          "humidity": 71.2,
+          "feedLevel": 80.6,
+          "waterLevel": 65.6,
+          "timeZone": "Asia/Manila"
+        },
+        "19": {
+          "timestamp": 1772910000000,
+          "temp": 28.1,
+          "humidity": 74.3,
+          "feedLevel": 80.6,
+          "waterLevel": 65.6,
+          "timeZone": "Asia/Manila"
+        },
+        "20": {
+          "timestamp": 1772913600000,
+          "temp": 27.5,
+          "humidity": 77.0,
+          "feedLevel": 80.6,
+          "waterLevel": 80.8,
+          "timeZone": "Asia/Manila"
+        },
+        "21": {
+          "timestamp": 1772917200000,
+          "temp": 26.9,
+          "humidity": 77.7,
+          "feedLevel": 80.6,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        },
+        "22": {
+          "timestamp": 1772920800000,
+          "temp": 26.3,
+          "humidity": 78.4,
+          "feedLevel": 80.6,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        },
+        "23": {
+          "timestamp": 1772924400000,
+          "temp": 25.7,
+          "humidity": 79.1,
+          "feedLevel": 80.6,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        }
+      },
+      "2026-03-08": {
+        "00": {
+          "timestamp": 1772928000000,
+          "temp": 24.0,
+          "humidity": 91.0,
+          "feedLevel": 80.6,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        },
+        "01": {
+          "timestamp": 1772931600000,
+          "temp": 24.1,
+          "humidity": 89.6,
+          "feedLevel": 80.6,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        },
+        "02": {
+          "timestamp": 1772935200000,
+          "temp": 24.2,
+          "humidity": 88.2,
+          "feedLevel": 80.6,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        },
+        "03": {
+          "timestamp": 1772938800000,
+          "temp": 24.4,
+          "humidity": 86.8,
+          "feedLevel": 80.6,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        },
+        "04": {
+          "timestamp": 1772942400000,
+          "temp": 24.5,
+          "humidity": 85.4,
+          "feedLevel": 80.6,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        },
+        "05": {
+          "timestamp": 1772946000000,
+          "temp": 25.2,
+          "humidity": 84.0,
+          "feedLevel": 80.6,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        },
+        "06": {
+          "timestamp": 1772949600000,
+          "temp": 26.3,
+          "humidity": 83.0,
+          "feedLevel": 79.4,
+          "waterLevel": 78.6,
+          "timeZone": "Asia/Manila"
+        },
+        "07": {
+          "timestamp": 1772953200000,
+          "temp": 27.4,
+          "humidity": 80.4,
+          "feedLevel": 79.4,
+          "waterLevel": 76.4,
+          "timeZone": "Asia/Manila"
+        },
+        "08": {
+          "timestamp": 1772956800000,
+          "temp": 28.5,
+          "humidity": 77.8,
+          "feedLevel": 79.4,
+          "waterLevel": 74.9,
+          "timeZone": "Asia/Manila"
+        },
+        "09": {
+          "timestamp": 1772960400000,
+          "temp": 25.6,
+          "humidity": 75.2,
+          "feedLevel": 79.4,
+          "waterLevel": 74.9,
+          "timeZone": "Asia/Manila"
+        },
+        "10": {
+          "timestamp": 1772964000000,
+          "temp": 26.9,
+          "humidity": 72.6,
+          "feedLevel": 79.4,
+          "waterLevel": 74.9,
+          "timeZone": "Asia/Manila"
+        },
+        "11": {
+          "timestamp": 1772967600000,
+          "temp": 28.5,
+          "humidity": 70.0,
+          "feedLevel": 79.4,
+          "waterLevel": 74.9,
+          "timeZone": "Asia/Manila"
+        },
+        "12": {
+          "timestamp": 1772971200000,
+          "temp": 30.1,
+          "humidity": 78.0,
+          "feedLevel": 78.0,
+          "waterLevel": 74.9,
+          "timeZone": "Asia/Manila"
+        },
+        "13": {
+          "timestamp": 1772974800000,
+          "temp": 27.6,
+          "humidity": 88.3,
+          "feedLevel": 78.0,
+          "waterLevel": 72.7,
+          "timeZone": "Asia/Manila"
+        },
+        "14": {
+          "timestamp": 1772978400000,
+          "temp": 26.5,
+          "humidity": 90.1,
+          "feedLevel": 78.0,
+          "waterLevel": 71.2,
+          "timeZone": "Asia/Manila"
+        },
+        "15": {
+          "timestamp": 1772982000000,
+          "temp": 25.5,
+          "humidity": 91.9,
+          "feedLevel": 78.0,
+          "waterLevel": 71.2,
+          "timeZone": "Asia/Manila"
+        },
+        "16": {
+          "timestamp": 1772985600000,
+          "temp": 24.3,
+          "humidity": 95.5,
+          "feedLevel": 78.0,
+          "waterLevel": 71.2,
+          "timeZone": "Asia/Manila"
+        },
+        "17": {
+          "timestamp": 1772989200000,
+          "temp": 23.1,
+          "humidity": 98.0,
+          "feedLevel": 78.0,
+          "waterLevel": 69.0,
+          "timeZone": "Asia/Manila"
+        },
+        "18": {
+          "timestamp": 1772992800000,
+          "temp": 23.7,
+          "humidity": 93.2,
+          "feedLevel": 76.8,
+          "waterLevel": 69.0,
+          "timeZone": "Asia/Manila"
+        },
+        "19": {
+          "timestamp": 1772996400000,
+          "temp": 26.6,
+          "humidity": 96.3,
+          "feedLevel": 91.3,
+          "waterLevel": 67.5,
+          "timeZone": "Asia/Manila"
+        },
+        "20": {
+          "timestamp": 1773000000000,
+          "temp": 26.0,
+          "humidity": 87.0,
+          "feedLevel": 91.3,
+          "waterLevel": 67.5,
+          "timeZone": "Asia/Manila"
+        },
+        "21": {
+          "timestamp": 1773003600000,
+          "temp": 25.4,
+          "humidity": 87.7,
+          "feedLevel": 91.3,
+          "waterLevel": 65.3,
+          "timeZone": "Asia/Manila"
+        },
+        "22": {
+          "timestamp": 1773007200000,
+          "temp": 24.8,
+          "humidity": 88.4,
+          "feedLevel": 91.3,
+          "waterLevel": 65.3,
+          "timeZone": "Asia/Manila"
+        },
+        "23": {
+          "timestamp": 1773010800000,
+          "temp": 24.2,
+          "humidity": 89.1,
+          "feedLevel": 91.3,
+          "waterLevel": 65.3,
+          "timeZone": "Asia/Manila"
+        }
+      },
       "2026-03-09": {
         "00": {
           "timestamp": 1773014400000,
-          "temp": 24.0,
-          "humidity": 82.0,
-          "feedLevel": 95.0,
-          "waterLevel": 97.0,
+          "temp": 24.6,
+          "humidity": 85.0,
+          "feedLevel": 91.3,
+          "waterLevel": 65.3,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773018000000,
-          "temp": 23.8,
-          "humidity": 80.5,
-          "feedLevel": 95.0,
-          "waterLevel": 97.0,
+          "temp": 24.7,
+          "humidity": 83.6,
+          "feedLevel": 91.3,
+          "waterLevel": 65.3,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773021600000,
-          "temp": 23.7,
-          "humidity": 79.0,
-          "feedLevel": 95.0,
-          "waterLevel": 97.0,
+          "temp": 24.8,
+          "humidity": 82.2,
+          "feedLevel": 91.3,
+          "waterLevel": 65.3,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773025200000,
-          "temp": 23.9,
-          "humidity": 77.5,
-          "feedLevel": 95.0,
-          "waterLevel": 97.0,
+          "temp": 25.0,
+          "humidity": 80.8,
+          "feedLevel": 91.3,
+          "waterLevel": 65.3,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773028800000,
-          "temp": 24.2,
-          "humidity": 76.0,
-          "feedLevel": 95.0,
-          "waterLevel": 97.0,
+          "temp": 25.1,
+          "humidity": 79.4,
+          "feedLevel": 91.3,
+          "waterLevel": 65.3,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773032400000,
-          "temp": 24.8,
-          "humidity": 74.5,
-          "feedLevel": 95.0,
-          "waterLevel": 97.0,
+          "temp": 25.8,
+          "humidity": 78.0,
+          "feedLevel": 91.3,
+          "waterLevel": 65.3,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773036000000,
-          "temp": 26.0,
-          "humidity": 72.0,
-          "feedLevel": 93.5,
-          "waterLevel": 97.0,
+          "temp": 26.9,
+          "humidity": 77.0,
+          "feedLevel": 89.8,
+          "waterLevel": 65.3,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773039600000,
-          "temp": 27.2,
-          "humidity": 68.8,
-          "feedLevel": 93.5,
-          "waterLevel": 94.8,
+          "temp": 28.0,
+          "humidity": 74.4,
+          "feedLevel": 89.8,
+          "waterLevel": 63.1,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773043200000,
-          "temp": 28.4,
-          "humidity": 65.6,
-          "feedLevel": 93.5,
-          "waterLevel": 94.8,
+          "temp": 29.1,
+          "humidity": 71.8,
+          "feedLevel": 89.8,
+          "waterLevel": 63.1,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773046800000,
-          "temp": 29.2,
-          "humidity": 62.4,
-          "feedLevel": 93.5,
-          "waterLevel": 94.8,
+          "temp": 29.1,
+          "humidity": 69.2,
+          "feedLevel": 89.8,
+          "waterLevel": 63.1,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773050400000,
-          "temp": 31.0,
-          "humidity": 59.2,
-          "feedLevel": 93.5,
-          "waterLevel": 94.8,
+          "temp": 30.4,
+          "humidity": 66.6,
+          "feedLevel": 89.8,
+          "waterLevel": 63.1,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773054000000,
-          "temp": 33.8,
-          "humidity": 56.0,
-          "feedLevel": 93.5,
-          "waterLevel": 94.8,
+          "temp": 32.0,
+          "humidity": 64.0,
+          "feedLevel": 89.8,
+          "waterLevel": 63.1,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773057600000,
-          "temp": 35.7,
-          "humidity": 55.0,
-          "feedLevel": 91.8,
-          "waterLevel": 94.8,
+          "temp": 33.6,
+          "humidity": 63.0,
+          "feedLevel": 88.0,
+          "waterLevel": 63.1,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773061200000,
-          "temp": 34.9,
-          "humidity": 57.8,
-          "feedLevel": 91.8,
-          "waterLevel": 92.3,
+          "temp": 32.9,
+          "humidity": 64.8,
+          "feedLevel": 88.0,
+          "waterLevel": 60.9,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773064800000,
-          "temp": 33.1,
-          "humidity": 60.6,
-          "feedLevel": 91.8,
-          "waterLevel": 92.3,
+          "temp": 31.8,
+          "humidity": 66.6,
+          "feedLevel": 88.0,
+          "waterLevel": 60.9,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773068400000,
-          "temp": 31.5,
-          "humidity": 63.4,
-          "feedLevel": 91.8,
-          "waterLevel": 92.3,
+          "temp": 30.8,
+          "humidity": 68.4,
+          "feedLevel": 88.0,
+          "waterLevel": 60.9,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773072000000,
-          "temp": 30.1,
-          "humidity": 66.0,
-          "feedLevel": 91.8,
-          "waterLevel": 92.3,
+          "temp": 27.8,
+          "humidity": 80.5,
+          "feedLevel": 88.0,
+          "waterLevel": 60.9,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773075600000,
-          "temp": 28.7,
-          "humidity": 69.1,
-          "feedLevel": 91.8,
-          "waterLevel": 89.8,
+          "temp": 26.6,
+          "humidity": 83.6,
+          "feedLevel": 88.0,
+          "waterLevel": 58.7,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773079200000,
-          "temp": 27.3,
-          "humidity": 72.2,
-          "feedLevel": 90.3,
-          "waterLevel": 89.8,
+          "temp": 27.2,
+          "humidity": 78.2,
+          "feedLevel": 86.5,
+          "waterLevel": 58.7,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773082800000,
-          "temp": 26.0,
-          "humidity": 75.3,
-          "feedLevel": 90.3,
-          "waterLevel": 89.8,
+          "temp": 27.2,
+          "humidity": 81.3,
+          "feedLevel": 86.5,
+          "waterLevel": 58.7,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773086400000,
-          "temp": 25.2,
-          "humidity": 79.0,
-          "feedLevel": 90.3,
-          "waterLevel": 89.8,
+          "temp": 26.6,
+          "humidity": 81.0,
+          "feedLevel": 86.5,
+          "waterLevel": 58.7,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773090000000,
-          "temp": 24.4,
-          "humidity": 77.8,
-          "feedLevel": 90.3,
-          "waterLevel": 87.6,
+          "temp": 26.0,
+          "humidity": 81.7,
+          "feedLevel": 86.5,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773093600000,
-          "temp": 23.6,
-          "humidity": 76.6,
-          "feedLevel": 90.3,
-          "waterLevel": 87.6,
+          "temp": 25.4,
+          "humidity": 82.4,
+          "feedLevel": 86.5,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773097200000,
-          "temp": 22.8,
-          "humidity": 75.4,
-          "feedLevel": 90.3,
-          "waterLevel": 87.6,
+          "temp": 24.8,
+          "humidity": 83.1,
+          "feedLevel": 86.5,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         }
       },
       "2026-03-10": {
         "00": {
           "timestamp": 1773100800000,
-          "temp": 24.6,
-          "humidity": 83.2,
-          "feedLevel": 90.3,
-          "waterLevel": 87.6,
+          "temp": 25.8,
+          "humidity": 80.0,
+          "feedLevel": 86.5,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773104400000,
-          "temp": 24.4,
-          "humidity": 81.7,
-          "feedLevel": 90.3,
-          "waterLevel": 87.6,
+          "temp": 25.9,
+          "humidity": 78.6,
+          "feedLevel": 86.5,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773108000000,
-          "temp": 24.3,
-          "humidity": 80.2,
-          "feedLevel": 90.3,
-          "waterLevel": 87.6,
+          "temp": 26.0,
+          "humidity": 77.2,
+          "feedLevel": 86.5,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773111600000,
-          "temp": 24.5,
-          "humidity": 78.7,
-          "feedLevel": 90.3,
-          "waterLevel": 87.6,
+          "temp": 26.2,
+          "humidity": 75.8,
+          "feedLevel": 86.5,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773115200000,
-          "temp": 24.8,
-          "humidity": 77.2,
-          "feedLevel": 90.3,
-          "waterLevel": 87.6,
+          "temp": 26.3,
+          "humidity": 74.4,
+          "feedLevel": 86.5,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773118800000,
-          "temp": 25.4,
-          "humidity": 75.7,
-          "feedLevel": 90.3,
-          "waterLevel": 87.6,
+          "temp": 27.0,
+          "humidity": 73.0,
+          "feedLevel": 86.5,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773122400000,
-          "temp": 26.6,
-          "humidity": 72.7,
-          "feedLevel": 88.9,
-          "waterLevel": 87.6,
+          "temp": 28.1,
+          "humidity": 72.0,
+          "feedLevel": 85.0,
+          "waterLevel": 56.5,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773126000000,
-          "temp": 27.8,
-          "humidity": 69.5,
-          "feedLevel": 88.9,
-          "waterLevel": 85.5,
+          "temp": 29.2,
+          "humidity": 69.4,
+          "feedLevel": 85.0,
+          "waterLevel": 54.3,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773129600000,
-          "temp": 29.0,
-          "humidity": 66.3,
-          "feedLevel": 88.9,
-          "waterLevel": 85.5,
+          "temp": 30.3,
+          "humidity": 66.8,
+          "feedLevel": 85.0,
+          "waterLevel": 54.3,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773133200000,
-          "temp": 29.2,
-          "humidity": 63.1,
-          "feedLevel": 88.9,
-          "waterLevel": 85.5,
+          "temp": 32.9,
+          "humidity": 64.2,
+          "feedLevel": 85.0,
+          "waterLevel": 54.3,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773136800000,
-          "temp": 31.0,
-          "humidity": 59.9,
-          "feedLevel": 88.9,
-          "waterLevel": 85.5,
+          "temp": 34.2,
+          "humidity": 61.6,
+          "feedLevel": 85.0,
+          "waterLevel": 54.3,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773140400000,
-          "temp": 33.8,
-          "humidity": 56.7,
-          "feedLevel": 88.9,
-          "waterLevel": 85.5,
+          "temp": 35.8,
+          "humidity": 59.0,
+          "feedLevel": 85.0,
+          "waterLevel": 51.5,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773144000000,
-          "temp": 35.7,
-          "humidity": 56.0,
-          "feedLevel": 87.3,
-          "waterLevel": 85.5,
+          "temp": 37.4,
+          "humidity": 54.0,
+          "feedLevel": 83.2,
+          "waterLevel": 51.5,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773147600000,
-          "temp": 34.9,
-          "humidity": 58.8,
-          "feedLevel": 87.3,
-          "waterLevel": 83.1,
+          "temp": 36.7,
+          "humidity": 55.8,
+          "feedLevel": 83.2,
+          "waterLevel": 49.3,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773151200000,
-          "temp": 33.1,
-          "humidity": 61.6,
-          "feedLevel": 87.3,
-          "waterLevel": 83.1,
+          "temp": 35.6,
+          "humidity": 57.6,
+          "feedLevel": 83.2,
+          "waterLevel": 46.5,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773154800000,
-          "temp": 31.8,
-          "humidity": 64.4,
-          "feedLevel": 87.3,
-          "waterLevel": 83.1,
+          "temp": 34.6,
+          "humidity": 59.4,
+          "feedLevel": 83.2,
+          "waterLevel": 46.5,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773158400000,
-          "temp": 30.4,
-          "humidity": 66.0,
-          "feedLevel": 87.3,
-          "waterLevel": 83.1,
+          "temp": 33.4,
+          "humidity": 63.0,
+          "feedLevel": 83.2,
+          "waterLevel": 46.5,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773162000000,
-          "temp": 29.0,
-          "humidity": 69.1,
-          "feedLevel": 87.3,
-          "waterLevel": 80.7,
+          "temp": 32.2,
+          "humidity": 66.1,
+          "feedLevel": 83.2,
+          "waterLevel": 43.7,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773165600000,
-          "temp": 27.6,
-          "humidity": 72.2,
-          "feedLevel": 85.9,
-          "waterLevel": 80.7,
+          "temp": 31.0,
+          "humidity": 69.2,
+          "feedLevel": 81.7,
+          "waterLevel": 43.7,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773169200000,
-          "temp": 26.6,
-          "humidity": 75.3,
-          "feedLevel": 85.9,
-          "waterLevel": 80.7,
+          "temp": 28.4,
+          "humidity": 72.3,
+          "feedLevel": 81.7,
+          "waterLevel": 43.7,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773172800000,
-          "temp": 25.8,
-          "humidity": 79.8,
-          "feedLevel": 85.9,
-          "waterLevel": 80.7,
+          "temp": 27.8,
+          "humidity": 76.0,
+          "feedLevel": 81.7,
+          "waterLevel": 40.9,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773176400000,
-          "temp": 25.0,
-          "humidity": 78.6,
-          "feedLevel": 85.9,
-          "waterLevel": 78.6,
+          "temp": 27.2,
+          "humidity": 76.7,
+          "feedLevel": 81.7,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773180000000,
-          "temp": 24.2,
+          "temp": 26.6,
           "humidity": 77.4,
-          "feedLevel": 85.9,
-          "waterLevel": 78.6,
+          "feedLevel": 81.7,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773183600000,
-          "temp": 23.4,
-          "humidity": 76.2,
-          "feedLevel": 85.9,
-          "waterLevel": 78.6,
+          "temp": 26.0,
+          "humidity": 78.1,
+          "feedLevel": 81.7,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         }
       },
       "2026-03-11": {
         "00": {
           "timestamp": 1773187200000,
-          "temp": 25.2,
-          "humidity": 82.0,
-          "feedLevel": 85.9,
-          "waterLevel": 78.6,
+          "temp": 24.2,
+          "humidity": 89.0,
+          "feedLevel": 81.7,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773190800000,
-          "temp": 25.0,
-          "humidity": 80.5,
-          "feedLevel": 85.9,
-          "waterLevel": 78.6,
+          "temp": 24.3,
+          "humidity": 87.6,
+          "feedLevel": 81.7,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773194400000,
-          "temp": 24.9,
-          "humidity": 79.0,
-          "feedLevel": 85.9,
-          "waterLevel": 78.6,
+          "temp": 24.4,
+          "humidity": 86.2,
+          "feedLevel": 81.7,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773198000000,
-          "temp": 25.1,
-          "humidity": 77.5,
-          "feedLevel": 85.9,
-          "waterLevel": 78.6,
+          "temp": 24.6,
+          "humidity": 84.8,
+          "feedLevel": 81.7,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773201600000,
-          "temp": 25.4,
-          "humidity": 76.0,
-          "feedLevel": 85.9,
-          "waterLevel": 78.6,
+          "temp": 24.7,
+          "humidity": 83.4,
+          "feedLevel": 81.7,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773205200000,
-          "temp": 26.0,
-          "humidity": 74.5,
-          "feedLevel": 85.9,
-          "waterLevel": 78.6,
+          "temp": 25.4,
+          "humidity": 82.0,
+          "feedLevel": 81.7,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773208800000,
-          "temp": 27.2,
-          "humidity": 73.4,
-          "feedLevel": 84.4,
-          "waterLevel": 78.6,
+          "temp": 26.5,
+          "humidity": 81.0,
+          "feedLevel": 80.2,
+          "waterLevel": 38.7,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773212400000,
-          "temp": 28.4,
-          "humidity": 70.2,
-          "feedLevel": 84.4,
-          "waterLevel": 76.5,
+          "temp": 27.6,
+          "humidity": 78.4,
+          "feedLevel": 80.2,
+          "waterLevel": 36.5,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773216000000,
-          "temp": 29.6,
-          "humidity": 67.0,
-          "feedLevel": 84.4,
-          "waterLevel": 76.5,
+          "temp": 28.7,
+          "humidity": 75.8,
+          "feedLevel": 80.2,
+          "waterLevel": 36.5,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773219600000,
-          "temp": 29.7,
-          "humidity": 63.8,
-          "feedLevel": 84.4,
-          "waterLevel": 76.5,
+          "temp": 27.4,
+          "humidity": 73.2,
+          "feedLevel": 80.2,
+          "waterLevel": 36.5,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773223200000,
-          "temp": 31.5,
-          "humidity": 60.6,
-          "feedLevel": 84.4,
-          "waterLevel": 76.5,
+          "temp": 28.7,
+          "humidity": 70.6,
+          "feedLevel": 80.2,
+          "waterLevel": 36.5,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773226800000,
-          "temp": 34.3,
-          "humidity": 57.4,
-          "feedLevel": 84.4,
-          "waterLevel": 76.5,
+          "temp": 30.3,
+          "humidity": 68.0,
+          "feedLevel": 80.2,
+          "waterLevel": 36.5,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773230400000,
-          "temp": 36.2,
-          "humidity": 55.0,
-          "feedLevel": 82.7,
-          "waterLevel": 76.5,
+          "temp": 30.1,
+          "humidity": 78.5,
+          "feedLevel": 78.4,
+          "waterLevel": 36.5,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773234000000,
-          "temp": 35.4,
-          "humidity": 57.8,
-          "feedLevel": 82.7,
-          "waterLevel": 74.1,
+          "temp": 31.2,
+          "humidity": 71.8,
+          "feedLevel": 78.4,
+          "waterLevel": 34.3,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773237600000,
-          "temp": 33.6,
-          "humidity": 60.6,
-          "feedLevel": 82.7,
-          "waterLevel": 74.1,
+          "temp": 30.1,
+          "humidity": 73.6,
+          "feedLevel": 78.4,
+          "waterLevel": 34.3,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773241200000,
-          "temp": 31.5,
-          "humidity": 63.4,
-          "feedLevel": 82.7,
-          "waterLevel": 74.1,
+          "temp": 29.1,
+          "humidity": 75.4,
+          "feedLevel": 78.4,
+          "waterLevel": 34.3,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773244800000,
-          "temp": 30.1,
-          "humidity": 66.0,
-          "feedLevel": 82.7,
-          "waterLevel": 74.1,
+          "temp": 27.9,
+          "humidity": 79.0,
+          "feedLevel": 78.4,
+          "waterLevel": 34.3,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773248400000,
-          "temp": 28.7,
-          "humidity": 69.1,
-          "feedLevel": 82.7,
-          "waterLevel": 71.7,
+          "temp": 26.7,
+          "humidity": 82.1,
+          "feedLevel": 78.4,
+          "waterLevel": 32.1,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773252000000,
-          "temp": 27.3,
-          "humidity": 72.2,
-          "feedLevel": 81.2,
-          "waterLevel": 71.7,
+          "temp": 23.7,
+          "humidity": 93.7,
+          "feedLevel": 76.9,
+          "waterLevel": 32.1,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773255600000,
-          "temp": 27.2,
-          "humidity": 75.3,
-          "feedLevel": 81.2,
-          "waterLevel": 71.7,
+          "temp": 26.8,
+          "humidity": 88.3,
+          "feedLevel": 76.9,
+          "waterLevel": 32.1,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773259200000,
-          "temp": 26.4,
-          "humidity": 79.0,
-          "feedLevel": 81.2,
-          "waterLevel": 71.7,
+          "temp": 26.2,
+          "humidity": 85.0,
+          "feedLevel": 76.9,
+          "waterLevel": 50.1,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773262800000,
           "temp": 25.6,
-          "humidity": 77.8,
-          "feedLevel": 81.2,
-          "waterLevel": 69.6,
+          "humidity": 85.7,
+          "feedLevel": 76.9,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773266400000,
-          "temp": 24.8,
-          "humidity": 76.6,
-          "feedLevel": 81.2,
-          "waterLevel": 69.6,
+          "temp": 25.0,
+          "humidity": 86.4,
+          "feedLevel": 76.9,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773270000000,
-          "temp": 24.0,
-          "humidity": 75.4,
-          "feedLevel": 81.2,
-          "waterLevel": 69.6,
+          "temp": 24.4,
+          "humidity": 87.1,
+          "feedLevel": 76.9,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         }
       },
       "2026-03-12": {
         "00": {
           "timestamp": 1773273600000,
-          "temp": 24.0,
-          "humidity": 83.2,
-          "feedLevel": 81.2,
-          "waterLevel": 69.6,
+          "temp": 24.9,
+          "humidity": 83.0,
+          "feedLevel": 76.9,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773277200000,
-          "temp": 23.8,
-          "humidity": 81.7,
-          "feedLevel": 81.2,
-          "waterLevel": 69.6,
+          "temp": 25.0,
+          "humidity": 81.6,
+          "feedLevel": 76.9,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773280800000,
-          "temp": 23.7,
+          "temp": 25.1,
           "humidity": 80.2,
-          "feedLevel": 81.2,
-          "waterLevel": 69.6,
+          "feedLevel": 76.9,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773284400000,
-          "temp": 23.9,
-          "humidity": 78.7,
-          "feedLevel": 81.2,
-          "waterLevel": 69.6,
+          "temp": 25.3,
+          "humidity": 78.8,
+          "feedLevel": 76.9,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773288000000,
-          "temp": 24.2,
-          "humidity": 77.2,
-          "feedLevel": 81.2,
-          "waterLevel": 69.6,
+          "temp": 25.4,
+          "humidity": 77.4,
+          "feedLevel": 76.9,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773291600000,
-          "temp": 24.8,
-          "humidity": 75.7,
-          "feedLevel": 81.2,
-          "waterLevel": 69.6,
+          "temp": 26.1,
+          "humidity": 76.0,
+          "feedLevel": 76.9,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773295200000,
-          "temp": 26.0,
-          "humidity": 72.0,
-          "feedLevel": 79.8,
-          "waterLevel": 69.6,
+          "temp": 27.2,
+          "humidity": 75.0,
+          "feedLevel": 75.4,
+          "waterLevel": 47.9,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773298800000,
-          "temp": 27.2,
-          "humidity": 68.8,
-          "feedLevel": 79.8,
-          "waterLevel": 67.4,
+          "temp": 28.3,
+          "humidity": 72.4,
+          "feedLevel": 75.4,
+          "waterLevel": 45.7,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773302400000,
-          "temp": 28.4,
-          "humidity": 65.6,
-          "feedLevel": 79.8,
-          "waterLevel": 79.4,
+          "temp": 29.4,
+          "humidity": 69.8,
+          "feedLevel": 75.4,
+          "waterLevel": 45.7,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773306000000,
-          "temp": 29.2,
-          "humidity": 62.4,
-          "feedLevel": 79.8,
-          "waterLevel": 79.4,
+          "temp": 29.5,
+          "humidity": 67.2,
+          "feedLevel": 75.4,
+          "waterLevel": 45.7,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773309600000,
-          "temp": 31.0,
-          "humidity": 59.2,
-          "feedLevel": 79.8,
-          "waterLevel": 79.4,
+          "temp": 30.8,
+          "humidity": 64.6,
+          "feedLevel": 75.4,
+          "waterLevel": 45.7,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773313200000,
-          "temp": 33.8,
-          "humidity": 56.0,
-          "feedLevel": 79.8,
-          "waterLevel": 79.4,
+          "temp": 32.4,
+          "humidity": 62.0,
+          "feedLevel": 75.4,
+          "waterLevel": 45.7,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773316800000,
-          "temp": 35.7,
-          "humidity": 55.0,
-          "feedLevel": 78.2,
-          "waterLevel": 79.4,
+          "temp": 34.0,
+          "humidity": 60.0,
+          "feedLevel": 73.6,
+          "waterLevel": 45.7,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773320400000,
-          "temp": 34.9,
-          "humidity": 57.8,
-          "feedLevel": 78.2,
-          "waterLevel": 76.9,
+          "temp": 33.3,
+          "humidity": 61.8,
+          "feedLevel": 73.6,
+          "waterLevel": 43.5,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773324000000,
-          "temp": 33.1,
-          "humidity": 60.6,
-          "feedLevel": 78.2,
-          "waterLevel": 76.9,
+          "temp": 32.2,
+          "humidity": 63.6,
+          "feedLevel": 73.6,
+          "waterLevel": 43.5,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773327600000,
-          "temp": 31.8,
-          "humidity": 63.4,
-          "feedLevel": 78.2,
-          "waterLevel": 76.9,
+          "temp": 31.2,
+          "humidity": 65.4,
+          "feedLevel": 73.6,
+          "waterLevel": 43.5,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773331200000,
-          "temp": 30.4,
-          "humidity": 66.8,
-          "feedLevel": 78.2,
-          "waterLevel": 76.9,
+          "temp": 30.0,
+          "humidity": 69.0,
+          "feedLevel": 73.6,
+          "waterLevel": 43.5,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773334800000,
-          "temp": 29.0,
-          "humidity": 69.9,
-          "feedLevel": 78.2,
-          "waterLevel": 74.4,
+          "temp": 28.8,
+          "humidity": 72.1,
+          "feedLevel": 73.6,
+          "waterLevel": 41.3,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773338400000,
           "temp": 27.6,
-          "humidity": 73.0,
-          "feedLevel": 76.8,
-          "waterLevel": 74.4,
+          "humidity": 75.2,
+          "feedLevel": 72.1,
+          "waterLevel": 41.3,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773342000000,
-          "temp": 26.0,
-          "humidity": 76.1,
-          "feedLevel": 76.8,
-          "waterLevel": 74.4,
+          "temp": 27.5,
+          "humidity": 78.3,
+          "feedLevel": 72.1,
+          "waterLevel": 41.3,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773345600000,
-          "temp": 25.2,
-          "humidity": 79.8,
-          "feedLevel": 76.8,
-          "waterLevel": 86.4,
+          "temp": 26.9,
+          "humidity": 79.0,
+          "feedLevel": 72.1,
+          "waterLevel": 41.3,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773349200000,
-          "temp": 24.4,
-          "humidity": 78.6,
-          "feedLevel": 76.8,
-          "waterLevel": 84.2,
+          "temp": 26.3,
+          "humidity": 79.7,
+          "feedLevel": 72.1,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773352800000,
-          "temp": 23.6,
-          "humidity": 77.4,
-          "feedLevel": 76.8,
-          "waterLevel": 84.2,
+          "temp": 25.7,
+          "humidity": 80.4,
+          "feedLevel": 72.1,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773356400000,
-          "temp": 22.8,
-          "humidity": 76.2,
-          "feedLevel": 76.8,
-          "waterLevel": 84.2,
+          "temp": 25.1,
+          "humidity": 81.1,
+          "feedLevel": 72.1,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         }
       },
       "2026-03-13": {
         "00": {
           "timestamp": 1773360000000,
-          "temp": 24.6,
-          "humidity": 82.0,
-          "feedLevel": 76.8,
-          "waterLevel": 84.2,
+          "temp": 23.7,
+          "humidity": 93.0,
+          "feedLevel": 72.1,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773363600000,
-          "temp": 24.4,
-          "humidity": 80.5,
-          "feedLevel": 76.8,
-          "waterLevel": 84.2,
+          "temp": 23.8,
+          "humidity": 91.6,
+          "feedLevel": 72.1,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773367200000,
-          "temp": 24.3,
-          "humidity": 79.0,
-          "feedLevel": 76.8,
-          "waterLevel": 84.2,
+          "temp": 23.9,
+          "humidity": 90.2,
+          "feedLevel": 72.1,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773370800000,
-          "temp": 24.5,
-          "humidity": 77.5,
-          "feedLevel": 76.8,
-          "waterLevel": 84.2,
+          "temp": 24.1,
+          "humidity": 88.8,
+          "feedLevel": 72.1,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773374400000,
-          "temp": 24.8,
-          "humidity": 76.0,
-          "feedLevel": 76.8,
-          "waterLevel": 84.2,
+          "temp": 24.2,
+          "humidity": 87.4,
+          "feedLevel": 72.1,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773378000000,
-          "temp": 25.4,
-          "humidity": 74.5,
-          "feedLevel": 76.8,
-          "waterLevel": 84.2,
+          "temp": 24.9,
+          "humidity": 86.0,
+          "feedLevel": 72.1,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773381600000,
-          "temp": 26.6,
-          "humidity": 72.7,
-          "feedLevel": 75.3,
-          "waterLevel": 84.2,
+          "temp": 26.0,
+          "humidity": 85.0,
+          "feedLevel": 70.6,
+          "waterLevel": 39.1,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773385200000,
-          "temp": 27.8,
-          "humidity": 69.5,
-          "feedLevel": 75.3,
-          "waterLevel": 82.1,
+          "temp": 27.1,
+          "humidity": 82.4,
+          "feedLevel": 70.6,
+          "waterLevel": 36.9,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773388800000,
-          "temp": 29.0,
-          "humidity": 66.3,
-          "feedLevel": 75.3,
-          "waterLevel": 82.1,
+          "temp": 28.2,
+          "humidity": 79.8,
+          "feedLevel": 70.6,
+          "waterLevel": 35.4,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773392400000,
-          "temp": 29.2,
-          "humidity": 63.1,
-          "feedLevel": 75.3,
-          "waterLevel": 82.1,
+          "temp": 25.1,
+          "humidity": 77.2,
+          "feedLevel": 70.6,
+          "waterLevel": 35.4,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773396000000,
-          "temp": 31.0,
-          "humidity": 59.9,
-          "feedLevel": 75.3,
-          "waterLevel": 82.1,
+          "temp": 26.4,
+          "humidity": 74.6,
+          "feedLevel": 70.6,
+          "waterLevel": 35.4,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773399600000,
-          "temp": 33.8,
-          "humidity": 56.7,
-          "feedLevel": 75.3,
-          "waterLevel": 82.1,
+          "temp": 28.0,
+          "humidity": 72.0,
+          "feedLevel": 70.6,
+          "waterLevel": 35.4,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773403200000,
-          "temp": 35.7,
-          "humidity": 56.0,
-          "feedLevel": 73.6,
-          "waterLevel": 82.1,
+          "temp": 29.6,
+          "humidity": 79.0,
+          "feedLevel": 68.8,
+          "waterLevel": 35.4,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773406800000,
-          "temp": 34.9,
-          "humidity": 58.8,
-          "feedLevel": 73.6,
-          "waterLevel": 79.7,
+          "temp": 28.9,
+          "humidity": 80.8,
+          "feedLevel": 68.8,
+          "waterLevel": 33.2,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773410400000,
-          "temp": 33.1,
-          "humidity": 61.6,
-          "feedLevel": 73.6,
-          "waterLevel": 79.7,
+          "temp": 26.0,
+          "humidity": 91.1,
+          "feedLevel": 68.8,
+          "waterLevel": 31.7,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773414000000,
-          "temp": 31.5,
-          "humidity": 64.4,
-          "feedLevel": 73.6,
-          "waterLevel": 79.7,
+          "temp": 25.0,
+          "humidity": 92.9,
+          "feedLevel": 68.8,
+          "waterLevel": 31.7,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773417600000,
-          "temp": 30.1,
-          "humidity": 66.0,
-          "feedLevel": 73.6,
-          "waterLevel": 79.7,
+          "temp": 23.8,
+          "humidity": 96.5,
+          "feedLevel": 68.8,
+          "waterLevel": 31.7,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773421200000,
-          "temp": 28.7,
-          "humidity": 69.1,
-          "feedLevel": 73.6,
-          "waterLevel": 77.3,
+          "temp": 22.6,
+          "humidity": 98.0,
+          "feedLevel": 68.8,
+          "waterLevel": 29.5,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773424800000,
-          "temp": 27.3,
-          "humidity": 72.2,
-          "feedLevel": 72.1,
-          "waterLevel": 77.3,
+          "temp": 21.4,
+          "humidity": 98.0,
+          "feedLevel": 67.3,
+          "waterLevel": 29.5,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773428400000,
-          "temp": 26.6,
-          "humidity": 75.3,
-          "feedLevel": 82.6,
-          "waterLevel": 77.3,
+          "temp": 26.3,
+          "humidity": 97.3,
+          "feedLevel": 67.3,
+          "waterLevel": 28.0,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773432000000,
-          "temp": 25.8,
-          "humidity": 79.0,
-          "feedLevel": 82.6,
-          "waterLevel": 77.3,
+          "temp": 25.7,
+          "humidity": 89.0,
+          "feedLevel": 67.3,
+          "waterLevel": 28.0,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773435600000,
-          "temp": 25.0,
-          "humidity": 77.8,
-          "feedLevel": 82.6,
-          "waterLevel": 75.2,
+          "temp": 25.1,
+          "humidity": 89.7,
+          "feedLevel": 67.3,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773439200000,
-          "temp": 24.2,
-          "humidity": 76.6,
-          "feedLevel": 82.6,
-          "waterLevel": 75.2,
+          "temp": 24.5,
+          "humidity": 90.4,
+          "feedLevel": 67.3,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773442800000,
-          "temp": 23.4,
-          "humidity": 75.4,
-          "feedLevel": 82.6,
-          "waterLevel": 75.2,
+          "temp": 23.9,
+          "humidity": 91.1,
+          "feedLevel": 67.3,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         }
       },
       "2026-03-14": {
         "00": {
           "timestamp": 1773446400000,
-          "temp": 25.2,
-          "humidity": 83.2,
-          "feedLevel": 82.6,
-          "waterLevel": 75.2,
+          "temp": 24.5,
+          "humidity": 86.0,
+          "feedLevel": 67.3,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773450000000,
-          "temp": 25.0,
-          "humidity": 81.7,
-          "feedLevel": 82.6,
-          "waterLevel": 75.2,
+          "temp": 24.6,
+          "humidity": 84.6,
+          "feedLevel": 67.3,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773453600000,
-          "temp": 24.9,
-          "humidity": 80.2,
-          "feedLevel": 82.6,
-          "waterLevel": 75.2,
+          "temp": 24.7,
+          "humidity": 83.2,
+          "feedLevel": 67.3,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773457200000,
-          "temp": 25.1,
-          "humidity": 78.7,
-          "feedLevel": 82.6,
-          "waterLevel": 75.2,
+          "temp": 24.9,
+          "humidity": 81.8,
+          "feedLevel": 67.3,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773460800000,
-          "temp": 25.4,
-          "humidity": 77.2,
-          "feedLevel": 82.6,
-          "waterLevel": 75.2,
+          "temp": 25.0,
+          "humidity": 80.4,
+          "feedLevel": 67.3,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773464400000,
-          "temp": 26.0,
-          "humidity": 75.7,
-          "feedLevel": 82.6,
-          "waterLevel": 75.2,
+          "temp": 25.7,
+          "humidity": 79.0,
+          "feedLevel": 67.3,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773468000000,
-          "temp": 27.2,
-          "humidity": 73.4,
-          "feedLevel": 81.2,
-          "waterLevel": 75.2,
+          "temp": 26.8,
+          "humidity": 78.0,
+          "feedLevel": 66.1,
+          "waterLevel": 25.8,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773471600000,
-          "temp": 28.4,
-          "humidity": 70.2,
-          "feedLevel": 81.2,
-          "waterLevel": 73.1,
+          "temp": 27.9,
+          "humidity": 75.4,
+          "feedLevel": 66.1,
+          "waterLevel": 23.6,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773475200000,
-          "temp": 29.6,
-          "humidity": 67.0,
-          "feedLevel": 81.2,
-          "waterLevel": 73.1,
+          "temp": 29.0,
+          "humidity": 72.8,
+          "feedLevel": 66.1,
+          "waterLevel": 23.6,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773478800000,
-          "temp": 29.7,
-          "humidity": 63.8,
-          "feedLevel": 81.2,
-          "waterLevel": 73.1,
+          "temp": 28.8,
+          "humidity": 70.2,
+          "feedLevel": 66.1,
+          "waterLevel": 23.6,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773482400000,
-          "temp": 31.5,
-          "humidity": 60.6,
-          "feedLevel": 81.2,
-          "waterLevel": 73.1,
+          "temp": 30.1,
+          "humidity": 67.6,
+          "feedLevel": 66.1,
+          "waterLevel": 23.6,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773486000000,
-          "temp": 34.3,
-          "humidity": 57.4,
-          "feedLevel": 81.2,
-          "waterLevel": 73.1,
+          "temp": 31.7,
+          "humidity": 65.0,
+          "feedLevel": 66.1,
+          "waterLevel": 23.6,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773489600000,
-          "temp": 36.2,
-          "humidity": 55.0,
-          "feedLevel": 79.6,
-          "waterLevel": 73.1,
+          "temp": 33.3,
+          "humidity": 64.0,
+          "feedLevel": 64.7,
+          "waterLevel": 23.6,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773493200000,
-          "temp": 35.4,
-          "humidity": 57.8,
-          "feedLevel": 79.6,
-          "waterLevel": 70.7,
+          "temp": 32.6,
+          "humidity": 65.8,
+          "feedLevel": 64.7,
+          "waterLevel": 21.4,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773496800000,
-          "temp": 33.6,
-          "humidity": 60.6,
-          "feedLevel": 79.6,
-          "waterLevel": 70.7,
+          "temp": 31.5,
+          "humidity": 67.6,
+          "feedLevel": 64.7,
+          "waterLevel": 21.4,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773500400000,
-          "temp": 31.8,
-          "humidity": 63.4,
-          "feedLevel": 79.6,
-          "waterLevel": 70.7,
+          "temp": 30.5,
+          "humidity": 69.4,
+          "feedLevel": 64.7,
+          "waterLevel": 21.4,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773504000000,
-          "temp": 30.4,
-          "humidity": 66.0,
-          "feedLevel": 79.6,
-          "waterLevel": 70.7,
+          "temp": 29.3,
+          "humidity": 73.0,
+          "feedLevel": 64.7,
+          "waterLevel": 21.4,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773507600000,
-          "temp": 29.0,
-          "humidity": 69.1,
-          "feedLevel": 79.6,
-          "waterLevel": 68.3,
+          "temp": 28.1,
+          "humidity": 76.1,
+          "feedLevel": 64.7,
+          "waterLevel": 19.2,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773511200000,
-          "temp": 27.6,
-          "humidity": 72.2,
-          "feedLevel": 78.2,
-          "waterLevel": 68.3,
+          "temp": 26.9,
+          "humidity": 79.2,
+          "feedLevel": 63.5,
+          "waterLevel": 19.2,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773514800000,
-          "temp": 27.2,
-          "humidity": 75.3,
-          "feedLevel": 78.2,
-          "waterLevel": 68.3,
+          "temp": 27.1,
+          "humidity": 82.3,
+          "feedLevel": 63.5,
+          "waterLevel": 19.2,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773518400000,
-          "temp": 26.4,
-          "humidity": 79.8,
-          "feedLevel": 78.2,
-          "waterLevel": 68.3,
+          "temp": 26.5,
+          "humidity": 82.0,
+          "feedLevel": 63.5,
+          "waterLevel": 37.2,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773522000000,
-          "temp": 25.6,
-          "humidity": 78.6,
-          "feedLevel": 78.2,
-          "waterLevel": 66.2,
+          "temp": 25.9,
+          "humidity": 82.7,
+          "feedLevel": 63.5,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773525600000,
-          "temp": 24.8,
-          "humidity": 77.4,
-          "feedLevel": 78.2,
-          "waterLevel": 66.2,
+          "temp": 25.3,
+          "humidity": 83.4,
+          "feedLevel": 63.5,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773529200000,
-          "temp": 24.0,
-          "humidity": 76.2,
-          "feedLevel": 78.2,
-          "waterLevel": 66.2,
+          "temp": 24.7,
+          "humidity": 84.1,
+          "feedLevel": 63.5,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         }
       },
       "2026-03-15": {
         "00": {
           "timestamp": 1773532800000,
-          "temp": 24.0,
-          "humidity": 82.0,
-          "feedLevel": 78.2,
-          "waterLevel": 66.2,
+          "temp": 25.6,
+          "humidity": 79.0,
+          "feedLevel": 63.5,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773536400000,
-          "temp": 23.8,
-          "humidity": 80.5,
-          "feedLevel": 78.2,
-          "waterLevel": 66.2,
+          "temp": 25.7,
+          "humidity": 77.6,
+          "feedLevel": 63.5,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773540000000,
-          "temp": 23.7,
-          "humidity": 79.0,
-          "feedLevel": 78.2,
-          "waterLevel": 66.2,
+          "temp": 25.8,
+          "humidity": 76.2,
+          "feedLevel": 63.5,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773543600000,
-          "temp": 23.9,
-          "humidity": 77.5,
-          "feedLevel": 78.2,
-          "waterLevel": 66.2,
+          "temp": 26.0,
+          "humidity": 74.8,
+          "feedLevel": 63.5,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773547200000,
-          "temp": 24.2,
-          "humidity": 76.0,
-          "feedLevel": 78.2,
-          "waterLevel": 66.2,
+          "temp": 26.1,
+          "humidity": 73.4,
+          "feedLevel": 63.5,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773550800000,
-          "temp": 24.8,
-          "humidity": 74.5,
-          "feedLevel": 78.2,
-          "waterLevel": 66.2,
+          "temp": 26.8,
+          "humidity": 72.0,
+          "feedLevel": 63.5,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773554400000,
-          "temp": 26.0,
-          "humidity": 72.0,
-          "feedLevel": 76.7,
-          "waterLevel": 66.2,
+          "temp": 27.9,
+          "humidity": 71.0,
+          "feedLevel": 62.3,
+          "waterLevel": 35.0,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773558000000,
-          "temp": 27.2,
-          "humidity": 68.8,
-          "feedLevel": 76.7,
-          "waterLevel": 64.0,
+          "temp": 29.0,
+          "humidity": 68.4,
+          "feedLevel": 62.3,
+          "waterLevel": 32.8,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773561600000,
-          "temp": 28.4,
-          "humidity": 65.6,
-          "feedLevel": 76.7,
-          "waterLevel": 64.0,
+          "temp": 30.1,
+          "humidity": 65.8,
+          "feedLevel": 62.3,
+          "waterLevel": 32.8,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773565200000,
-          "temp": 29.2,
-          "humidity": 62.4,
-          "feedLevel": 76.7,
-          "waterLevel": 64.0,
+          "temp": 32.6,
+          "humidity": 63.2,
+          "feedLevel": 62.3,
+          "waterLevel": 32.8,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773568800000,
-          "temp": 31.0,
-          "humidity": 59.2,
-          "feedLevel": 76.7,
-          "waterLevel": 64.0,
+          "temp": 33.9,
+          "humidity": 60.6,
+          "feedLevel": 62.3,
+          "waterLevel": 32.8,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773572400000,
-          "temp": 33.8,
-          "humidity": 56.0,
-          "feedLevel": 76.7,
-          "waterLevel": 64.0,
+          "temp": 35.5,
+          "humidity": 58.0,
+          "feedLevel": 62.3,
+          "waterLevel": 30.0,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773576000000,
-          "temp": 35.7,
+          "temp": 37.1,
           "humidity": 55.0,
-          "feedLevel": 75.0,
-          "waterLevel": 64.0,
+          "feedLevel": 60.9,
+          "waterLevel": 30.0,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773579600000,
-          "temp": 34.9,
-          "humidity": 57.8,
-          "feedLevel": 75.0,
-          "waterLevel": 61.5,
+          "temp": 36.4,
+          "humidity": 56.8,
+          "feedLevel": 60.9,
+          "waterLevel": 27.8,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773583200000,
-          "temp": 33.1,
-          "humidity": 60.6,
-          "feedLevel": 75.0,
-          "waterLevel": 61.5,
+          "temp": 35.3,
+          "humidity": 58.6,
+          "feedLevel": 60.9,
+          "waterLevel": 25.0,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773586800000,
-          "temp": 31.5,
-          "humidity": 63.4,
-          "feedLevel": 75.0,
-          "waterLevel": 61.5,
+          "temp": 34.3,
+          "humidity": 60.4,
+          "feedLevel": 60.9,
+          "waterLevel": 25.0,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773590400000,
-          "temp": 30.1,
-          "humidity": 66.8,
-          "feedLevel": 75.0,
-          "waterLevel": 61.5,
+          "temp": 33.1,
+          "humidity": 64.0,
+          "feedLevel": 60.9,
+          "waterLevel": 25.0,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773594000000,
-          "temp": 28.7,
-          "humidity": 69.9,
-          "feedLevel": 75.0,
-          "waterLevel": 59.0,
+          "temp": 31.9,
+          "humidity": 67.1,
+          "feedLevel": 60.9,
+          "waterLevel": 22.2,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773597600000,
-          "temp": 27.3,
-          "humidity": 73.0,
-          "feedLevel": 73.5,
-          "waterLevel": 59.0,
+          "temp": 30.7,
+          "humidity": 70.2,
+          "feedLevel": 59.7,
+          "waterLevel": 22.2,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773601200000,
-          "temp": 26.0,
-          "humidity": 76.1,
-          "feedLevel": 73.5,
-          "waterLevel": 59.0,
+          "temp": 28.2,
+          "humidity": 73.3,
+          "feedLevel": 74.2,
+          "waterLevel": 22.2,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773604800000,
-          "temp": 25.2,
-          "humidity": 79.0,
-          "feedLevel": 73.5,
-          "waterLevel": 59.0,
+          "temp": 27.6,
+          "humidity": 75.0,
+          "feedLevel": 74.2,
+          "waterLevel": 19.4,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773608400000,
-          "temp": 24.4,
-          "humidity": 77.8,
-          "feedLevel": 73.5,
-          "waterLevel": 56.8,
+          "temp": 27.0,
+          "humidity": 75.7,
+          "feedLevel": 74.2,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773612000000,
-          "temp": 23.6,
-          "humidity": 76.6,
-          "feedLevel": 73.5,
-          "waterLevel": 56.8,
+          "temp": 26.4,
+          "humidity": 76.4,
+          "feedLevel": 74.2,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773615600000,
-          "temp": 22.8,
-          "humidity": 75.4,
-          "feedLevel": 73.5,
-          "waterLevel": 56.8,
+          "temp": 25.8,
+          "humidity": 77.1,
+          "feedLevel": 74.2,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         }
       },
       "2026-03-16": {
         "00": {
           "timestamp": 1773619200000,
-          "temp": 24.6,
-          "humidity": 83.2,
-          "feedLevel": 73.5,
-          "waterLevel": 56.8,
+          "temp": 24.4,
+          "humidity": 90.0,
+          "feedLevel": 74.2,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773622800000,
-          "temp": 24.4,
-          "humidity": 81.7,
-          "feedLevel": 73.5,
-          "waterLevel": 56.8,
+          "temp": 24.5,
+          "humidity": 88.6,
+          "feedLevel": 74.2,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773626400000,
-          "temp": 24.3,
-          "humidity": 80.2,
-          "feedLevel": 73.5,
-          "waterLevel": 56.8,
+          "temp": 24.6,
+          "humidity": 87.2,
+          "feedLevel": 74.2,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773630000000,
-          "temp": 24.5,
-          "humidity": 78.7,
-          "feedLevel": 73.5,
-          "waterLevel": 56.8,
+          "temp": 24.8,
+          "humidity": 85.8,
+          "feedLevel": 74.2,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773633600000,
-          "temp": 24.8,
-          "humidity": 77.2,
-          "feedLevel": 73.5,
-          "waterLevel": 56.8,
+          "temp": 24.9,
+          "humidity": 84.4,
+          "feedLevel": 74.2,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773637200000,
-          "temp": 25.4,
-          "humidity": 75.7,
-          "feedLevel": 73.5,
-          "waterLevel": 56.8,
+          "temp": 25.6,
+          "humidity": 83.0,
+          "feedLevel": 74.2,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773640800000,
-          "temp": 26.6,
-          "humidity": 72.7,
-          "feedLevel": 72.1,
-          "waterLevel": 56.8,
+          "temp": 26.7,
+          "humidity": 82.0,
+          "feedLevel": 72.7,
+          "waterLevel": 17.2,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773644400000,
           "temp": 27.8,
-          "humidity": 69.5,
-          "feedLevel": 72.1,
-          "waterLevel": 54.7,
+          "humidity": 79.4,
+          "feedLevel": 72.7,
+          "waterLevel": 15.0,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773648000000,
-          "temp": 29.0,
-          "humidity": 66.3,
-          "feedLevel": 72.1,
-          "waterLevel": 66.7,
+          "temp": 28.9,
+          "humidity": 76.8,
+          "feedLevel": 72.7,
+          "waterLevel": 15.0,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773651600000,
-          "temp": 29.2,
-          "humidity": 63.1,
-          "feedLevel": 72.1,
-          "waterLevel": 66.7,
+          "temp": 27.5,
+          "humidity": 74.2,
+          "feedLevel": 72.7,
+          "waterLevel": 15.0,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773655200000,
-          "temp": 31.0,
-          "humidity": 59.9,
-          "feedLevel": 72.1,
-          "waterLevel": 66.7,
+          "temp": 28.8,
+          "humidity": 71.6,
+          "feedLevel": 72.7,
+          "waterLevel": 15.0,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773658800000,
-          "temp": 33.8,
-          "humidity": 56.7,
-          "feedLevel": 72.1,
-          "waterLevel": 66.7,
+          "temp": 30.4,
+          "humidity": 69.0,
+          "feedLevel": 72.7,
+          "waterLevel": 15.0,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773662400000,
-          "temp": 35.7,
-          "humidity": 56.0,
-          "feedLevel": 70.5,
-          "waterLevel": 66.7,
+          "temp": 32.0,
+          "humidity": 71.0,
+          "feedLevel": 70.9,
+          "waterLevel": 15.0,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773666000000,
-          "temp": 34.9,
-          "humidity": 58.8,
-          "feedLevel": 70.5,
-          "waterLevel": 64.3,
+          "temp": 31.3,
+          "humidity": 72.8,
+          "feedLevel": 70.9,
+          "waterLevel": 12.8,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773669600000,
-          "temp": 33.1,
-          "humidity": 61.6,
-          "feedLevel": 70.5,
-          "waterLevel": 64.3,
+          "temp": 30.2,
+          "humidity": 74.6,
+          "feedLevel": 70.9,
+          "waterLevel": 12.8,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773673200000,
-          "temp": 31.8,
-          "humidity": 64.4,
-          "feedLevel": 70.5,
-          "waterLevel": 64.3,
+          "temp": 29.2,
+          "humidity": 76.4,
+          "feedLevel": 70.9,
+          "waterLevel": 12.8,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773676800000,
-          "temp": 30.4,
-          "humidity": 66.0,
-          "feedLevel": 70.5,
-          "waterLevel": 64.3,
+          "temp": 26.2,
+          "humidity": 88.5,
+          "feedLevel": 70.9,
+          "waterLevel": 12.8,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773680400000,
-          "temp": 29.0,
-          "humidity": 69.1,
-          "feedLevel": 70.5,
-          "waterLevel": 61.9,
+          "temp": 25.0,
+          "humidity": 91.6,
+          "feedLevel": 70.9,
+          "waterLevel": 10.6,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773684000000,
-          "temp": 27.6,
-          "humidity": 72.2,
-          "feedLevel": 69.1,
-          "waterLevel": 61.9,
+          "temp": 23.8,
+          "humidity": 94.7,
+          "feedLevel": 69.4,
+          "waterLevel": 10.6,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773687600000,
-          "temp": 26.6,
-          "humidity": 75.3,
-          "feedLevel": 69.1,
-          "waterLevel": 61.9,
+          "temp": 27.0,
+          "humidity": 89.3,
+          "feedLevel": 69.4,
+          "waterLevel": 10.6,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773691200000,
-          "temp": 25.8,
-          "humidity": 79.8,
-          "feedLevel": 69.1,
-          "waterLevel": 73.9,
+          "temp": 26.4,
+          "humidity": 86.0,
+          "feedLevel": 69.4,
+          "waterLevel": 10.6,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773694800000,
-          "temp": 25.0,
-          "humidity": 78.6,
-          "feedLevel": 69.1,
-          "waterLevel": 71.8,
+          "temp": 25.8,
+          "humidity": 86.7,
+          "feedLevel": 69.4,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773698400000,
-          "temp": 24.2,
-          "humidity": 77.4,
-          "feedLevel": 69.1,
-          "waterLevel": 71.8,
+          "temp": 25.2,
+          "humidity": 87.4,
+          "feedLevel": 69.4,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773702000000,
-          "temp": 23.4,
-          "humidity": 76.2,
-          "feedLevel": 69.1,
-          "waterLevel": 71.8,
+          "temp": 24.6,
+          "humidity": 88.1,
+          "feedLevel": 69.4,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         }
       },
       "2026-03-17": {
         "00": {
           "timestamp": 1773705600000,
-          "temp": 25.2,
-          "humidity": 82.0,
-          "feedLevel": 69.1,
-          "waterLevel": 71.8,
+          "temp": 24.7,
+          "humidity": 84.0,
+          "feedLevel": 69.4,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773709200000,
-          "temp": 25.0,
-          "humidity": 80.5,
-          "feedLevel": 69.1,
-          "waterLevel": 71.8,
+          "temp": 24.8,
+          "humidity": 82.6,
+          "feedLevel": 69.4,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773712800000,
           "temp": 24.9,
-          "humidity": 79.0,
-          "feedLevel": 69.1,
-          "waterLevel": 71.8,
+          "humidity": 81.2,
+          "feedLevel": 69.4,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773716400000,
           "temp": 25.1,
-          "humidity": 77.5,
-          "feedLevel": 69.1,
-          "waterLevel": 71.8,
+          "humidity": 79.8,
+          "feedLevel": 69.4,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773720000000,
-          "temp": 25.4,
-          "humidity": 76.0,
-          "feedLevel": 69.1,
-          "waterLevel": 71.8,
+          "temp": 25.2,
+          "humidity": 78.4,
+          "feedLevel": 69.4,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773723600000,
-          "temp": 26.0,
-          "humidity": 74.5,
-          "feedLevel": 69.1,
-          "waterLevel": 71.8,
+          "temp": 25.9,
+          "humidity": 77.0,
+          "feedLevel": 69.4,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773727200000,
-          "temp": 27.2,
-          "humidity": 73.4,
-          "feedLevel": 67.6,
-          "waterLevel": 71.8,
+          "temp": 27.0,
+          "humidity": 76.0,
+          "feedLevel": 67.9,
+          "waterLevel": 8.4,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773730800000,
-          "temp": 28.4,
-          "humidity": 70.2,
-          "feedLevel": 67.6,
-          "waterLevel": 69.7,
+          "temp": 28.1,
+          "humidity": 73.4,
+          "feedLevel": 67.9,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773734400000,
-          "temp": 29.6,
-          "humidity": 67.0,
-          "feedLevel": 67.6,
-          "waterLevel": 69.7,
+          "temp": 29.2,
+          "humidity": 70.8,
+          "feedLevel": 67.9,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773738000000,
-          "temp": 29.7,
-          "humidity": 63.8,
-          "feedLevel": 67.6,
-          "waterLevel": 69.7,
+          "temp": 29.9,
+          "humidity": 68.2,
+          "feedLevel": 67.9,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773741600000,
-          "temp": 31.5,
-          "humidity": 60.6,
-          "feedLevel": 67.6,
-          "waterLevel": 69.7,
+          "temp": 31.2,
+          "humidity": 65.6,
+          "feedLevel": 67.9,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773745200000,
-          "temp": 34.3,
-          "humidity": 57.4,
-          "feedLevel": 67.6,
-          "waterLevel": 69.7,
+          "temp": 32.8,
+          "humidity": 63.0,
+          "feedLevel": 67.9,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773748800000,
-          "temp": 36.2,
-          "humidity": 55.0,
-          "feedLevel": 65.9,
-          "waterLevel": 69.7,
+          "temp": 34.4,
+          "humidity": 62.0,
+          "feedLevel": 66.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773752400000,
-          "temp": 35.4,
-          "humidity": 57.8,
-          "feedLevel": 65.9,
-          "waterLevel": 67.3,
+          "temp": 33.7,
+          "humidity": 63.8,
+          "feedLevel": 66.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773756000000,
-          "temp": 33.6,
-          "humidity": 60.6,
-          "feedLevel": 65.9,
-          "waterLevel": 67.3,
+          "temp": 32.6,
+          "humidity": 65.6,
+          "feedLevel": 66.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773759600000,
-          "temp": 31.5,
-          "humidity": 63.4,
-          "feedLevel": 65.9,
-          "waterLevel": 67.3,
+          "temp": 31.6,
+          "humidity": 67.4,
+          "feedLevel": 66.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773763200000,
-          "temp": 30.1,
-          "humidity": 66.0,
-          "feedLevel": 65.9,
-          "waterLevel": 67.3,
+          "temp": 30.4,
+          "humidity": 71.0,
+          "feedLevel": 66.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773766800000,
-          "temp": 28.7,
-          "humidity": 69.1,
-          "feedLevel": 65.9,
-          "waterLevel": 64.9,
+          "temp": 27.4,
+          "humidity": 82.6,
+          "feedLevel": 66.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773770400000,
-          "temp": 27.3,
-          "humidity": 72.2,
-          "feedLevel": 64.4,
-          "waterLevel": 64.9,
+          "temp": 28.0,
+          "humidity": 77.2,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773774000000,
-          "temp": 27.2,
-          "humidity": 75.3,
-          "feedLevel": 74.9,
-          "waterLevel": 64.9,
+          "temp": 27.3,
+          "humidity": 80.3,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773777600000,
-          "temp": 26.4,
-          "humidity": 79.0,
-          "feedLevel": 74.9,
-          "waterLevel": 64.9,
+          "temp": 26.7,
+          "humidity": 80.0,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773781200000,
-          "temp": 25.6,
-          "humidity": 77.8,
-          "feedLevel": 74.9,
-          "waterLevel": 62.8,
+          "temp": 26.1,
+          "humidity": 80.7,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773784800000,
-          "temp": 24.8,
-          "humidity": 76.6,
-          "feedLevel": 74.9,
-          "waterLevel": 62.8,
+          "temp": 25.5,
+          "humidity": 81.4,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773788400000,
-          "temp": 24.0,
-          "humidity": 75.4,
-          "feedLevel": 74.9,
-          "waterLevel": 62.8,
+          "temp": 24.9,
+          "humidity": 82.1,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         }
       },
       "2026-03-18": {
         "00": {
           "timestamp": 1773792000000,
-          "temp": 24.0,
-          "humidity": 83.2,
-          "feedLevel": 74.9,
-          "waterLevel": 62.8,
+          "temp": 23.9,
+          "humidity": 92.0,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "01": {
           "timestamp": 1773795600000,
-          "temp": 23.8,
-          "humidity": 81.7,
-          "feedLevel": 74.9,
-          "waterLevel": 62.8,
+          "temp": 24.0,
+          "humidity": 90.6,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "02": {
           "timestamp": 1773799200000,
-          "temp": 23.7,
-          "humidity": 80.2,
-          "feedLevel": 74.9,
-          "waterLevel": 62.8,
+          "temp": 24.1,
+          "humidity": 89.2,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "03": {
           "timestamp": 1773802800000,
-          "temp": 23.9,
-          "humidity": 78.7,
-          "feedLevel": 74.9,
-          "waterLevel": 62.8,
+          "temp": 24.3,
+          "humidity": 87.8,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "04": {
           "timestamp": 1773806400000,
-          "temp": 24.2,
-          "humidity": 77.2,
-          "feedLevel": 74.9,
-          "waterLevel": 62.8,
+          "temp": 24.4,
+          "humidity": 86.4,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "05": {
           "timestamp": 1773810000000,
-          "temp": 24.8,
-          "humidity": 75.7,
-          "feedLevel": 74.9,
-          "waterLevel": 62.8,
+          "temp": 25.1,
+          "humidity": 85.0,
+          "feedLevel": 64.6,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "06": {
           "timestamp": 1773813600000,
-          "temp": 26.0,
-          "humidity": 72.0,
-          "feedLevel": 73.5,
-          "waterLevel": 62.8,
+          "temp": 26.2,
+          "humidity": 84.0,
+          "feedLevel": 63.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "07": {
           "timestamp": 1773817200000,
-          "temp": 27.2,
-          "humidity": 68.8,
-          "feedLevel": 73.5,
-          "waterLevel": 60.6,
+          "temp": 27.3,
+          "humidity": 81.4,
+          "feedLevel": 63.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "08": {
           "timestamp": 1773820800000,
           "temp": 28.4,
-          "humidity": 65.6,
-          "feedLevel": 73.5,
-          "waterLevel": 60.6,
+          "humidity": 78.8,
+          "feedLevel": 63.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "09": {
           "timestamp": 1773824400000,
-          "temp": 29.2,
-          "humidity": 62.4,
-          "feedLevel": 73.5,
-          "waterLevel": 60.6,
+          "temp": 25.9,
+          "humidity": 76.2,
+          "feedLevel": 63.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "10": {
           "timestamp": 1773828000000,
-          "temp": 31.0,
-          "humidity": 59.2,
-          "feedLevel": 73.5,
-          "waterLevel": 60.6,
+          "temp": 27.2,
+          "humidity": 73.6,
+          "feedLevel": 63.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "11": {
           "timestamp": 1773831600000,
-          "temp": 33.8,
-          "humidity": 56.0,
-          "feedLevel": 73.5,
-          "waterLevel": 60.6,
+          "temp": 28.8,
+          "humidity": 71.0,
+          "feedLevel": 63.1,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "12": {
           "timestamp": 1773835200000,
-          "temp": 35.7,
-          "humidity": 55.0,
-          "feedLevel": 71.9,
-          "waterLevel": 60.6,
+          "temp": 30.4,
+          "humidity": 77.0,
+          "feedLevel": 61.3,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "13": {
           "timestamp": 1773838800000,
-          "temp": 34.9,
-          "humidity": 57.8,
-          "feedLevel": 71.9,
-          "waterLevel": 58.1,
+          "temp": 27.9,
+          "humidity": 87.3,
+          "feedLevel": 61.3,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "14": {
           "timestamp": 1773842400000,
-          "temp": 33.1,
-          "humidity": 60.6,
-          "feedLevel": 71.9,
-          "waterLevel": 58.1,
+          "temp": 26.8,
+          "humidity": 89.1,
+          "feedLevel": 61.3,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "15": {
           "timestamp": 1773846000000,
-          "temp": 31.8,
-          "humidity": 63.4,
-          "feedLevel": 71.9,
-          "waterLevel": 58.1,
+          "temp": 25.8,
+          "humidity": 90.9,
+          "feedLevel": 61.3,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "16": {
           "timestamp": 1773849600000,
-          "temp": 30.4,
-          "humidity": 66.8,
-          "feedLevel": 71.9,
-          "waterLevel": 58.1,
+          "temp": 26.4,
+          "humidity": 86.0,
+          "feedLevel": 61.3,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "17": {
           "timestamp": 1773853200000,
-          "temp": 29.0,
-          "humidity": 69.9,
-          "feedLevel": 71.9,
-          "waterLevel": 55.6,
+          "temp": 25.2,
+          "humidity": 89.1,
+          "feedLevel": 61.3,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "18": {
           "timestamp": 1773856800000,
-          "temp": 27.6,
-          "humidity": 73.0,
-          "feedLevel": 70.5,
-          "waterLevel": 55.6,
+          "temp": 24.0,
+          "humidity": 92.2,
+          "feedLevel": 59.8,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "19": {
           "timestamp": 1773860400000,
-          "temp": 26.0,
-          "humidity": 76.1,
-          "feedLevel": 70.5,
-          "waterLevel": 55.6,
+          "temp": 26.5,
+          "humidity": 95.3,
+          "feedLevel": 59.8,
+          "waterLevel": 8.0,
           "timeZone": "Asia/Manila"
         },
         "20": {
           "timestamp": 1773864000000,
-          "temp": 25.2,
-          "humidity": 79.8,
-          "feedLevel": 70.5,
-          "waterLevel": 55.6,
+          "temp": 25.9,
+          "humidity": 88.0,
+          "feedLevel": 59.8,
+          "waterLevel": 26.0,
           "timeZone": "Asia/Manila"
         },
         "21": {
           "timestamp": 1773867600000,
-          "temp": 24.4,
-          "humidity": 78.6,
-          "feedLevel": 70.5,
-          "waterLevel": 53.4,
+          "temp": 25.3,
+          "humidity": 88.7,
+          "feedLevel": 59.8,
+          "waterLevel": 23.8,
           "timeZone": "Asia/Manila"
         },
         "22": {
           "timestamp": 1773871200000,
-          "temp": 23.6,
-          "humidity": 77.4,
-          "feedLevel": 70.5,
-          "waterLevel": 53.4,
+          "temp": 24.7,
+          "humidity": 89.4,
+          "feedLevel": 59.8,
+          "waterLevel": 23.8,
           "timeZone": "Asia/Manila"
         },
         "23": {
           "timestamp": 1773874800000,
-          "temp": 22.8,
-          "humidity": 76.2,
-          "feedLevel": 70.5,
-          "waterLevel": 53.4,
+          "temp": 24.1,
+          "humidity": 90.1,
+          "feedLevel": 59.8,
+          "waterLevel": 23.8,
           "timeZone": "Asia/Manila"
         }
       }
     },
     "consumptionEvents": {
-      "-seedFeed001": {
-        "timestamp": 1773036300000,
+      "-phFeed0001": {
+        "timestamp": 1772690760000,
+        "type": "feed",
+        "amount": 30.0,
+        "unit": "g",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-05",
+        "hourKey": "06"
+      },
+      "-phWater0002": {
+        "timestamp": 1772694720000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-05",
+        "hourKey": "07"
+      },
+      "-phFeed0003": {
+        "timestamp": 1772712360000,
+        "type": "feed",
+        "amount": 36.0,
+        "unit": "g",
+        "dropPercent": 1.8,
+        "dayKey": "2026-03-05",
+        "hourKey": "12"
+      },
+      "-phWater0004": {
+        "timestamp": 1772716320000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-05",
+        "hourKey": "13"
+      },
+      "-phWater0005": {
+        "timestamp": 1772730720000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-05",
+        "hourKey": "17"
+      },
+      "-phFeed0006": {
+        "timestamp": 1772733960000,
+        "type": "feed",
+        "amount": 30.0,
+        "unit": "g",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-05",
+        "hourKey": "18"
+      },
+      "-phWater0007": {
+        "timestamp": 1772745120000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-05",
+        "hourKey": "21"
+      },
+      "-phFeed0008": {
+        "timestamp": 1772777160000,
+        "type": "feed",
+        "amount": 30.0,
+        "unit": "g",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-06",
+        "hourKey": "06"
+      },
+      "-phWater0009": {
+        "timestamp": 1772781120000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-06",
+        "hourKey": "07"
+      },
+      "-phFeed0010": {
+        "timestamp": 1772798760000,
+        "type": "feed",
+        "amount": 36.0,
+        "unit": "g",
+        "dropPercent": 1.8,
+        "dayKey": "2026-03-06",
+        "hourKey": "12"
+      },
+      "-phWater0011": {
+        "timestamp": 1772802720000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-06",
+        "hourKey": "13"
+      },
+      "-phWater0012": {
+        "timestamp": 1772817120000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-06",
+        "hourKey": "17"
+      },
+      "-phFeed0013": {
+        "timestamp": 1772820360000,
+        "type": "feed",
+        "amount": 30.0,
+        "unit": "g",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-06",
+        "hourKey": "18"
+      },
+      "-phWater0014": {
+        "timestamp": 1772831520000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-06",
+        "hourKey": "21"
+      },
+      "-phFeed0015": {
+        "timestamp": 1772863560000,
+        "type": "feed",
+        "amount": 24.0,
+        "unit": "g",
+        "dropPercent": 1.2,
+        "dayKey": "2026-03-07",
+        "hourKey": "06"
+      },
+      "-phWater0016": {
+        "timestamp": 1772867520000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-07",
+        "hourKey": "07"
+      },
+      "-phWater0017": {
+        "timestamp": 1772881920000,
+        "type": "water",
+        "amount": 112.0,
+        "unit": "ml",
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-07",
+        "hourKey": "11"
+      },
+      "-phFeed0018": {
+        "timestamp": 1772885160000,
+        "type": "feed",
+        "amount": 28.0,
+        "unit": "g",
+        "dropPercent": 1.4,
+        "dayKey": "2026-03-07",
+        "hourKey": "12"
+      },
+      "-phWater0019": {
+        "timestamp": 1772889120000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-07",
+        "hourKey": "13"
+      },
+      "-phWater0020": {
+        "timestamp": 1772892720000,
+        "type": "water",
+        "amount": 112.0,
+        "unit": "ml",
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-07",
+        "hourKey": "14"
+      },
+      "-phWater0021": {
+        "timestamp": 1772903520000,
+        "type": "water",
+        "amount": 112.0,
+        "unit": "ml",
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-07",
+        "hourKey": "17"
+      },
+      "-phFeed0022": {
+        "timestamp": 1772906760000,
+        "type": "feed",
+        "amount": 24.0,
+        "unit": "g",
+        "dropPercent": 1.2,
+        "dayKey": "2026-03-07",
+        "hourKey": "18"
+      },
+      "-phWater0023": {
+        "timestamp": 1772914320000,
+        "type": "water",
+        "amount": 112.0,
+        "unit": "ml",
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-07",
+        "hourKey": "20"
+      },
+      "-phWater0024": {
+        "timestamp": 1772917920000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-07",
+        "hourKey": "21"
+      },
+      "-phFeed0025": {
+        "timestamp": 1772949960000,
+        "type": "feed",
+        "amount": 24.0,
+        "unit": "g",
+        "dropPercent": 1.2,
+        "dayKey": "2026-03-08",
+        "hourKey": "06"
+      },
+      "-phWater0026": {
+        "timestamp": 1772953920000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-08",
+        "hourKey": "07"
+      },
+      "-phWater0027": {
+        "timestamp": 1772957520000,
+        "type": "water",
+        "amount": 60.0,
+        "unit": "ml",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-08",
+        "hourKey": "08"
+      },
+      "-phFeed0028": {
+        "timestamp": 1772971560000,
+        "type": "feed",
+        "amount": 28.0,
+        "unit": "g",
+        "dropPercent": 1.4,
+        "dayKey": "2026-03-08",
+        "hourKey": "12"
+      },
+      "-phWater0029": {
+        "timestamp": 1772975520000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-08",
+        "hourKey": "13"
+      },
+      "-phWater0030": {
+        "timestamp": 1772979120000,
+        "type": "water",
+        "amount": 60.0,
+        "unit": "ml",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-08",
+        "hourKey": "14"
+      },
+      "-phWater0031": {
+        "timestamp": 1772989920000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-08",
+        "hourKey": "17"
+      },
+      "-phFeed0032": {
+        "timestamp": 1772993160000,
+        "type": "feed",
+        "amount": 24.0,
+        "unit": "g",
+        "dropPercent": 1.2,
+        "dayKey": "2026-03-08",
+        "hourKey": "18"
+      },
+      "-phWater0033": {
+        "timestamp": 1772997120000,
+        "type": "water",
+        "amount": 60.0,
+        "unit": "ml",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-08",
+        "hourKey": "19"
+      },
+      "-phWater0034": {
+        "timestamp": 1773004320000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-08",
+        "hourKey": "21"
+      },
+      "-phFeed0035": {
+        "timestamp": 1773036360000,
         "type": "feed",
         "amount": 30.0,
         "unit": "g",
@@ -1959,8 +3043,8 @@
         "dayKey": "2026-03-09",
         "hourKey": "06"
       },
-      "-seedWater002": {
-        "timestamp": 1773040200000,
+      "-phWater0036": {
+        "timestamp": 1773040320000,
         "type": "water",
         "amount": 88.0,
         "unit": "ml",
@@ -1968,35 +3052,35 @@
         "dayKey": "2026-03-09",
         "hourKey": "07"
       },
-      "-seedFeed003": {
-        "timestamp": 1773057900000,
+      "-phFeed0037": {
+        "timestamp": 1773057960000,
         "type": "feed",
-        "amount": 34.0,
+        "amount": 36.0,
         "unit": "g",
-        "dropPercent": 1.7,
+        "dropPercent": 1.8,
         "dayKey": "2026-03-09",
         "hourKey": "12"
       },
-      "-seedWater004": {
-        "timestamp": 1773061800000,
+      "-phWater0038": {
+        "timestamp": 1773061920000,
         "type": "water",
-        "amount": 100.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.5,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-09",
         "hourKey": "13"
       },
-      "-seedWater005": {
-        "timestamp": 1773076200000,
+      "-phWater0039": {
+        "timestamp": 1773076320000,
         "type": "water",
-        "amount": 100.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.5,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-09",
         "hourKey": "17"
       },
-      "-seedFeed006": {
-        "timestamp": 1773079500000,
+      "-phFeed0040": {
+        "timestamp": 1773079560000,
         "type": "feed",
         "amount": 30.0,
         "unit": "g",
@@ -2004,8 +3088,8 @@
         "dayKey": "2026-03-09",
         "hourKey": "18"
       },
-      "-seedWater007": {
-        "timestamp": 1773090600000,
+      "-phWater0041": {
+        "timestamp": 1773090720000,
         "type": "water",
         "amount": 88.0,
         "unit": "ml",
@@ -2013,71 +3097,98 @@
         "dayKey": "2026-03-09",
         "hourKey": "21"
       },
-      "-seedFeed008": {
-        "timestamp": 1773122700000,
+      "-phFeed0042": {
+        "timestamp": 1773122760000,
         "type": "feed",
-        "amount": 28.0,
+        "amount": 30.0,
         "unit": "g",
-        "dropPercent": 1.4,
+        "dropPercent": 1.5,
         "dayKey": "2026-03-10",
         "hourKey": "06"
       },
-      "-seedWater009": {
-        "timestamp": 1773126600000,
+      "-phWater0043": {
+        "timestamp": 1773126720000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-10",
         "hourKey": "07"
       },
-      "-seedFeed010": {
-        "timestamp": 1773144300000,
+      "-phWater0044": {
+        "timestamp": 1773141120000,
+        "type": "water",
+        "amount": 112.0,
+        "unit": "ml",
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-10",
+        "hourKey": "11"
+      },
+      "-phFeed0045": {
+        "timestamp": 1773144360000,
         "type": "feed",
-        "amount": 32.0,
+        "amount": 36.0,
         "unit": "g",
-        "dropPercent": 1.6,
+        "dropPercent": 1.8,
         "dayKey": "2026-03-10",
         "hourKey": "12"
       },
-      "-seedWater011": {
-        "timestamp": 1773148200000,
+      "-phWater0046": {
+        "timestamp": 1773148320000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-10",
         "hourKey": "13"
       },
-      "-seedWater012": {
-        "timestamp": 1773162600000,
+      "-phWater0047": {
+        "timestamp": 1773151920000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 112.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-10",
+        "hourKey": "14"
+      },
+      "-phWater0048": {
+        "timestamp": 1773162720000,
+        "type": "water",
+        "amount": 112.0,
+        "unit": "ml",
+        "dropPercent": 2.8,
         "dayKey": "2026-03-10",
         "hourKey": "17"
       },
-      "-seedFeed013": {
-        "timestamp": 1773165900000,
+      "-phFeed0049": {
+        "timestamp": 1773165960000,
         "type": "feed",
-        "amount": 28.0,
+        "amount": 30.0,
         "unit": "g",
-        "dropPercent": 1.4,
+        "dropPercent": 1.5,
         "dayKey": "2026-03-10",
         "hourKey": "18"
       },
-      "-seedWater014": {
-        "timestamp": 1773177000000,
+      "-phWater0050": {
+        "timestamp": 1773173520000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 112.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-10",
+        "hourKey": "20"
+      },
+      "-phWater0051": {
+        "timestamp": 1773177120000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
         "dayKey": "2026-03-10",
         "hourKey": "21"
       },
-      "-seedFeed015": {
-        "timestamp": 1773209100000,
+      "-phFeed0052": {
+        "timestamp": 1773209160000,
         "type": "feed",
         "amount": 30.0,
         "unit": "g",
@@ -2085,44 +3196,44 @@
         "dayKey": "2026-03-11",
         "hourKey": "06"
       },
-      "-seedWater016": {
-        "timestamp": 1773213000000,
+      "-phWater0053": {
+        "timestamp": 1773213120000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-11",
         "hourKey": "07"
       },
-      "-seedFeed017": {
-        "timestamp": 1773230700000,
+      "-phFeed0054": {
+        "timestamp": 1773230760000,
         "type": "feed",
-        "amount": 34.0,
+        "amount": 36.0,
         "unit": "g",
-        "dropPercent": 1.7,
+        "dropPercent": 1.8,
         "dayKey": "2026-03-11",
         "hourKey": "12"
       },
-      "-seedWater018": {
-        "timestamp": 1773234600000,
+      "-phWater0055": {
+        "timestamp": 1773234720000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-11",
         "hourKey": "13"
       },
-      "-seedWater019": {
-        "timestamp": 1773249000000,
+      "-phWater0056": {
+        "timestamp": 1773249120000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-11",
         "hourKey": "17"
       },
-      "-seedFeed020": {
-        "timestamp": 1773252300000,
+      "-phFeed0057": {
+        "timestamp": 1773252360000,
         "type": "feed",
         "amount": 30.0,
         "unit": "g",
@@ -2130,26 +3241,26 @@
         "dayKey": "2026-03-11",
         "hourKey": "18"
       },
-      "-seedWater021": {
-        "timestamp": 1773263400000,
+      "-phWater0058": {
+        "timestamp": 1773263520000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-11",
         "hourKey": "21"
       },
-      "-seedFeed022": {
-        "timestamp": 1773295500000,
+      "-phFeed0059": {
+        "timestamp": 1773295560000,
         "type": "feed",
-        "amount": 28.0,
+        "amount": 30.0,
         "unit": "g",
-        "dropPercent": 1.4,
+        "dropPercent": 1.5,
         "dayKey": "2026-03-12",
         "hourKey": "06"
       },
-      "-seedWater023": {
-        "timestamp": 1773299400000,
+      "-phWater0060": {
+        "timestamp": 1773299520000,
         "type": "water",
         "amount": 88.0,
         "unit": "ml",
@@ -2157,44 +3268,44 @@
         "dayKey": "2026-03-12",
         "hourKey": "07"
       },
-      "-seedFeed024": {
-        "timestamp": 1773317100000,
+      "-phFeed0061": {
+        "timestamp": 1773317160000,
         "type": "feed",
-        "amount": 32.0,
+        "amount": 36.0,
         "unit": "g",
-        "dropPercent": 1.6,
+        "dropPercent": 1.8,
         "dayKey": "2026-03-12",
         "hourKey": "12"
       },
-      "-seedWater025": {
-        "timestamp": 1773321000000,
+      "-phWater0062": {
+        "timestamp": 1773321120000,
         "type": "water",
-        "amount": 100.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.5,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-12",
         "hourKey": "13"
       },
-      "-seedWater026": {
-        "timestamp": 1773335400000,
+      "-phWater0063": {
+        "timestamp": 1773335520000,
         "type": "water",
-        "amount": 100.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.5,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-12",
         "hourKey": "17"
       },
-      "-seedFeed027": {
-        "timestamp": 1773338700000,
+      "-phFeed0064": {
+        "timestamp": 1773338760000,
         "type": "feed",
-        "amount": 28.0,
+        "amount": 30.0,
         "unit": "g",
-        "dropPercent": 1.4,
+        "dropPercent": 1.5,
         "dayKey": "2026-03-12",
         "hourKey": "18"
       },
-      "-seedWater028": {
-        "timestamp": 1773349800000,
+      "-phWater0065": {
+        "timestamp": 1773349920000,
         "type": "water",
         "amount": 88.0,
         "unit": "ml",
@@ -2202,8 +3313,8 @@
         "dayKey": "2026-03-12",
         "hourKey": "21"
       },
-      "-seedFeed029": {
-        "timestamp": 1773381900000,
+      "-phFeed0066": {
+        "timestamp": 1773381960000,
         "type": "feed",
         "amount": 30.0,
         "unit": "g",
@@ -2211,44 +3322,62 @@
         "dayKey": "2026-03-13",
         "hourKey": "06"
       },
-      "-seedWater030": {
-        "timestamp": 1773385800000,
+      "-phWater0067": {
+        "timestamp": 1773385920000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-13",
         "hourKey": "07"
       },
-      "-seedFeed031": {
-        "timestamp": 1773403500000,
+      "-phWater0068": {
+        "timestamp": 1773389520000,
+        "type": "water",
+        "amount": 60.0,
+        "unit": "ml",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-13",
+        "hourKey": "08"
+      },
+      "-phFeed0069": {
+        "timestamp": 1773403560000,
         "type": "feed",
-        "amount": 34.0,
+        "amount": 36.0,
         "unit": "g",
-        "dropPercent": 1.7,
+        "dropPercent": 1.8,
         "dayKey": "2026-03-13",
         "hourKey": "12"
       },
-      "-seedWater032": {
-        "timestamp": 1773407400000,
+      "-phWater0070": {
+        "timestamp": 1773407520000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-13",
         "hourKey": "13"
       },
-      "-seedWater033": {
-        "timestamp": 1773421800000,
+      "-phWater0071": {
+        "timestamp": 1773411120000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 60.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-13",
+        "hourKey": "14"
+      },
+      "-phWater0072": {
+        "timestamp": 1773421920000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
         "dayKey": "2026-03-13",
         "hourKey": "17"
       },
-      "-seedFeed034": {
-        "timestamp": 1773425100000,
+      "-phFeed0073": {
+        "timestamp": 1773425160000,
         "type": "feed",
         "amount": 30.0,
         "unit": "g",
@@ -2256,89 +3385,98 @@
         "dayKey": "2026-03-13",
         "hourKey": "18"
       },
-      "-seedWater035": {
-        "timestamp": 1773436200000,
+      "-phWater0074": {
+        "timestamp": 1773429120000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 60.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-13",
+        "hourKey": "19"
+      },
+      "-phWater0075": {
+        "timestamp": 1773436320000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
         "dayKey": "2026-03-13",
         "hourKey": "21"
       },
-      "-seedFeed036": {
-        "timestamp": 1773468300000,
+      "-phFeed0076": {
+        "timestamp": 1773468360000,
         "type": "feed",
-        "amount": 28.0,
+        "amount": 24.0,
         "unit": "g",
-        "dropPercent": 1.4,
+        "dropPercent": 1.2,
         "dayKey": "2026-03-14",
         "hourKey": "06"
       },
-      "-seedWater037": {
-        "timestamp": 1773472200000,
+      "-phWater0077": {
+        "timestamp": 1773472320000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-14",
         "hourKey": "07"
       },
-      "-seedFeed038": {
-        "timestamp": 1773489900000,
-        "type": "feed",
-        "amount": 32.0,
-        "unit": "g",
-        "dropPercent": 1.6,
-        "dayKey": "2026-03-14",
-        "hourKey": "12"
-      },
-      "-seedWater039": {
-        "timestamp": 1773493800000,
-        "type": "water",
-        "amount": 96.0,
-        "unit": "ml",
-        "dropPercent": 2.4,
-        "dayKey": "2026-03-14",
-        "hourKey": "13"
-      },
-      "-seedWater040": {
-        "timestamp": 1773508200000,
-        "type": "water",
-        "amount": 96.0,
-        "unit": "ml",
-        "dropPercent": 2.4,
-        "dayKey": "2026-03-14",
-        "hourKey": "17"
-      },
-      "-seedFeed041": {
-        "timestamp": 1773511500000,
+      "-phFeed0078": {
+        "timestamp": 1773489960000,
         "type": "feed",
         "amount": 28.0,
         "unit": "g",
         "dropPercent": 1.4,
         "dayKey": "2026-03-14",
+        "hourKey": "12"
+      },
+      "-phWater0079": {
+        "timestamp": 1773493920000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-14",
+        "hourKey": "13"
+      },
+      "-phWater0080": {
+        "timestamp": 1773508320000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
+        "dayKey": "2026-03-14",
+        "hourKey": "17"
+      },
+      "-phFeed0081": {
+        "timestamp": 1773511560000,
+        "type": "feed",
+        "amount": 24.0,
+        "unit": "g",
+        "dropPercent": 1.2,
+        "dayKey": "2026-03-14",
         "hourKey": "18"
       },
-      "-seedWater042": {
-        "timestamp": 1773522600000,
+      "-phWater0082": {
+        "timestamp": 1773522720000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-14",
         "hourKey": "21"
       },
-      "-seedFeed043": {
-        "timestamp": 1773554700000,
+      "-phFeed0083": {
+        "timestamp": 1773554760000,
         "type": "feed",
-        "amount": 30.0,
+        "amount": 24.0,
         "unit": "g",
-        "dropPercent": 1.5,
+        "dropPercent": 1.2,
         "dayKey": "2026-03-15",
         "hourKey": "06"
       },
-      "-seedWater044": {
-        "timestamp": 1773558600000,
+      "-phWater0084": {
+        "timestamp": 1773558720000,
         "type": "water",
         "amount": 88.0,
         "unit": "ml",
@@ -2346,44 +3484,71 @@
         "dayKey": "2026-03-15",
         "hourKey": "07"
       },
-      "-seedFeed045": {
-        "timestamp": 1773576300000,
+      "-phWater0085": {
+        "timestamp": 1773573120000,
+        "type": "water",
+        "amount": 112.0,
+        "unit": "ml",
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-15",
+        "hourKey": "11"
+      },
+      "-phFeed0086": {
+        "timestamp": 1773576360000,
         "type": "feed",
-        "amount": 34.0,
+        "amount": 28.0,
         "unit": "g",
-        "dropPercent": 1.7,
+        "dropPercent": 1.4,
         "dayKey": "2026-03-15",
         "hourKey": "12"
       },
-      "-seedWater046": {
-        "timestamp": 1773580200000,
+      "-phWater0087": {
+        "timestamp": 1773580320000,
         "type": "water",
-        "amount": 100.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.5,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-15",
         "hourKey": "13"
       },
-      "-seedWater047": {
-        "timestamp": 1773594600000,
+      "-phWater0088": {
+        "timestamp": 1773583920000,
         "type": "water",
-        "amount": 100.0,
+        "amount": 112.0,
         "unit": "ml",
-        "dropPercent": 2.5,
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-15",
+        "hourKey": "14"
+      },
+      "-phWater0089": {
+        "timestamp": 1773594720000,
+        "type": "water",
+        "amount": 112.0,
+        "unit": "ml",
+        "dropPercent": 2.8,
         "dayKey": "2026-03-15",
         "hourKey": "17"
       },
-      "-seedFeed048": {
-        "timestamp": 1773597900000,
+      "-phFeed0090": {
+        "timestamp": 1773597960000,
         "type": "feed",
-        "amount": 30.0,
+        "amount": 24.0,
         "unit": "g",
-        "dropPercent": 1.5,
+        "dropPercent": 1.2,
         "dayKey": "2026-03-15",
         "hourKey": "18"
       },
-      "-seedWater049": {
-        "timestamp": 1773609000000,
+      "-phWater0091": {
+        "timestamp": 1773605520000,
+        "type": "water",
+        "amount": 112.0,
+        "unit": "ml",
+        "dropPercent": 2.8,
+        "dayKey": "2026-03-15",
+        "hourKey": "20"
+      },
+      "-phWater0092": {
+        "timestamp": 1773609120000,
         "type": "water",
         "amount": 88.0,
         "unit": "ml",
@@ -2391,71 +3556,71 @@
         "dayKey": "2026-03-15",
         "hourKey": "21"
       },
-      "-seedFeed050": {
-        "timestamp": 1773641100000,
+      "-phFeed0093": {
+        "timestamp": 1773641160000,
         "type": "feed",
-        "amount": 28.0,
+        "amount": 30.0,
         "unit": "g",
-        "dropPercent": 1.4,
+        "dropPercent": 1.5,
         "dayKey": "2026-03-16",
         "hourKey": "06"
       },
-      "-seedWater051": {
-        "timestamp": 1773645000000,
+      "-phWater0094": {
+        "timestamp": 1773645120000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-16",
         "hourKey": "07"
       },
-      "-seedFeed052": {
-        "timestamp": 1773662700000,
+      "-phFeed0095": {
+        "timestamp": 1773662760000,
         "type": "feed",
-        "amount": 32.0,
+        "amount": 36.0,
         "unit": "g",
-        "dropPercent": 1.6,
+        "dropPercent": 1.8,
         "dayKey": "2026-03-16",
         "hourKey": "12"
       },
-      "-seedWater053": {
-        "timestamp": 1773666600000,
+      "-phWater0096": {
+        "timestamp": 1773666720000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-16",
         "hourKey": "13"
       },
-      "-seedWater054": {
-        "timestamp": 1773681000000,
+      "-phWater0097": {
+        "timestamp": 1773681120000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-16",
         "hourKey": "17"
       },
-      "-seedFeed055": {
-        "timestamp": 1773684300000,
+      "-phFeed0098": {
+        "timestamp": 1773684360000,
         "type": "feed",
-        "amount": 28.0,
+        "amount": 30.0,
         "unit": "g",
-        "dropPercent": 1.4,
+        "dropPercent": 1.5,
         "dayKey": "2026-03-16",
         "hourKey": "18"
       },
-      "-seedWater056": {
-        "timestamp": 1773695400000,
+      "-phWater0099": {
+        "timestamp": 1773695520000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-16",
         "hourKey": "21"
       },
-      "-seedFeed057": {
-        "timestamp": 1773727500000,
+      "-phFeed0100": {
+        "timestamp": 1773727560000,
         "type": "feed",
         "amount": 30.0,
         "unit": "g",
@@ -2463,44 +3628,44 @@
         "dayKey": "2026-03-17",
         "hourKey": "06"
       },
-      "-seedWater058": {
-        "timestamp": 1773731400000,
+      "-phWater0101": {
+        "timestamp": 1773731520000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-17",
         "hourKey": "07"
       },
-      "-seedFeed059": {
-        "timestamp": 1773749100000,
+      "-phFeed0102": {
+        "timestamp": 1773749160000,
         "type": "feed",
-        "amount": 34.0,
+        "amount": 36.0,
         "unit": "g",
-        "dropPercent": 1.7,
+        "dropPercent": 1.8,
         "dayKey": "2026-03-17",
         "hourKey": "12"
       },
-      "-seedWater060": {
-        "timestamp": 1773753000000,
+      "-phWater0103": {
+        "timestamp": 1773753120000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-17",
         "hourKey": "13"
       },
-      "-seedWater061": {
-        "timestamp": 1773767400000,
+      "-phWater0104": {
+        "timestamp": 1773767520000,
         "type": "water",
-        "amount": 96.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.4,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-17",
         "hourKey": "17"
       },
-      "-seedFeed062": {
-        "timestamp": 1773770700000,
+      "-phFeed0105": {
+        "timestamp": 1773770760000,
         "type": "feed",
         "amount": 30.0,
         "unit": "g",
@@ -2508,26 +3673,26 @@
         "dayKey": "2026-03-17",
         "hourKey": "18"
       },
-      "-seedWater063": {
-        "timestamp": 1773781800000,
+      "-phWater0106": {
+        "timestamp": 1773781920000,
         "type": "water",
-        "amount": 84.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.1,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-17",
         "hourKey": "21"
       },
-      "-seedFeed064": {
-        "timestamp": 1773813900000,
+      "-phFeed0107": {
+        "timestamp": 1773813960000,
         "type": "feed",
-        "amount": 28.0,
+        "amount": 30.0,
         "unit": "g",
-        "dropPercent": 1.4,
+        "dropPercent": 1.5,
         "dayKey": "2026-03-18",
         "hourKey": "06"
       },
-      "-seedWater065": {
-        "timestamp": 1773817800000,
+      "-phWater0108": {
+        "timestamp": 1773817920000,
         "type": "water",
         "amount": 88.0,
         "unit": "ml",
@@ -2535,44 +3700,71 @@
         "dayKey": "2026-03-18",
         "hourKey": "07"
       },
-      "-seedFeed066": {
-        "timestamp": 1773835500000,
+      "-phWater0109": {
+        "timestamp": 1773821520000,
+        "type": "water",
+        "amount": 60.0,
+        "unit": "ml",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-18",
+        "hourKey": "08"
+      },
+      "-phFeed0110": {
+        "timestamp": 1773835560000,
         "type": "feed",
-        "amount": 32.0,
+        "amount": 36.0,
         "unit": "g",
-        "dropPercent": 1.6,
+        "dropPercent": 1.8,
         "dayKey": "2026-03-18",
         "hourKey": "12"
       },
-      "-seedWater067": {
-        "timestamp": 1773839400000,
+      "-phWater0111": {
+        "timestamp": 1773839520000,
         "type": "water",
-        "amount": 100.0,
+        "amount": 88.0,
         "unit": "ml",
-        "dropPercent": 2.5,
+        "dropPercent": 2.2,
         "dayKey": "2026-03-18",
         "hourKey": "13"
       },
-      "-seedWater068": {
-        "timestamp": 1773853800000,
+      "-phWater0112": {
+        "timestamp": 1773843120000,
         "type": "water",
-        "amount": 100.0,
+        "amount": 60.0,
         "unit": "ml",
-        "dropPercent": 2.5,
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-18",
+        "hourKey": "14"
+      },
+      "-phWater0113": {
+        "timestamp": 1773853920000,
+        "type": "water",
+        "amount": 88.0,
+        "unit": "ml",
+        "dropPercent": 2.2,
         "dayKey": "2026-03-18",
         "hourKey": "17"
       },
-      "-seedFeed069": {
-        "timestamp": 1773857100000,
+      "-phFeed0114": {
+        "timestamp": 1773857160000,
         "type": "feed",
-        "amount": 28.0,
+        "amount": 30.0,
         "unit": "g",
-        "dropPercent": 1.4,
+        "dropPercent": 1.5,
         "dayKey": "2026-03-18",
         "hourKey": "18"
       },
-      "-seedWater070": {
-        "timestamp": 1773868200000,
+      "-phWater0115": {
+        "timestamp": 1773861120000,
+        "type": "water",
+        "amount": 60.0,
+        "unit": "ml",
+        "dropPercent": 1.5,
+        "dayKey": "2026-03-18",
+        "hourKey": "19"
+      },
+      "-phWater0116": {
+        "timestamp": 1773868320000,
         "type": "water",
         "amount": 88.0,
         "unit": "ml",
@@ -2582,181 +3774,272 @@
       }
     },
     "daily": {
+      "2026-03-05": {
+        "date": "2026-03-05",
+        "weatherPattern": "warm",
+        "feedConsumed": 96.0,
+        "waterConsumed": 352.0,
+        "tempAvg": 28.3,
+        "humAvg": 74.1,
+        "tempHigh": 34.2,
+        "tempLow": 24.8,
+        "feedEnd": 89.2,
+        "waterEnd": 87.2,
+        "samples": 24
+      },
+      "2026-03-06": {
+        "date": "2026-03-06",
+        "weatherPattern": "humid",
+        "feedConsumed": 96.0,
+        "waterConsumed": 352.0,
+        "tempAvg": 27.0,
+        "humAvg": 80.5,
+        "tempHigh": 32.4,
+        "tempLow": 24.3,
+        "feedEnd": 84.4,
+        "waterEnd": 78.4,
+        "samples": 24
+      },
+      "2026-03-07": {
+        "date": "2026-03-07",
+        "weatherPattern": "hot",
+        "feedConsumed": 76.0,
+        "waterConsumed": 712.0,
+        "tempAvg": 29.8,
+        "humAvg": 70.4,
+        "tempHigh": 36.8,
+        "tempLow": 25.5,
+        "feedEnd": 80.6,
+        "waterEnd": 78.6,
+        "samples": 24
+      },
+      "2026-03-08": {
+        "date": "2026-03-08",
+        "weatherPattern": "stormy",
+        "feedConsumed": 76.0,
+        "waterConsumed": 532.0,
+        "tempAvg": 25.7,
+        "humAvg": 86.1,
+        "tempHigh": 30.1,
+        "tempLow": 23.1,
+        "feedEnd": 91.3,
+        "waterEnd": 65.3,
+        "samples": 24
+      },
       "2026-03-09": {
         "date": "2026-03-09",
-        "feedConsumed": 94.0,
-        "waterConsumed": 376.0,
-        "tempAvg": 27.6,
-        "humAvg": 70.1,
-        "feedEnd": 90.3,
-        "waterEnd": 87.6,
+        "weatherPattern": "balanced",
+        "feedConsumed": 96.0,
+        "waterConsumed": 352.0,
+        "tempAvg": 27.8,
+        "humAvg": 76.1,
+        "tempHigh": 33.6,
+        "tempLow": 24.6,
+        "feedEnd": 86.5,
+        "waterEnd": 56.5,
         "samples": 24
       },
       "2026-03-10": {
         "date": "2026-03-10",
-        "feedConsumed": 88.0,
-        "waterConsumed": 360.0,
-        "tempAvg": 28.0,
-        "humAvg": 70.8,
-        "feedEnd": 85.9,
-        "waterEnd": 78.6,
+        "weatherPattern": "hot",
+        "feedConsumed": 96.0,
+        "waterConsumed": 712.0,
+        "tempAvg": 30.2,
+        "humAvg": 69.1,
+        "tempHigh": 37.4,
+        "tempLow": 25.8,
+        "feedEnd": 81.7,
+        "waterEnd": 38.7,
         "samples": 24
       },
       "2026-03-11": {
         "date": "2026-03-11",
-        "feedConsumed": 94.0,
-        "waterConsumed": 360.0,
-        "tempAvg": 28.5,
-        "humAvg": 70.4,
-        "feedEnd": 81.2,
-        "waterEnd": 69.6,
+        "weatherPattern": "humid",
+        "feedConsumed": 96.0,
+        "waterConsumed": 352.0,
+        "tempAvg": 26.8,
+        "humAvg": 81.1,
+        "tempHigh": 31.2,
+        "tempLow": 23.7,
+        "feedEnd": 76.9,
+        "waterEnd": 47.9,
         "samples": 24
       },
       "2026-03-12": {
         "date": "2026-03-12",
-        "feedConsumed": 88.0,
-        "waterConsumed": 376.0,
-        "tempAvg": 27.7,
-        "humAvg": 70.6,
-        "feedEnd": 76.8,
-        "waterEnd": 84.2,
+        "weatherPattern": "warm",
+        "feedConsumed": 96.0,
+        "waterConsumed": 352.0,
+        "tempAvg": 28.2,
+        "humAvg": 73.1,
+        "tempHigh": 34.0,
+        "tempLow": 24.9,
+        "feedEnd": 72.1,
+        "waterEnd": 39.1,
         "samples": 24
       },
       "2026-03-13": {
         "date": "2026-03-13",
-        "feedConsumed": 94.0,
-        "waterConsumed": 360.0,
-        "tempAvg": 28.0,
-        "humAvg": 70.4,
-        "feedEnd": 82.6,
-        "waterEnd": 75.2,
+        "weatherPattern": "stormy",
+        "feedConsumed": 96.0,
+        "waterConsumed": 532.0,
+        "tempAvg": 25.3,
+        "humAvg": 87.6,
+        "tempHigh": 29.6,
+        "tempLow": 21.4,
+        "feedEnd": 67.3,
+        "waterEnd": 25.8,
         "samples": 24
       },
       "2026-03-14": {
         "date": "2026-03-14",
-        "feedConsumed": 88.0,
-        "waterConsumed": 360.0,
-        "tempAvg": 28.5,
-        "humAvg": 70.9,
-        "feedEnd": 78.2,
-        "waterEnd": 66.2,
+        "weatherPattern": "balanced",
+        "feedConsumed": 76.0,
+        "waterConsumed": 352.0,
+        "tempAvg": 27.7,
+        "humAvg": 76.4,
+        "tempHigh": 33.3,
+        "tempLow": 24.5,
+        "feedEnd": 63.5,
+        "waterEnd": 35.0,
         "samples": 24
       },
       "2026-03-15": {
         "date": "2026-03-15",
-        "feedConsumed": 94.0,
-        "waterConsumed": 376.0,
-        "tempAvg": 27.6,
-        "humAvg": 70.2,
-        "feedEnd": 73.5,
-        "waterEnd": 56.8,
+        "weatherPattern": "hot",
+        "feedConsumed": 76.0,
+        "waterConsumed": 712.0,
+        "tempAvg": 30.0,
+        "humAvg": 68.7,
+        "tempHigh": 37.1,
+        "tempLow": 25.6,
+        "feedEnd": 74.2,
+        "waterEnd": 17.2,
         "samples": 24
       },
       "2026-03-16": {
         "date": "2026-03-16",
-        "feedConsumed": 88.0,
-        "waterConsumed": 360.0,
-        "tempAvg": 28.0,
-        "humAvg": 70.8,
-        "feedEnd": 69.1,
-        "waterEnd": 71.8,
+        "weatherPattern": "humid",
+        "feedConsumed": 96.0,
+        "waterConsumed": 352.0,
+        "tempAvg": 26.9,
+        "humAvg": 82.5,
+        "tempHigh": 32.0,
+        "tempLow": 23.8,
+        "feedEnd": 69.4,
+        "waterEnd": 8.4,
         "samples": 24
       },
       "2026-03-17": {
         "date": "2026-03-17",
-        "feedConsumed": 94.0,
-        "waterConsumed": 360.0,
-        "tempAvg": 28.5,
-        "humAvg": 70.4,
-        "feedEnd": 74.9,
-        "waterEnd": 62.8,
+        "weatherPattern": "warm",
+        "feedConsumed": 96.0,
+        "waterConsumed": 352.0,
+        "tempAvg": 28.2,
+        "humAvg": 74.8,
+        "tempHigh": 34.4,
+        "tempLow": 24.7,
+        "feedEnd": 64.6,
+        "waterEnd": 8.0,
         "samples": 24
       },
       "2026-03-18": {
         "date": "2026-03-18",
-        "feedConsumed": 88.0,
-        "waterConsumed": 376.0,
-        "tempAvg": 27.7,
-        "humAvg": 70.6,
-        "feedEnd": 70.5,
-        "waterEnd": 53.4,
+        "weatherPattern": "stormy",
+        "feedConsumed": 96.0,
+        "waterConsumed": 532.0,
+        "tempAvg": 25.9,
+        "humAvg": 85.8,
+        "tempHigh": 30.4,
+        "tempLow": 23.9,
+        "feedEnd": 59.8,
+        "waterEnd": 23.8,
         "samples": 24
       }
     }
   },
   "sensors": {
-    "temperature": 29.4,
-    "humidity": 68.2,
-    "feedLevel": 70.5,
-    "waterLevel": 53.4,
-    "lastUpdate": 1773832500000
+    "temperature": 30.8,
+    "humidity": 81.6,
+    "feedLevel": 59.8,
+    "waterLevel": 23.8,
+    "lastUpdate": 1773886800000
   },
   "alerts": {
-    "-seedAlert001": {
-      "type": "Low Feed",
-      "message": "Feed level is low (19%)",
-      "severity": "warning",
-      "timestamp": 1773820800000,
-      "resolved": false,
-      "source": "alert-engine",
-      "dedupeKey": "low-feed"
-    },
-    "-seedAlert002": {
-      "type": "Water Critically Low",
-      "message": "Water level is critically low (9%)",
-      "severity": "critical",
-      "timestamp": 1773822600000,
-      "resolved": false,
-      "source": "alert-engine",
-      "dedupeKey": "critical-water"
-    },
-    "-seedAlert003": {
+    "-phAlert001": {
       "type": "High Temperature",
-      "message": "Temperature too high (36.2 degC)",
+      "message": "Temperature reached 37.4 degC during a hot afternoon.",
       "severity": "warning",
-      "timestamp": 1773750000000,
-      "resolved": true,
-      "resolvedAt": 1773753000000,
-      "resolvedBy": "auto",
+      "timestamp": 1773547200000,
+      "resolved": false,
       "source": "alert-engine",
       "dedupeKey": "high-temp"
     },
-    "-seedAlert004": {
+    "-phAlert002": {
       "type": "High Humidity",
-      "message": "Humidity is high (84%)",
+      "message": "Humidity climbed to 92% during heavy rain.",
       "severity": "warning",
-      "timestamp": 1773537300000,
+      "timestamp": 1773822300000,
       "resolved": false,
       "source": "alert-engine",
       "dedupeKey": "high-humidity"
     },
-    "-seedAlert005": {
-      "type": "Sensor Data Stale",
-      "message": "No fresh sensor payload for 58s.",
+    "-phAlert003": {
+      "type": "Low Feed",
+      "message": "Feed level is low (18%). Schedule a refill soon.",
       "severity": "warning",
-      "timestamp": 1773481500000,
+      "timestamp": 1773731400000,
+      "resolved": false,
+      "source": "alert-engine",
+      "dedupeKey": "low-feed"
+    },
+    "-phAlert004": {
+      "type": "Water Critically Low",
+      "message": "Water level dropped to 9% after a very hot day.",
+      "severity": "critical",
+      "timestamp": 1773655200000,
+      "resolved": false,
+      "source": "alert-engine",
+      "dedupeKey": "critical-water"
+    },
+    "-phAlert005": {
+      "type": "Sensor Data Stale",
+      "message": "No fresh sensor payload for 67s.",
+      "severity": "warning",
+      "timestamp": 1773469800000,
       "resolved": true,
-      "resolvedAt": 1773481680000,
+      "resolvedAt": 1773470640000,
       "resolvedBy": "auto",
       "source": "alert-engine",
       "dedupeKey": "stale-data"
     },
-    "-seedAlert006": {
+    "-phAlert006": {
       "type": "Schedule Disrupted",
-      "message": "No feed drop detected after schedule 06:00 AM.",
+      "message": "No feed drop detected after the 6:00 AM schedule.",
       "severity": "warning",
-      "timestamp": 1773383100000,
+      "timestamp": 1773354300000,
       "resolved": false,
       "source": "alert-engine",
-      "dedupeKey": "scheduled-disrupted:seed",
+      "dedupeKey": "scheduled-disrupted:ph-seed",
       "meta": {
-        "scheduleId": "-seedSched001",
+        "scheduleId": "-phSched001",
         "scheduleTime": "06:00 AM"
       }
+    },
+    "-phAlert007": {
+      "type": "Rapid Humidity Change",
+      "message": "Humidity changed rapidly during an afternoon rain shower.",
+      "severity": "warning",
+      "timestamp": 1773821700000,
+      "resolved": true,
+      "resolvedAt": 1773824400000,
+      "resolvedBy": "auto",
+      "source": "alert-engine",
+      "dedupeKey": "rapid-humidity-change"
     }
   },
   "schedules": {
-    "-seedSched001": {
+    "-phSched001": {
       "days": [
         "Monday",
         "Tuesday",
@@ -2768,10 +4051,10 @@
       ],
       "time": "06:00 AM",
       "enabled": true,
-      "createdAt": 1772344800000,
+      "createdAt": 1772316000000,
       "group": "starter"
     },
-    "-seedSched002": {
+    "-phSched002": {
       "days": [
         "Monday",
         "Tuesday",
@@ -2783,32 +4066,55 @@
       ],
       "time": "12:00 PM",
       "enabled": true,
-      "createdAt": 1772366400000,
+      "createdAt": 1772251200000,
       "group": "starter"
     },
-    "-seedSched003": {
+    "-phSched003": {
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "time": "05:30 PM",
+      "enabled": true,
+      "createdAt": 1772443800000,
+      "group": "grower"
+    },
+    "-phSched004": {
       "days": [
         "Monday",
         "Wednesday",
         "Friday"
       ],
-      "time": "05:30 PM",
-      "enabled": false,
-      "createdAt": 1772904600000,
+      "time": "09:30 PM",
+      "enabled": true,
+      "createdAt": 1772888400000,
       "group": "custom"
     },
-    "-seedSched004": {
+    "-phSched005": {
       "days": [
         "Tuesday",
         "Thursday",
         "Saturday"
       ],
-      "time": "09:45 PM",
-      "enabled": true,
-      "createdAt": 1773179100000,
+      "time": "03:00 PM",
+      "enabled": false,
+      "createdAt": 1772955900000,
       "group": "custom"
     },
-    "-seedSched005": {
+    "-phSched006": {
+      "days": [
+        "Sunday"
+      ],
+      "time": "07:00 AM",
+      "enabled": true,
+      "createdAt": 1772406000000,
+      "group": "maintenance"
+    },
+    "-phSched007": {
       "days": [
         "Monday",
         "Tuesday",
@@ -2818,123 +4124,140 @@
       ],
       "time": "08:30 AM",
       "enabled": true,
-      "createdAt": 1772699400000,
-      "group": "grower"
-    },
-    "-seedSched006": {
-      "days": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday"
-      ],
-      "time": "03:30 PM",
-      "enabled": true,
-      "createdAt": 1772724600000,
+      "createdAt": 1772497800000,
       "group": "grower"
     }
   },
   "logs": {
-    "-seedLog001": {
-      "message": "Hourly history aggregation completed for 2026-03-09",
+    "-phLog001": {
+      "message": "Hourly history aggregated for 2026-03-05 (warm conditions)",
+      "source": "system",
+      "timestamp": 1772754900000
+    },
+    "-phLog002": {
+      "message": "Hourly history aggregated for 2026-03-06 (humid conditions)",
+      "source": "system",
+      "timestamp": 1772841300000
+    },
+    "-phLog003": {
+      "message": "Hourly history aggregated for 2026-03-07 (hot conditions)",
+      "source": "system",
+      "timestamp": 1772927700000
+    },
+    "-phLog004": {
+      "message": "Hourly history aggregated for 2026-03-08 (stormy conditions)",
+      "source": "system",
+      "timestamp": 1773014100000
+    },
+    "-phLog005": {
+      "message": "Hourly history aggregated for 2026-03-09 (balanced conditions)",
       "source": "system",
       "timestamp": 1773100500000
     },
-    "-seedLog002": {
-      "message": "Hourly history aggregation completed for 2026-03-10",
+    "-phLog025": {
+      "message": "Caretaker adjusted remaining feed stock after refill.",
+      "source": "web",
+      "timestamp": 1773143100000
+    },
+    "-phLog006": {
+      "message": "Hourly history aggregated for 2026-03-10 (hot conditions)",
       "source": "system",
       "timestamp": 1773186900000
     },
-    "-seedLog003": {
-      "message": "Hourly history aggregation completed for 2026-03-11",
+    "-phLog024": {
+      "message": "High humidity spike detected during evening rainfall.",
+      "source": "alert-engine",
+      "timestamp": 1773223500000
+    },
+    "-phLog007": {
+      "message": "Hourly history aggregated for 2026-03-11 (humid conditions)",
       "source": "system",
       "timestamp": 1773273300000
     },
-    "-seedLog004": {
-      "message": "Hourly history aggregation completed for 2026-03-12",
+    "-phLog023": {
+      "message": "Exported logs for weekly operations review.",
+      "source": "web",
+      "timestamp": 1773301800000
+    },
+    "-phLog008": {
+      "message": "Hourly history aggregated for 2026-03-12 (warm conditions)",
       "source": "system",
       "timestamp": 1773359700000
     },
-    "-seedLog005": {
-      "message": "Hourly history aggregation completed for 2026-03-13",
+    "-phLog022": {
+      "message": "Morning feed schedule executed and consumption verified.",
+      "source": "system",
+      "timestamp": 1773440100000
+    },
+    "-phLog009": {
+      "message": "Hourly history aggregated for 2026-03-13 (stormy conditions)",
       "source": "system",
       "timestamp": 1773446100000
     },
-    "-seedLog006": {
-      "message": "Hourly history aggregation completed for 2026-03-14",
+    "-phLog021": {
+      "message": "Resolved stale data alert automatically after telemetry resumed.",
+      "source": "system",
+      "timestamp": 1773470700000
+    },
+    "-phLog010": {
+      "message": "Hourly history aggregated for 2026-03-14 (balanced conditions)",
       "source": "system",
       "timestamp": 1773532500000
     },
-    "-seedLog020": {
-      "message": "Exported logs to CSV",
-      "source": "web",
-      "timestamp": 1773599100000
+    "-phLog020": {
+      "message": "Water tank topped up after high daytime consumption.",
+      "source": "esp32",
+      "timestamp": 1773576300000
     },
-    "-seedLog007": {
-      "message": "Hourly history aggregation completed for 2026-03-15",
+    "-phLog011": {
+      "message": "Hourly history aggregated for 2026-03-15 (hot conditions)",
       "source": "system",
       "timestamp": 1773618900000
     },
-    "-seedLog018": {
-      "message": "Schedule 06:00 AM reached. Waiting for feed drop confirmation.",
+    "-phLog019": {
+      "message": "MQTT connection restored after brief internet interruption.",
       "source": "system",
-      "timestamp": 1773640800000
+      "timestamp": 1773652500000
     },
-    "-seedLog019": {
-      "message": "Detected feed consumption event from reservoir drop",
-      "source": "system",
-      "timestamp": 1773641400000
-    },
-    "-seedLog017": {
-      "message": "Resolved high temperature alert automatically after values normalized",
-      "source": "system",
-      "timestamp": 1773672000000
-    },
-    "-seedLog008": {
-      "message": "Hourly history aggregation completed for 2026-03-16",
+    "-phLog012": {
+      "message": "Hourly history aggregated for 2026-03-16 (humid conditions)",
       "source": "system",
       "timestamp": 1773705300000
     },
-    "-seedLog016": {
-      "message": "MQTT reconnect successful",
-      "source": "system",
-      "timestamp": 1773745200000
-    },
-    "-seedLog015": {
-      "message": "Low water alert triggered by AlertEngine",
-      "source": "system",
-      "timestamp": 1773753600000
-    },
-    "-seedLog014": {
-      "message": "Enabled grower preset schedules",
+    "-phLog018": {
+      "message": "Low water alert acknowledged by caretaker.",
       "source": "web",
-      "timestamp": 1773760200000
+      "timestamp": 1773746400000
     },
-    "-seedLog013": {
-      "message": "Created custom schedule: Tuesday, Thursday, Saturday at 09:45 PM",
+    "-phLog017": {
+      "message": "Custom 9:30 PM feeding schedule enabled for grower batch.",
       "source": "web",
-      "timestamp": 1773765000000
+      "timestamp": 1773752700000
     },
-    "-seedLog009": {
-      "message": "Hourly history aggregation completed for 2026-03-17",
+    "-phLog013": {
+      "message": "Hourly history aggregated for 2026-03-17 (warm conditions)",
       "source": "system",
       "timestamp": 1773791700000
     },
-    "-seedLog012": {
-      "message": "Feed command sent from Dashboard",
+    "-phLog016": {
+      "message": "Dashboard feed command sent by farm staff.",
       "source": "web",
-      "timestamp": 1773821100000
+      "timestamp": 1773807000000
     },
-    "-seedLog011": {
-      "message": "ESP32 heartbeat",
-      "source": "esp32",
-      "timestamp": 1773830700000
+    "-phLog015": {
+      "message": "Nagkaroon ng short rain burst this afternoon; humidity rose sharply.",
+      "source": "system",
+      "timestamp": 1773823200000
     },
-    "-seedLog010": {
-      "message": "Hourly history aggregation completed for 2026-03-18",
+    "-phLog014": {
+      "message": "Hourly history aggregated for 2026-03-18 (stormy conditions)",
       "source": "system",
       "timestamp": 1773878100000
+    },
+    "-phLog026": {
+      "message": "ESP32 heartbeat received from coop controller.",
+      "source": "esp32",
+      "timestamp": 1773886500000
     }
   }
 }

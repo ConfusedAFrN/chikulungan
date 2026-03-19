@@ -8,6 +8,7 @@ import {
   Tab,
   Tabs,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import {
   Line,
@@ -26,10 +27,10 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { db, onValue, ref } from "./firebase";
 import { useTheme } from "@mui/material/styles";
 
-const FEED_CAPACITY_GRAMS = 2000;
-const WATER_CAPACITY_ML = 4000;
-const TEMP_THRESHOLD = 35;
-const HUMIDITY_THRESHOLD = 80;
+const FEED_CAPACITY_GRAMS = 330;
+const WATER_CAPACITY_ML = 350;
+const TEMP_THRESHOLD = 30;
+const HUMIDITY_THRESHOLD = 70;
 
 function formatHourLabel(hour) {
   if (!Number.isInteger(hour) || hour < 0 || hour > 23) return "-";
@@ -37,6 +38,13 @@ function formatHourLabel(hour) {
   const normalizedHour = hour % 12 || 12;
   const meridiem = hour >= 12 ? "PM" : "AM";
   return `${normalizedHour}:00 ${meridiem}`;
+}
+
+function formatChartHourLabel(hour) {
+  if (!Number.isInteger(hour) || hour < 0 || hour > 23) return "-";
+
+  const normalizedHour = hour % 12 || 12;
+  return `${normalizedHour}:00`;
 }
 
 function formatDayKey(dayKey) {
@@ -174,6 +182,21 @@ function buildTopHourSummary(countMap, limit = 3, suffix = "times") {
   return entries.slice(0, limit).map(([hour, count]) => `${formatHourLabel(hour)} (${count} ${suffix})`);
 }
 
+function buildChartTicks(hours, isMobile) {
+  const uniqueHours = [...new Set(hours.filter((hour) => Number.isInteger(hour) && hour >= 0 && hour <= 23))]
+    .sort((a, b) => a - b);
+
+  if (!isMobile || uniqueHours.length <= 8) return uniqueHours;
+
+  const stepped = uniqueHours.filter((hour, index) => (
+    index === 0 ||
+    index === uniqueHours.length - 1 ||
+    hour % 3 === 0
+  ));
+
+  return [...new Set(stepped)];
+}
+
 function buildWeeklyMetricInsight({ dayKeys, hourlyByDay, metricKey, threshold }) {
   const dailyPeakCounts = new Map();
   const thresholdHourCounts = new Map();
@@ -241,6 +264,7 @@ function buildWeeklyMetricInsight({ dayKeys, hourlyByDay, metricKey, threshold }
 
 export default function History() {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [tab, setTab] = useState(0);
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -338,26 +362,12 @@ export default function History() {
       .slice(-days);
   }, [dailyConsumptionRows, range, selectedDayKey]);
 
-  const visibleRangeDayKeys = useMemo(
-    () => new Set(visibleDailyConsumption.map((row) => row.dayKey)),
-    [visibleDailyConsumption]
-  );
-
   const selectedDayEvents = useMemo(() => {
     return consumptionEvents.filter((event) => {
       const dayKey = event.dayKey || getDateTimePartsInZone(event.timestamp, timeZone).dayKey;
       return dayKey === selectedDayKey;
     });
   }, [consumptionEvents, selectedDayKey, timeZone]);
-
-  const selectedRangeEvents = useMemo(() => {
-    if (range === "all") return consumptionEvents;
-
-    return consumptionEvents.filter((event) => {
-      const dayKey = event.dayKey || getDateTimePartsInZone(event.timestamp, timeZone).dayKey;
-      return visibleRangeDayKeys.has(dayKey);
-    });
-  }, [consumptionEvents, range, timeZone, visibleRangeDayKeys]);
 
   const selectedDayConsumptionByHour = useMemo(() => {
     const rows = Array.from({ length: 24 }, (_, hour) => ({
@@ -452,68 +462,6 @@ export default function History() {
     [hourlyByDay, weeklyDayKeys]
   );
 
-  const consumptionRangeInsight = useMemo(() => {
-    const highestFeedDay = [...visibleDailyConsumption]
-      .sort((a, b) => b.feedG - a.feedG || a.dayKey.localeCompare(b.dayKey))[0] || null;
-
-    const highestWaterDay = [...visibleDailyConsumption]
-      .sort((a, b) => b.waterMl - a.waterMl || a.dayKey.localeCompare(b.dayKey))[0] || null;
-
-    const hourlyEventSummary = Array.from({ length: 24 }, (_, hour) => ({
-      hour,
-      feedEvents: 0,
-      waterEvents: 0,
-      feedAmount: 0,
-      waterAmount: 0,
-    }));
-
-    selectedRangeEvents.forEach((event) => {
-      const hour = Number.isFinite(Number(event.hourKey))
-        ? Number(event.hourKey)
-        : getDateTimePartsInZone(event.timestamp, timeZone).hour;
-
-      if (!Number.isInteger(hour) || hour < 0 || hour > 23) return;
-
-      if (event.type === "feed") {
-        hourlyEventSummary[hour].feedEvents += 1;
-        hourlyEventSummary[hour].feedAmount += Number(event.amount || 0);
-      }
-
-      if (event.type === "water") {
-        hourlyEventSummary[hour].waterEvents += 1;
-        hourlyEventSummary[hour].waterAmount += Number(event.amount || 0);
-      }
-    });
-
-    const busiestFeedHour = [...hourlyEventSummary]
-      .sort((a, b) => b.feedAmount - a.feedAmount || b.feedEvents - a.feedEvents || a.hour - b.hour)[0] || null;
-
-    const busiestWaterHour = [...hourlyEventSummary]
-      .sort((a, b) => b.waterAmount - a.waterAmount || b.waterEvents - a.waterEvents || a.hour - b.hour)[0] || null;
-
-    const daysInView = Math.max(visibleDailyConsumption.length, 1);
-    const totalFeed = visibleDailyConsumption.reduce((sum, row) => sum + Number(row.feedG || 0), 0);
-    const totalWater = visibleDailyConsumption.reduce((sum, row) => sum + Number(row.waterMl || 0), 0);
-
-    return {
-      highestFeedDay,
-      highestWaterDay,
-      busiestFeedHour,
-      busiestWaterHour,
-      avgDailyFeed: Number((totalFeed / daysInView).toFixed(2)),
-      avgDailyWater: Number((totalWater / daysInView).toFixed(2)),
-    };
-  }, [selectedRangeEvents, timeZone, visibleDailyConsumption]);
-
-  const consumptionIdeas = useMemo(
-    () => [
-      "Run-out forecast based on average daily use versus feed/water capacity.",
-      "Anomaly detection when a day’s intake is much higher or lower than the recent weekly average.",
-      "Cost tracking if you later attach a price per kilogram of feed or per liter of water.",
-    ],
-    []
-  );
-
   const tooltipStyle = useMemo(
     () => ({
       backgroundColor: theme.palette.background.paper,
@@ -543,10 +491,18 @@ export default function History() {
     );
   }, [hourlyRows, selectedDateIsToday]);
 
+  const consumptionAxisTicks = useMemo(
+    () => buildChartTicks(hourAxisTicks, isMobile),
+    [hourAxisTicks, isMobile]
+  );
+
   const environmentAxisTicks = useMemo(() => {
-    if (!selectedDateIsToday) return hourAxisTicks;
-    return visibleEnvironmentRows.map((row) => row.hour);
-  }, [hourAxisTicks, selectedDateIsToday, visibleEnvironmentRows]);
+    const sourceHours = selectedDateIsToday
+      ? visibleEnvironmentRows.map((row) => row.hour)
+      : hourAxisTicks;
+
+    return buildChartTicks(sourceHours, isMobile);
+  }, [hourAxisTicks, isMobile, selectedDateIsToday, visibleEnvironmentRows]);
 
   const environmentAxisDomain = useMemo(() => {
     if (!selectedDateIsToday || visibleEnvironmentRows.length === 0) return [0, 23];
@@ -600,12 +556,12 @@ export default function History() {
 
         <Paper sx={{ mb: 3 }}>
           <Tabs value={tab} onChange={(_, value) => setTab(value)}>
-            <Tab label="Consumption" />
             <Tab label="Temperature & Humidity" />
+            <Tab label="Consumption" />
           </Tabs>
         </Paper>
 
-        {tab === 0 && (
+        {tab === 1 && (
           <Box>
             <Box
               sx={{
@@ -647,28 +603,82 @@ export default function History() {
               <Typography variant="subtitle1" sx={{ mb: 2 }}>
                 Consumption by Hour ({selectedDateLabel})
               </Typography>
-              <ResponsiveContainer width="100%" height={280}>
-                <LineChart data={selectedDayConsumptionByHour} margin={{ top: 8, right: 8, left: 0, bottom: 28 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="hour"
-                    type="number"
-                    domain={[0, 23]}
-                    ticks={hourAxisTicks}
-                    tickFormatter={formatHourLabel}
-                    interval={0}
-                    angle={-35}
-                    textAnchor="end"
-                    height={60}
-                    tick={{ fontSize: 11 }}
-                  />
-                  <YAxis yAxisId="feed" orientation="left" />
-                  <YAxis yAxisId="water" orientation="right" />
-                  <Tooltip contentStyle={tooltipStyle} labelFormatter={(value) => formatHourLabel(Number(value))} />
-                  <Line yAxisId="feed" type="monotone" dataKey="feedG" stroke="#ffb400" name="Feed (g)" dot={false} isAnimationActive={false} />
-                  <Line yAxisId="water" type="monotone" dataKey="waterMl" stroke="#1976d2" name="Water (ml)" dot={false} isAnimationActive={false} />
-                </LineChart>
-              </ResponsiveContainer>
+              {isMobile ? (
+                <Stack spacing={2}>
+                  <Paper variant="outlined" sx={{ p: 1.5 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Feed by Hour
+                    </Typography>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <LineChart data={selectedDayConsumptionByHour} margin={{ top: 8, right: 8, left: -12, bottom: 8 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                          dataKey="hour"
+                          type="number"
+                          domain={[0, 23]}
+                          ticks={consumptionAxisTicks}
+                          tickFormatter={formatChartHourLabel}
+                          interval={0}
+                          angle={0}
+                          height={30}
+                          tick={{ fontSize: 11 }}
+                        />
+                        <YAxis />
+                        <Tooltip contentStyle={tooltipStyle} labelFormatter={(value) => formatChartHourLabel(Number(value))} />
+                        <Line type="monotone" dataKey="feedG" stroke="#ffb400" name="Feed (g)" dot={false} isAnimationActive={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Paper>
+
+                  <Paper variant="outlined" sx={{ p: 1.5 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Water by Hour
+                    </Typography>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <LineChart data={selectedDayConsumptionByHour} margin={{ top: 8, right: 8, left: -12, bottom: 8 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                          dataKey="hour"
+                          type="number"
+                          domain={[0, 23]}
+                          ticks={consumptionAxisTicks}
+                          tickFormatter={formatChartHourLabel}
+                          interval={0}
+                          angle={0}
+                          height={30}
+                          tick={{ fontSize: 11 }}
+                        />
+                        <YAxis />
+                        <Tooltip contentStyle={tooltipStyle} labelFormatter={(value) => formatChartHourLabel(Number(value))} />
+                        <Line type="monotone" dataKey="waterMl" stroke="#1976d2" name="Water (ml)" dot={false} isAnimationActive={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Paper>
+                </Stack>
+              ) : (
+                <ResponsiveContainer width="100%" height={280}>
+                  <LineChart data={selectedDayConsumptionByHour} margin={{ top: 8, right: 8, left: 0, bottom: 28 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="hour"
+                      type="number"
+                      domain={[0, 23]}
+                      ticks={consumptionAxisTicks}
+                      tickFormatter={formatChartHourLabel}
+                      interval={0}
+                      angle={-35}
+                      textAnchor="end"
+                      height={60}
+                      tick={{ fontSize: 11 }}
+                    />
+                    <YAxis yAxisId="feed" orientation="left" />
+                    <YAxis yAxisId="water" orientation="right" />
+                    <Tooltip contentStyle={tooltipStyle} labelFormatter={(value) => formatChartHourLabel(Number(value))} />
+                    <Line yAxisId="feed" type="monotone" dataKey="feedG" stroke="#ffb400" name="Feed (g)" dot={false} isAnimationActive={false} />
+                    <Line yAxisId="water" type="monotone" dataKey="waterMl" stroke="#1976d2" name="Water (ml)" dot={false} isAnimationActive={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </Paper>
 
             <Paper sx={{ p: 3, mb: 3 }}>
@@ -691,69 +701,10 @@ export default function History() {
               )}
             </Paper>
 
-            <Paper sx={{ p: 3 }}>
-              <Typography variant="subtitle1" sx={{ mb: 2 }}>
-                Consumption Insights & Ideas
-              </Typography>
-
-              <Box
-                sx={{
-                  display: "grid",
-                  gap: 2,
-                  gridTemplateColumns: {
-                    xs: "1fr",
-                    md: "repeat(3, minmax(0, 1fr))",
-                  },
-                  mb: 2,
-                }}
-              >
-                <Paper variant="outlined" sx={{ p: 2 }}>
-                  <Typography variant="body2" color="text.secondary">Highest Feed Day in View</Typography>
-                  <Typography variant="h6" fontWeight={700}>
-                    {consumptionRangeInsight.highestFeedDay
-                      ? `${formatDayKey(consumptionRangeInsight.highestFeedDay.dayKey)} (${consumptionRangeInsight.highestFeedDay.feedG} g)`
-                      : "-"}
-                  </Typography>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Average daily feed in this range: {consumptionRangeInsight.avgDailyFeed} g
-                  </Typography>
-                </Paper>
-
-                <Paper variant="outlined" sx={{ p: 2 }}>
-                  <Typography variant="body2" color="text.secondary">Highest Water Day in View</Typography>
-                  <Typography variant="h6" fontWeight={700}>
-                    {consumptionRangeInsight.highestWaterDay
-                      ? `${formatDayKey(consumptionRangeInsight.highestWaterDay.dayKey)} (${consumptionRangeInsight.highestWaterDay.waterMl} ml)`
-                      : "-"}
-                  </Typography>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Average daily water in this range: {consumptionRangeInsight.avgDailyWater} ml
-                  </Typography>
-                </Paper>
-
-                <Paper variant="outlined" sx={{ p: 2 }}>
-                  <Typography variant="body2" color="text.secondary">Most Active Refill Window</Typography>
-                  <Typography variant="h6" fontWeight={700}>
-                    Feed: {consumptionRangeInsight.busiestFeedHour ? formatHourLabel(consumptionRangeInsight.busiestFeedHour.hour) : "-"}
-                  </Typography>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Water: {consumptionRangeInsight.busiestWaterHour ? formatHourLabel(consumptionRangeInsight.busiestWaterHour.hour) : "-"}
-                  </Typography>
-                </Paper>
-              </Box>
-
-              <Stack spacing={1}>
-                {consumptionIdeas.map((idea) => (
-                  <Alert key={idea} severity="info" variant="outlined">
-                    {idea}
-                  </Alert>
-                ))}
-              </Stack>
-            </Paper>
           </Box>
         )}
 
-        {tab === 1 && (
+        {tab === 0 && (
           <Box>
             <Box
               sx={{
@@ -861,6 +812,58 @@ export default function History() {
               </Typography>
               {!hasHourlyData ? (
                 <Alert severity="info">No hourly history yet. Hourly rows are created automatically from incoming sensors.</Alert>
+              ) : isMobile ? (
+                <Stack spacing={2}>
+                  <Paper variant="outlined" sx={{ p: 1.5 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Temperature by Hour
+                    </Typography>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <LineChart data={visibleEnvironmentRows} margin={{ top: 8, right: 8, left: -12, bottom: 8 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                          dataKey="hour"
+                          type="number"
+                          domain={environmentAxisDomain}
+                          ticks={environmentAxisTicks}
+                          tickFormatter={formatChartHourLabel}
+                          interval={0}
+                          angle={0}
+                          height={30}
+                          tick={{ fontSize: 11 }}
+                        />
+                        <YAxis domain={[0, 50]} />
+                        <Tooltip contentStyle={tooltipStyle} labelFormatter={(value) => formatChartHourLabel(Number(value))} />
+                        <Line type="monotone" dataKey="temp" stroke="#ff7043" name="Temperature" connectNulls={!selectedDateIsToday} isAnimationActive={false} dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Paper>
+
+                  <Paper variant="outlined" sx={{ p: 1.5 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Humidity by Hour
+                    </Typography>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <LineChart data={visibleEnvironmentRows} margin={{ top: 8, right: 8, left: -12, bottom: 8 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                          dataKey="hour"
+                          type="number"
+                          domain={environmentAxisDomain}
+                          ticks={environmentAxisTicks}
+                          tickFormatter={formatChartHourLabel}
+                          interval={0}
+                          angle={0}
+                          height={30}
+                          tick={{ fontSize: 11 }}
+                        />
+                        <YAxis domain={[0, 100]} />
+                        <Tooltip contentStyle={tooltipStyle} labelFormatter={(value) => formatChartHourLabel(Number(value))} />
+                        <Line type="monotone" dataKey="humidity" stroke="#42a5f5" name="Humidity (%)" connectNulls={!selectedDateIsToday} isAnimationActive={false} dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Paper>
+                </Stack>
               ) : (
                 <ResponsiveContainer width="100%" height={320}>
                   <LineChart data={visibleEnvironmentRows} margin={{ top: 8, right: 8, left: 0, bottom: 28 }}>
@@ -870,7 +873,7 @@ export default function History() {
                       type="number"
                       domain={environmentAxisDomain}
                       ticks={environmentAxisTicks}
-                      tickFormatter={formatHourLabel}
+                      tickFormatter={formatChartHourLabel}
                       interval={0}
                       angle={-35}
                       textAnchor="end"
@@ -879,7 +882,7 @@ export default function History() {
                     />
                     <YAxis yAxisId="temp" orientation="left" domain={[0, 50]} />
                     <YAxis yAxisId="humidity" orientation="right" domain={[0, 100]} />
-                    <Tooltip contentStyle={tooltipStyle} labelFormatter={(value) => formatHourLabel(Number(value))} />
+                    <Tooltip contentStyle={tooltipStyle} labelFormatter={(value) => formatChartHourLabel(Number(value))} />
                     <Line yAxisId="temp" type="monotone" dataKey="temp" stroke="#ff7043" name="Temperature" connectNulls={!selectedDateIsToday} isAnimationActive={false} />
                     <Line yAxisId="humidity" type="monotone" dataKey="humidity" stroke="#42a5f5" name="Humidity (%)" connectNulls={!selectedDateIsToday} isAnimationActive={false} />
                   </LineChart>
