@@ -9,6 +9,8 @@ const alertThresholds = {
   criticalFeed: 10, // unchanged
   lowWater: 20,
   criticalWater: 10,
+  highAmmonia: 35,
+  criticalAmmonia: 70,
   highTemp: 30,           // ← was 35; stress onset ~30°C (Aviagen/UGA)
   lowTemp: 22,            // ← was 18; protects young birds (needs 28+ early)
   criticalHighTemp: 35,   // ← tightened from 39; heat stress rapid above this
@@ -201,7 +203,7 @@ export default function AlertEngine() {
   const prevLevelsRef = useRef({ feed: null, water: null, timestamp: null });
   const lastWrittenHourRef = useRef("");
 
-  const sensorsRef = useRef({ temp: 0, humidity: 0, feed: 0, water: 0 });
+  const sensorsRef = useRef({ temp: 0, humidity: 0, feed: 0, water: 0, ammonia: 0 });
   const sensorTrendRef = useRef({
     temp: { value: null, timestamp: null },
     humidity: { value: null, timestamp: null },
@@ -398,6 +400,8 @@ export default function AlertEngine() {
       Number(s.humidity) <= alertThresholds.highHumidity;
     const isFeedNormal = Number.isFinite(Number(s.feed)) && Number(s.feed) >= alertThresholds.lowFeed;
     const isWaterNormal = Number.isFinite(Number(s.water)) && Number(s.water) >= alertThresholds.lowWater; // <- UPDATED
+    const isAmmoniaNormal =
+      Number.isFinite(Number(s.ammonia)) && Number(s.ammonia) < alertThresholds.highAmmonia;
 
     await resolveAlertsByPredicate((a) => {
       const type = String(a.type || "").toLowerCase();
@@ -406,6 +410,7 @@ export default function AlertEngine() {
       if (type.includes("humidity")) return isHumidityNormal;
       if (type.includes("feed")) return isFeedNormal;
       if (type.includes("water")) return isWaterNormal;   // <- ADDED
+      if (type.includes("ammonia")) return isAmmoniaNormal;
 
       return false;
     });
@@ -435,6 +440,7 @@ export default function AlertEngine() {
     const waterValue = Number(s.water);
     const tempValue = Number(s.temp);
     const humidityValue = Number(s.humidity);
+    const ammoniaValue = Number(s.ammonia);
     const isStale = age > alertThresholds.staleDataWarningMs;
 
     const candidates = [
@@ -499,6 +505,20 @@ export default function AlertEngine() {
         condition: humidityValue < alertThresholds.lowHumidity,
         type: "Low Humidity",
         message: `Humidity too low (${humidityValue}%)`,
+        severity: "warning",
+      },
+      {
+        condition: ammoniaValue >= alertThresholds.criticalAmmonia,
+        type: "Critical High Ammonia",
+        message: `Ammonia is critically high (${ammoniaValue}%)`,
+        severity: "critical",
+      },
+      {
+        condition:
+          ammoniaValue >= alertThresholds.highAmmonia &&
+          ammoniaValue < alertThresholds.criticalAmmonia,
+        type: "High Ammonia",
+        message: `Ammonia is elevated (${ammoniaValue}%)`,
         severity: "warning",
       },
       {
@@ -740,6 +760,7 @@ export default function AlertEngine() {
       sensorsRef.current.humidity = Number(data.humidity ?? sensorsRef.current.humidity ?? 0);
       sensorsRef.current.feed = Number(data.feedLevel ?? sensorsRef.current.feed ?? 0);
       sensorsRef.current.water = Number(data.waterLevel ?? sensorsRef.current.water ?? 0);
+      sensorsRef.current.ammonia = Number(data.ammoniaLevel ?? sensorsRef.current.ammonia ?? 0);
 
       if (data.lastUpdate != null) {
         const v = Number(data.lastUpdate);
@@ -805,6 +826,13 @@ export default function AlertEngine() {
       } else if (topic === "chickulungan/sensor/water") {
         sensorsRef.current.water = parseInt(payload, 10) || 0;
         evaluateAlerts();                    // <- NOW triggers Low Water check
+        autoResolveStabilizedAlerts();
+        persistHourlyAndConsumption().catch(() => {
+          /* noop */
+        });
+      } else if (topic === "chickulungan/sensor/ammonia") {
+        sensorsRef.current.ammonia = parseInt(payload, 10) || 0;
+        evaluateAlerts();
         autoResolveStabilizedAlerts();
         persistHourlyAndConsumption().catch(() => {
           /* noop */

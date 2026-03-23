@@ -8,10 +8,10 @@ const options = {
   debug: true,
 };
 
-export const refreshSchedules = () => {
+export function refreshSchedules() {
   client.publish("chickulungan/control/refreshSchedules", "1");
   console.log("Requested schedule refresh");
-};
+}
 
 
 // Use EMQX WebSocket (browser-safe, no auth)
@@ -35,9 +35,14 @@ client.on('error', (err) => {
   console.error('MQTT Error:', err); // ← Check for errors
 });
 
-export const publishFeed = () => {
+export function publishFeed() {
   client.publish('chickulungan/control/feed', '1');
   console.log('Published feed command');
-};
+}
+
+export function publishStopFeed() {
+  client.publish('chickulungan/control/stopFeed', '1');
+  console.log('Published emergency stop command');
+}
 
 export default client;

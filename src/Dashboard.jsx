@@ -34,7 +34,7 @@ import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import RestartAltRoundedIcon from "@mui/icons-material/RestartAltRounded";
 import { useTheme } from "@mui/material/styles";
-import { publishFeed } from "./mqtt";
+import { publishFeed, publishStopFeed } from "./mqtt";
 import { db, ref, onValue, push } from "./firebase";
 import { query, limitToLast } from "firebase/database";
 import { format, differenceInMinutes } from "date-fns";
@@ -47,6 +47,11 @@ export default function Dashboard() {
     humidity: 0,
     feed: 0,
     water: 0,
+    ammonia: 0,
+    ammoniaRaw: 0,
+    ammoniaBaseline: 0,
+    ammoniaDelta: 0,
+    ammoniaVoltage: 0,
   });
 
   const [online, setOnline] = useState(false);
@@ -146,6 +151,14 @@ export default function Dashboard() {
 
     const handler = (e) => {
       const { topic, payload } = e.detail || {};
+      const payloadText = String(payload || "");
+
+      if (topic === "chickulungan/log") {
+        const log = payloadText.toLowerCase();
+        if (log.includes("feed started")) setIsFeeding(true);
+        if (log.includes("feed stopped") || log.includes("emergency stop")) setIsFeeding(false);
+        return;
+      }
 
       if (topic === "chickulungan/sensor/temp") {
         pendingRef.current.temp = parseFloat(payload) || 0;
@@ -155,6 +168,16 @@ export default function Dashboard() {
         pendingRef.current.feed = parseInt(payload, 10) || 0;
       } else if (topic === "chickulungan/sensor/water") {
         pendingRef.current.water = parseInt(payload, 10) || 0;
+      } else if (topic === "chickulungan/sensor/ammonia") {
+        pendingRef.current.ammonia = parseInt(payload, 10) || 0;
+      } else if (topic === "chickulungan/sensor/ammoniaRaw") {
+        pendingRef.current.ammoniaRaw = parseInt(payload, 10) || 0;
+      } else if (topic === "chickulungan/sensor/ammoniaBaselineRaw") {
+        pendingRef.current.ammoniaBaseline = parseFloat(payload) || 0;
+      } else if (topic === "chickulungan/sensor/ammoniaDeltaRaw") {
+        pendingRef.current.ammoniaDelta = parseInt(payload, 10) || 0;
+      } else if (topic === "chickulungan/sensor/ammoniaVoltage") {
+        pendingRef.current.ammoniaVoltage = parseFloat(payload) || 0;
       }
 
       if (!rafRef.current) {
@@ -182,6 +205,11 @@ export default function Dashboard() {
         humidity: data.humidity ?? prev.humidity ?? 0,
         feed: data.feedLevel ?? prev.feed ?? 0,
         water: data.waterLevel ?? prev.water ?? 0,
+        ammonia: data.ammoniaLevel ?? prev.ammonia ?? 0,
+        ammoniaRaw: data.ammoniaRaw ?? prev.ammoniaRaw ?? 0,
+        ammoniaBaseline: data.ammoniaBaselineRaw ?? prev.ammoniaBaseline ?? 0,
+        ammoniaDelta: data.ammoniaDeltaRaw ?? prev.ammoniaDelta ?? 0,
+        ammoniaVoltage: data.ammoniaVoltage ?? prev.ammoniaVoltage ?? 0,
       }));
 
       if (data.lastUpdate != null) {
@@ -300,7 +328,24 @@ export default function Dashboard() {
 
     setTimeout(() => {
       setGlobalLoading(false);
-      setIsFeeding(false);
+    }, 1000);
+  };
+
+  const stopFeedNow = () => {
+    setGlobalLoading(true);
+    publishStopFeed();
+    setIsFeeding(false);
+
+    push(ref(db, "logs"), {
+      message: "Emergency stop command sent from Dashboard",
+      source: "web",
+      timestamp: Date.now(),
+    });
+
+    toast("Emergency stop sent!", "warning");
+
+    setTimeout(() => {
+      setGlobalLoading(false);
     }, 1000);
   };
 
@@ -428,6 +473,13 @@ export default function Dashboard() {
         detail: `Humidity at ${Number(sensors.humidity).toFixed(1)}%`,
       },
       {
+        key: "ammonia-high",
+        label: sensors.ammonia >= 70 ? "Critical High Ammonia" : "High Ammonia",
+        active: sensors.ammonia >= 35,
+        severity: sensors.ammonia >= 70 ? "critical" : "warning",
+        detail: `Ammonia at ${Number(sensors.ammonia).toFixed(0)}%`,
+      },
+      {
         key: "stale",
         label: "Sensor Data Stale",
         active: staleSeconds != null && staleSeconds > 45 && staleSeconds <= 90,
@@ -445,6 +497,29 @@ export default function Dashboard() {
   }, [sensors, lastUpdateMs]);
 
   const activeAlertCandidates = alertCandidates.filter((item) => item.active);
+  const ammoniaSeverity = useMemo(() => {
+    if (sensors.ammonia >= 70) {
+      return {
+        label: "High",
+        color: "error.main",
+        gaugeColor: "#d32f2f",
+      };
+    }
+
+    if (sensors.ammonia >= 35) {
+      return {
+        label: "Elevated",
+        color: "warning.main",
+        gaugeColor: "#ed6c02",
+      };
+    }
+
+    return {
+      label: "Normal",
+      color: "success.main",
+      gaugeColor: "#2e7d32",
+    };
+  }, [sensors.ammonia]);
 
   return (
     <Box sx={{ px: { xs: 1.5, sm: 3 }, py: { xs: 2, sm: 3 } }}>
@@ -624,6 +699,55 @@ export default function Dashboard() {
             {sensors.water < 20 ? "LOW!" : "Adequate"}
           </Typography>
         </Paper>
+
+        {/* Ammonia */}
+        <Paper
+          sx={{
+            p: 3,
+            textAlign: "center",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            minWidth: 0,
+          }}
+        >
+          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+            Ammonia
+          </Typography>
+          <Gauge
+            value={sensors.ammonia}
+            startAngle={-110}
+            endAngle={110}
+            height={180}
+            sx={{
+              mb: 1,
+              "& .MuiGauge-valueArc": {
+                fill: ammoniaSeverity.gaugeColor,
+              },
+            }}
+          />
+          <Typography variant="h4" fontWeight={700} color={ammoniaSeverity.color}>
+            {Number(sensors.ammonia).toFixed(0)}%
+          </Typography>
+          <Typography variant="body1" fontWeight={600} color={ammoniaSeverity.color} sx={{ mt: 0.5 }}>
+            {ammoniaSeverity.label}
+          </Typography>
+          <Stack spacing={0.35} sx={{ mt: 1.5 }}>
+            <Typography variant="caption" color="text.secondary">
+              Raw: {Number(sensors.ammoniaRaw).toFixed(0)}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Baseline: {Number(sensors.ammoniaBaseline).toFixed(1)}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Delta: {Number(sensors.ammoniaDelta).toFixed(0)}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Voltage: {Number(sensors.ammoniaVoltage).toFixed(3)}V
+            </Typography>
+          </Stack>
+        </Paper>
       </Box>
 
       {/* Control Buttons */}
@@ -638,6 +762,10 @@ export default function Dashboard() {
       >
         <Button variant="contained" size="large" onClick={feedNow} disabled={isFeeding}>
           FEED NOW
+        </Button>
+
+        <Button variant="contained" color="error" size="large" onClick={stopFeedNow}>
+          STOP FEEDING
         </Button>
 
         <Button variant="outlined" size="large" onClick={setSched}>
