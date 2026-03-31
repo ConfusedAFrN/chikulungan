@@ -1,0 +1,1968 @@
+{
+  "metadata": {
+    "location": {
+      "province": "Ilocos Sur",
+      "country": "Philippines",
+      "timeZone": "Asia/Manila"
+    },
+    "dateRange": {
+      "start": "2026-03-14",
+      "end": "2026-03-24"
+    },
+    "method": "Hourly profile calibrated using existing app history (2026-03-10 to 2026-03-18) and Ilocos Sur daily weather constraints (historical + near-term forecast).",
+    "generatedAt": "2026-03-24T01:31:47.253Z"
+  },
+  "history": {
+    "hourly": {
+      "2026-03-14": {
+        "10": {
+          "timestamp": 1773453600000,
+          "temp": 27.6,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "11": {
+          "timestamp": 1773457200000,
+          "temp": 30,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "12": {
+          "timestamp": 1773460800000,
+          "temp": 32,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "13": {
+          "timestamp": 1773464400000,
+          "temp": 31,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "14": {
+          "timestamp": 1773468000000,
+          "temp": 29.1,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "15": {
+          "timestamp": 1773471600000,
+          "temp": 27.6,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "16": {
+          "timestamp": 1773475200000,
+          "temp": 25.9,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "17": {
+          "timestamp": 1773478800000,
+          "temp": 23.8,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "18": {
+          "timestamp": 1773482400000,
+          "temp": 22.1,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "19": {
+          "timestamp": 1773486000000,
+          "temp": 23.4,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "20": {
+          "timestamp": 1773489600000,
+          "temp": 22.5,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "21": {
+          "timestamp": 1773493200000,
+          "temp": 21.6,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "22": {
+          "timestamp": 1773496800000,
+          "temp": 20.8,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "23": {
+          "timestamp": 1773500400000,
+          "temp": 19.9,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "00": {
+          "timestamp": 1773417600000,
+          "temp": 19.6,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "01": {
+          "timestamp": 1773421200000,
+          "temp": 19.7,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "02": {
+          "timestamp": 1773424800000,
+          "temp": 19.9,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "03": {
+          "timestamp": 1773428400000,
+          "temp": 20.2,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "04": {
+          "timestamp": 1773432000000,
+          "temp": 20.3,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "05": {
+          "timestamp": 1773435600000,
+          "temp": 21.3,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "06": {
+          "timestamp": 1773439200000,
+          "temp": 23,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "07": {
+          "timestamp": 1773442800000,
+          "temp": 24.6,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "08": {
+          "timestamp": 1773446400000,
+          "temp": 26.2,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "09": {
+          "timestamp": 1773450000000,
+          "temp": 25.7,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        }
+      },
+      "2026-03-15": {
+        "10": {
+          "timestamp": 1773540000000,
+          "temp": 26.6,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "11": {
+          "timestamp": 1773543600000,
+          "temp": 28.9,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "12": {
+          "timestamp": 1773547200000,
+          "temp": 31,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "13": {
+          "timestamp": 1773550800000,
+          "temp": 30,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "14": {
+          "timestamp": 1773554400000,
+          "temp": 28.1,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "15": {
+          "timestamp": 1773558000000,
+          "temp": 26.6,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "16": {
+          "timestamp": 1773561600000,
+          "temp": 24.8,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "17": {
+          "timestamp": 1773565200000,
+          "temp": 22.8,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "18": {
+          "timestamp": 1773568800000,
+          "temp": 21,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "19": {
+          "timestamp": 1773572400000,
+          "temp": 22.3,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "20": {
+          "timestamp": 1773576000000,
+          "temp": 21.4,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "21": {
+          "timestamp": 1773579600000,
+          "temp": 20.6,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "22": {
+          "timestamp": 1773583200000,
+          "temp": 19.7,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "23": {
+          "timestamp": 1773586800000,
+          "temp": 18.8,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "00": {
+          "timestamp": 1773504000000,
+          "temp": 18.5,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "01": {
+          "timestamp": 1773507600000,
+          "temp": 18.6,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "02": {
+          "timestamp": 1773511200000,
+          "temp": 18.8,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "03": {
+          "timestamp": 1773514800000,
+          "temp": 19.1,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "04": {
+          "timestamp": 1773518400000,
+          "temp": 19.2,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "05": {
+          "timestamp": 1773522000000,
+          "temp": 20.3,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "06": {
+          "timestamp": 1773525600000,
+          "temp": 21.9,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "07": {
+          "timestamp": 1773529200000,
+          "temp": 23.5,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "08": {
+          "timestamp": 1773532800000,
+          "temp": 25.1,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "09": {
+          "timestamp": 1773536400000,
+          "temp": 24.7,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        }
+      },
+      "2026-03-16": {
+        "10": {
+          "timestamp": 1773626400000,
+          "temp": 26,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "11": {
+          "timestamp": 1773630000000,
+          "temp": 28.5,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "12": {
+          "timestamp": 1773633600000,
+          "temp": 30.6,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "13": {
+          "timestamp": 1773637200000,
+          "temp": 29.5,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "14": {
+          "timestamp": 1773640800000,
+          "temp": 27.5,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "15": {
+          "timestamp": 1773644400000,
+          "temp": 26,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "16": {
+          "timestamp": 1773648000000,
+          "temp": 24.2,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "17": {
+          "timestamp": 1773651600000,
+          "temp": 22,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "18": {
+          "timestamp": 1773655200000,
+          "temp": 20.2,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "19": {
+          "timestamp": 1773658800000,
+          "temp": 21.6,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "20": {
+          "timestamp": 1773662400000,
+          "temp": 20.7,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "21": {
+          "timestamp": 1773666000000,
+          "temp": 19.7,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "22": {
+          "timestamp": 1773669600000,
+          "temp": 18.8,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "23": {
+          "timestamp": 1773673200000,
+          "temp": 17.9,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "00": {
+          "timestamp": 1773590400000,
+          "temp": 17.6,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "01": {
+          "timestamp": 1773594000000,
+          "temp": 17.8,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "02": {
+          "timestamp": 1773597600000,
+          "temp": 17.9,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "03": {
+          "timestamp": 1773601200000,
+          "temp": 18.2,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "04": {
+          "timestamp": 1773604800000,
+          "temp": 18.4,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "05": {
+          "timestamp": 1773608400000,
+          "temp": 19.4,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "06": {
+          "timestamp": 1773612000000,
+          "temp": 21.1,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "07": {
+          "timestamp": 1773615600000,
+          "temp": 22.8,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "08": {
+          "timestamp": 1773619200000,
+          "temp": 24.5,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "09": {
+          "timestamp": 1773622800000,
+          "temp": 24,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        }
+      },
+      "2026-03-17": {
+        "10": {
+          "timestamp": 1773712800000,
+          "temp": 27.2,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "11": {
+          "timestamp": 1773716400000,
+          "temp": 29.6,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "12": {
+          "timestamp": 1773720000000,
+          "temp": 31.6,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "13": {
+          "timestamp": 1773723600000,
+          "temp": 30.6,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "14": {
+          "timestamp": 1773727200000,
+          "temp": 28.7,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "15": {
+          "timestamp": 1773730800000,
+          "temp": 27.2,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "16": {
+          "timestamp": 1773734400000,
+          "temp": 25.5,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "17": {
+          "timestamp": 1773738000000,
+          "temp": 23.4,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "18": {
+          "timestamp": 1773741600000,
+          "temp": 21.7,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "19": {
+          "timestamp": 1773745200000,
+          "temp": 23,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "20": {
+          "timestamp": 1773748800000,
+          "temp": 22.1,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "21": {
+          "timestamp": 1773752400000,
+          "temp": 21.2,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "22": {
+          "timestamp": 1773756000000,
+          "temp": 20.4,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "23": {
+          "timestamp": 1773759600000,
+          "temp": 19.5,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "00": {
+          "timestamp": 1773676800000,
+          "temp": 19.2,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "01": {
+          "timestamp": 1773680400000,
+          "temp": 19.3,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "02": {
+          "timestamp": 1773684000000,
+          "temp": 19.5,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "03": {
+          "timestamp": 1773687600000,
+          "temp": 19.8,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "04": {
+          "timestamp": 1773691200000,
+          "temp": 19.9,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "05": {
+          "timestamp": 1773694800000,
+          "temp": 20.9,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "06": {
+          "timestamp": 1773698400000,
+          "temp": 22.6,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "07": {
+          "timestamp": 1773702000000,
+          "temp": 24.2,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "08": {
+          "timestamp": 1773705600000,
+          "temp": 25.8,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "09": {
+          "timestamp": 1773709200000,
+          "temp": 25.3,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        }
+      },
+      "2026-03-18": {
+        "10": {
+          "timestamp": 1773799200000,
+          "temp": 26.9,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "11": {
+          "timestamp": 1773802800000,
+          "temp": 28.6,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "12": {
+          "timestamp": 1773806400000,
+          "temp": 30,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "13": {
+          "timestamp": 1773810000000,
+          "temp": 29.3,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "14": {
+          "timestamp": 1773813600000,
+          "temp": 27.9,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "15": {
+          "timestamp": 1773817200000,
+          "temp": 26.9,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "16": {
+          "timestamp": 1773820800000,
+          "temp": 25.7,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "17": {
+          "timestamp": 1773824400000,
+          "temp": 24.2,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "18": {
+          "timestamp": 1773828000000,
+          "temp": 23,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "19": {
+          "timestamp": 1773831600000,
+          "temp": 23.9,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "20": {
+          "timestamp": 1773835200000,
+          "temp": 23.3,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "21": {
+          "timestamp": 1773838800000,
+          "temp": 22.6,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "22": {
+          "timestamp": 1773842400000,
+          "temp": 22,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "23": {
+          "timestamp": 1773846000000,
+          "temp": 21.4,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "00": {
+          "timestamp": 1773763200000,
+          "temp": 21.2,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "01": {
+          "timestamp": 1773766800000,
+          "temp": 21.3,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "02": {
+          "timestamp": 1773770400000,
+          "temp": 21.4,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "03": {
+          "timestamp": 1773774000000,
+          "temp": 21.6,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "04": {
+          "timestamp": 1773777600000,
+          "temp": 21.7,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "05": {
+          "timestamp": 1773781200000,
+          "temp": 22.4,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "06": {
+          "timestamp": 1773784800000,
+          "temp": 23.6,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "07": {
+          "timestamp": 1773788400000,
+          "temp": 24.7,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "08": {
+          "timestamp": 1773792000000,
+          "temp": 25.9,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "09": {
+          "timestamp": 1773795600000,
+          "temp": 25.6,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        }
+      },
+      "2026-03-19": {
+        "10": {
+          "timestamp": 1773885600000,
+          "temp": 27.2,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "11": {
+          "timestamp": 1773889200000,
+          "temp": 28.7,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "12": {
+          "timestamp": 1773892800000,
+          "temp": 30,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "13": {
+          "timestamp": 1773896400000,
+          "temp": 29.3,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "14": {
+          "timestamp": 1773900000000,
+          "temp": 28.1,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "15": {
+          "timestamp": 1773903600000,
+          "temp": 27.2,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "16": {
+          "timestamp": 1773907200000,
+          "temp": 26.1,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "17": {
+          "timestamp": 1773910800000,
+          "temp": 24.7,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "18": {
+          "timestamp": 1773914400000,
+          "temp": 23.6,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "19": {
+          "timestamp": 1773918000000,
+          "temp": 24.4,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "20": {
+          "timestamp": 1773921600000,
+          "temp": 23.9,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "21": {
+          "timestamp": 1773925200000,
+          "temp": 23.3,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "22": {
+          "timestamp": 1773928800000,
+          "temp": 22.8,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "23": {
+          "timestamp": 1773932400000,
+          "temp": 22.2,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "00": {
+          "timestamp": 1773849600000,
+          "temp": 22,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "01": {
+          "timestamp": 1773853200000,
+          "temp": 22.1,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "02": {
+          "timestamp": 1773856800000,
+          "temp": 22.2,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "03": {
+          "timestamp": 1773860400000,
+          "temp": 22.4,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "04": {
+          "timestamp": 1773864000000,
+          "temp": 22.5,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "05": {
+          "timestamp": 1773867600000,
+          "temp": 23.1,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "06": {
+          "timestamp": 1773871200000,
+          "temp": 24.2,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "07": {
+          "timestamp": 1773874800000,
+          "temp": 25.2,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "08": {
+          "timestamp": 1773878400000,
+          "temp": 26.2,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "09": {
+          "timestamp": 1773882000000,
+          "temp": 26,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        }
+      },
+      "2026-03-20": {
+        "10": {
+          "timestamp": 1773972000000,
+          "temp": 28.3,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "11": {
+          "timestamp": 1773975600000,
+          "temp": 30.3,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "12": {
+          "timestamp": 1773979200000,
+          "temp": 32.1,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "13": {
+          "timestamp": 1773982800000,
+          "temp": 31.2,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "14": {
+          "timestamp": 1773986400000,
+          "temp": 29.6,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "15": {
+          "timestamp": 1773990000000,
+          "temp": 28.3,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "16": {
+          "timestamp": 1773993600000,
+          "temp": 26.8,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "17": {
+          "timestamp": 1773997200000,
+          "temp": 25.1,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "18": {
+          "timestamp": 1774000800000,
+          "temp": 23.6,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "19": {
+          "timestamp": 1774004400000,
+          "temp": 24.7,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "20": {
+          "timestamp": 1774008000000,
+          "temp": 23.9,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "21": {
+          "timestamp": 1774011600000,
+          "temp": 23.2,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "22": {
+          "timestamp": 1774015200000,
+          "temp": 22.4,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "23": {
+          "timestamp": 1774018800000,
+          "temp": 21.7,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "00": {
+          "timestamp": 1773936000000,
+          "temp": 21.4,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "01": {
+          "timestamp": 1773939600000,
+          "temp": 21.5,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "02": {
+          "timestamp": 1773943200000,
+          "temp": 21.7,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "03": {
+          "timestamp": 1773946800000,
+          "temp": 21.9,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "04": {
+          "timestamp": 1773950400000,
+          "temp": 22,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "05": {
+          "timestamp": 1773954000000,
+          "temp": 22.9,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "06": {
+          "timestamp": 1773957600000,
+          "temp": 24.3,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "07": {
+          "timestamp": 1773961200000,
+          "temp": 25.7,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "08": {
+          "timestamp": 1773964800000,
+          "temp": 27.1,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "09": {
+          "timestamp": 1773968400000,
+          "temp": 26.7,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        }
+      },
+      "2026-03-21": {
+        "10": {
+          "timestamp": 1774058400000,
+          "temp": 27.3,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "11": {
+          "timestamp": 1774062000000,
+          "temp": 29,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "12": {
+          "timestamp": 1774065600000,
+          "temp": 30.5,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "13": {
+          "timestamp": 1774069200000,
+          "temp": 29.8,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "14": {
+          "timestamp": 1774072800000,
+          "temp": 28.4,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "15": {
+          "timestamp": 1774076400000,
+          "temp": 27.3,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "16": {
+          "timestamp": 1774080000000,
+          "temp": 26.1,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "17": {
+          "timestamp": 1774083600000,
+          "temp": 24.6,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "18": {
+          "timestamp": 1774087200000,
+          "temp": 23.3,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "19": {
+          "timestamp": 1774090800000,
+          "temp": 24.2,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "20": {
+          "timestamp": 1774094400000,
+          "temp": 23.6,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "21": {
+          "timestamp": 1774098000000,
+          "temp": 23,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "22": {
+          "timestamp": 1774101600000,
+          "temp": 22.3,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "23": {
+          "timestamp": 1774105200000,
+          "temp": 21.7,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "00": {
+          "timestamp": 1774022400000,
+          "temp": 21.5,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "01": {
+          "timestamp": 1774026000000,
+          "temp": 21.6,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "02": {
+          "timestamp": 1774029600000,
+          "temp": 21.7,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "03": {
+          "timestamp": 1774033200000,
+          "temp": 21.9,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "04": {
+          "timestamp": 1774036800000,
+          "temp": 22,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "05": {
+          "timestamp": 1774040400000,
+          "temp": 22.8,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "06": {
+          "timestamp": 1774044000000,
+          "temp": 23.9,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "07": {
+          "timestamp": 1774047600000,
+          "temp": 25.1,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "08": {
+          "timestamp": 1774051200000,
+          "temp": 26.3,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "09": {
+          "timestamp": 1774054800000,
+          "temp": 26,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        }
+      },
+      "2026-03-22": {
+        "10": {
+          "timestamp": 1774144800000,
+          "temp": 26.8,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "11": {
+          "timestamp": 1774148400000,
+          "temp": 28.3,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "12": {
+          "timestamp": 1774152000000,
+          "temp": 29.7,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "13": {
+          "timestamp": 1774155600000,
+          "temp": 29,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "14": {
+          "timestamp": 1774159200000,
+          "temp": 27.7,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "15": {
+          "timestamp": 1774162800000,
+          "temp": 26.8,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "16": {
+          "timestamp": 1774166400000,
+          "temp": 25.6,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "17": {
+          "timestamp": 1774170000000,
+          "temp": 24.2,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "18": {
+          "timestamp": 1774173600000,
+          "temp": 23.1,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "19": {
+          "timestamp": 1774177200000,
+          "temp": 23.9,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "20": {
+          "timestamp": 1774180800000,
+          "temp": 23.4,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "21": {
+          "timestamp": 1774184400000,
+          "temp": 22.8,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "22": {
+          "timestamp": 1774188000000,
+          "temp": 22.2,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "23": {
+          "timestamp": 1774191600000,
+          "temp": 21.6,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "00": {
+          "timestamp": 1774108800000,
+          "temp": 21.4,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "01": {
+          "timestamp": 1774112400000,
+          "temp": 21.5,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "02": {
+          "timestamp": 1774116000000,
+          "temp": 21.6,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "03": {
+          "timestamp": 1774119600000,
+          "temp": 21.8,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "04": {
+          "timestamp": 1774123200000,
+          "temp": 21.9,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "05": {
+          "timestamp": 1774126800000,
+          "temp": 22.6,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "06": {
+          "timestamp": 1774130400000,
+          "temp": 23.6,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "07": {
+          "timestamp": 1774134000000,
+          "temp": 24.7,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "08": {
+          "timestamp": 1774137600000,
+          "temp": 25.8,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        },
+        "09": {
+          "timestamp": 1774141200000,
+          "temp": 25.5,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "historical"
+        }
+      },
+      "2026-03-23": {
+        "10": {
+          "timestamp": 1774231200000,
+          "temp": 27.5,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "11": {
+          "timestamp": 1774234800000,
+          "temp": 29.1,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "12": {
+          "timestamp": 1774238400000,
+          "temp": 30.4,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "13": {
+          "timestamp": 1774242000000,
+          "temp": 29.7,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "14": {
+          "timestamp": 1774245600000,
+          "temp": 28.5,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "15": {
+          "timestamp": 1774249200000,
+          "temp": 27.5,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "16": {
+          "timestamp": 1774252800000,
+          "temp": 26.4,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "17": {
+          "timestamp": 1774256400000,
+          "temp": 25,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "18": {
+          "timestamp": 1774260000000,
+          "temp": 23.8,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "19": {
+          "timestamp": 1774263600000,
+          "temp": 24.7,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "20": {
+          "timestamp": 1774267200000,
+          "temp": 24.1,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "21": {
+          "timestamp": 1774270800000,
+          "temp": 23.5,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "22": {
+          "timestamp": 1774274400000,
+          "temp": 23,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "23": {
+          "timestamp": 1774278000000,
+          "temp": 22.4,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "00": {
+          "timestamp": 1774195200000,
+          "temp": 22.2,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "01": {
+          "timestamp": 1774198800000,
+          "temp": 22.3,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "02": {
+          "timestamp": 1774202400000,
+          "temp": 22.4,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "03": {
+          "timestamp": 1774206000000,
+          "temp": 22.6,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "04": {
+          "timestamp": 1774209600000,
+          "temp": 22.7,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "05": {
+          "timestamp": 1774213200000,
+          "temp": 23.4,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "06": {
+          "timestamp": 1774216800000,
+          "temp": 24.4,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "07": {
+          "timestamp": 1774220400000,
+          "temp": 25.5,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "08": {
+          "timestamp": 1774224000000,
+          "temp": 26.5,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        },
+        "09": {
+          "timestamp": 1774227600000,
+          "temp": 26.3,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "interpolated"
+        }
+      },
+      "2026-03-24": {
+        "10": {
+          "timestamp": 1774317600000,
+          "temp": 28.2,
+          "humidity": 67.8,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "11": {
+          "timestamp": 1774321200000,
+          "temp": 29.7,
+          "humidity": 65.2,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "12": {
+          "timestamp": 1774324800000,
+          "temp": 31,
+          "humidity": 66.7,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "13": {
+          "timestamp": 1774328400000,
+          "temp": 30.3,
+          "humidity": 68.5,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "14": {
+          "timestamp": 1774332000000,
+          "temp": 29.1,
+          "humidity": 71.3,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "15": {
+          "timestamp": 1774335600000,
+          "temp": 28.2,
+          "humidity": 73.1,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "16": {
+          "timestamp": 1774339200000,
+          "temp": 27.1,
+          "humidity": 76.7,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "17": {
+          "timestamp": 1774342800000,
+          "temp": 25.7,
+          "humidity": 80.5,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "18": {
+          "timestamp": 1774346400000,
+          "temp": 24.6,
+          "humidity": 83.3,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "19": {
+          "timestamp": 1774350000000,
+          "temp": 25.4,
+          "humidity": 84.1,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "20": {
+          "timestamp": 1774353600000,
+          "temp": 24.9,
+          "humidity": 82.2,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "21": {
+          "timestamp": 1774357200000,
+          "temp": 24.3,
+          "humidity": 82.9,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "22": {
+          "timestamp": 1774360800000,
+          "temp": 23.8,
+          "humidity": 83.6,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "23": {
+          "timestamp": 1774364400000,
+          "temp": 23.2,
+          "humidity": 84.3,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "00": {
+          "timestamp": 1774281600000,
+          "temp": 23,
+          "humidity": 86.2,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "01": {
+          "timestamp": 1774285200000,
+          "temp": 23.1,
+          "humidity": 84.8,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "02": {
+          "timestamp": 1774288800000,
+          "temp": 23.2,
+          "humidity": 83.4,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "03": {
+          "timestamp": 1774292400000,
+          "temp": 23.4,
+          "humidity": 82,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "04": {
+          "timestamp": 1774296000000,
+          "temp": 23.5,
+          "humidity": 80.6,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "05": {
+          "timestamp": 1774299600000,
+          "temp": 24.1,
+          "humidity": 79.2,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "06": {
+          "timestamp": 1774303200000,
+          "temp": 25.2,
+          "humidity": 78.2,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "07": {
+          "timestamp": 1774306800000,
+          "temp": 26.2,
+          "humidity": 75.6,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "08": {
+          "timestamp": 1774310400000,
+          "temp": 27.2,
+          "humidity": 73,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        },
+        "09": {
+          "timestamp": 1774314000000,
+          "temp": 27,
+          "humidity": 70.4,
+          "timeZone": "Asia/Manila",
+          "source": "forecast"
+        }
+      }
+    },
+    "daily": {
+      "2026-03-14": {
+        "tempAvg": 24.1,
+        "tempHigh": 32,
+        "tempLow": 19.6,
+        "humidityAvg": 77.6,
+        "source": "historical"
+      },
+      "2026-03-15": {
+        "tempAvg": 23,
+        "tempHigh": 31,
+        "tempLow": 18.5,
+        "humidityAvg": 77.6,
+        "source": "historical"
+      },
+      "2026-03-16": {
+        "tempAvg": 22.3,
+        "tempHigh": 30.6,
+        "tempLow": 17.6,
+        "humidityAvg": 77.6,
+        "source": "historical"
+      },
+      "2026-03-17": {
+        "tempAvg": 23.7,
+        "tempHigh": 31.6,
+        "tempLow": 19.2,
+        "humidityAvg": 77.6,
+        "source": "historical"
+      },
+      "2026-03-18": {
+        "tempAvg": 24.4,
+        "tempHigh": 30,
+        "tempLow": 21.2,
+        "humidityAvg": 77.6,
+        "source": "historical"
+      },
+      "2026-03-19": {
+        "tempAvg": 24.9,
+        "tempHigh": 30,
+        "tempLow": 22,
+        "humidityAvg": 77.6,
+        "source": "historical"
+      },
+      "2026-03-20": {
+        "tempAvg": 25.3,
+        "tempHigh": 32.1,
+        "tempLow": 21.4,
+        "humidityAvg": 77.6,
+        "source": "historical"
+      },
+      "2026-03-21": {
+        "tempAvg": 24.7,
+        "tempHigh": 30.5,
+        "tempLow": 21.5,
+        "humidityAvg": 77.6,
+        "source": "historical"
+      },
+      "2026-03-22": {
+        "tempAvg": 24.4,
+        "tempHigh": 29.7,
+        "tempLow": 21.4,
+        "humidityAvg": 77.6,
+        "source": "historical"
+      },
+      "2026-03-23": {
+        "tempAvg": 25.2,
+        "tempHigh": 30.4,
+        "tempLow": 22.2,
+        "humidityAvg": 77.6,
+        "source": "interpolated"
+      },
+      "2026-03-24": {
+        "tempAvg": 25.9,
+        "tempHigh": 31,
+        "tempLow": 23,
+        "humidityAvg": 77.6,
+        "source": "forecast"
+      }
+    }
+  }
+}

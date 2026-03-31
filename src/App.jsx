@@ -37,6 +37,7 @@ import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   History as HistoryIcon,
+  Sms as SmsIcon,
 } from "@mui/icons-material";
 import { format } from "date-fns";
 import { useTheme, useMediaQuery } from "@mui/material";
@@ -48,6 +49,7 @@ import Logs from "./Logs";
 import History from "./History";
 import { MqttProvider } from "./MqttProvider";
 import AlertEngine from "./AlertEngine";
+import SMSSettings from "./SMSSettings";
 
 
 const fullDrawerWidth = 260;
@@ -59,6 +61,7 @@ const menu = [
   { text: "Alerts", icon: <NotificationsIcon />, path: "/alerts" },
   { text: "Logs", icon: <DescriptionIcon />, path: "/logs" },
   { text: "History", icon: <HistoryIcon />, path: "/history" },
+  { text: "SMS Alerts", icon: <SmsIcon />, path: "/sms-settings" },
   
 ];
 
@@ -72,6 +75,8 @@ const getTooltipText = (text) => {
       return "Alerts";
     case "Logs":
       return "Logs";
+    case "SMS Alerts":
+      return "SMS Alerts";
     default:
       return text; // Fallback
   }
@@ -390,6 +395,7 @@ function Layout() {
               <Route path="/alerts" element={<Alerts />} />
               <Route path="/logs" element={<Logs />} />
               <Route path="/history" element={<History />} />
+              <Route path="/sms-settings" element={<SMSSettings />} />
             </Routes>
           </Box>
         </Box>
