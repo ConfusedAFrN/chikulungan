@@ -44,6 +44,7 @@ const REMIND_ONLY_WHEN_HIDDEN = true;
 const FEED_CAPACITY_GRAMS = 2000;
 const WATER_CAPACITY_ML = 4000;
 const MIN_CONSUMPTION_DROP_PERCENT = 0.1;
+const MAX_VALID_LEVEL_PERCENT = 100;
 
 function getDateTimePartsInZone(ts, timeZone) {
   const formatter = new Intl.DateTimeFormat("en-CA", {
@@ -157,6 +158,13 @@ function saveReminderState(state) {
 
 function normalizeSeverity(sev) {
   return sev === "critical" ? "critical" : "warning";
+}
+
+function toValidLevelPercent(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return null;
+  if (numeric < 0 || numeric > MAX_VALID_LEVEL_PERCENT) return null;
+  return Number(numeric.toFixed(3));
 }
 
 function parseScheduleTimeToday(timeStr, nowMs = Date.now()) {
@@ -319,8 +327,13 @@ export default function AlertEngine() {
     }
 
     const prev = prevLevelsRef.current;
-    const currentFeed = Number(s.feed ?? 0);
-    const currentWater = Number(s.water ?? 0);
+    const currentFeed = toValidLevelPercent(s.feed);
+    const currentWater = toValidLevelPercent(s.water);
+
+    if (currentFeed == null || currentWater == null) {
+      prevLevelsRef.current = { feed: null, water: null, timestamp: now };
+      return;
+    }
 
     if (prev.feed == null || prev.water == null) {
       prevLevelsRef.current = { feed: currentFeed, water: currentWater, timestamp: now };
@@ -330,7 +343,7 @@ export default function AlertEngine() {
     const feedDropPercent = Number((prev.feed - currentFeed).toFixed(3));
     const waterDropPercent = Number((prev.water - currentWater).toFixed(3));
 
-    if (feedDropPercent >= MIN_CONSUMPTION_DROP_PERCENT) {
+    if (feedDropPercent >= MIN_CONSUMPTION_DROP_PERCENT && feedDropPercent <= MAX_VALID_LEVEL_PERCENT) {
       await push(ref(db, "history/consumptionEvents"), {
         timestamp: now,
         dayKey,
@@ -343,7 +356,7 @@ export default function AlertEngine() {
       });
     }
 
-    if (waterDropPercent >= MIN_CONSUMPTION_DROP_PERCENT) {
+    if (waterDropPercent >= MIN_CONSUMPTION_DROP_PERCENT && waterDropPercent <= MAX_VALID_LEVEL_PERCENT) {
       await push(ref(db, "history/consumptionEvents"), {
         timestamp: now,
         dayKey,

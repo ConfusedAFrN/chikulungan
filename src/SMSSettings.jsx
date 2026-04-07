@@ -10,7 +10,7 @@ import {
   Alert,
   Stack,
 } from "@mui/material";
-import { db, ref, onValue, set } from "./firebase";
+import { db, ref, onValue, set, update } from "./firebase";
 import { toast } from "./utils/feedback";
 import { refreshSchedules } from "./mqtt";
 
@@ -40,7 +40,7 @@ export default function SMSSettings() {
       return;
     }
 
-    set(ref(db, "smsSettings"), {
+    update(ref(db, "smsSettings"), {
       phone: cleanPhone,
       enabled,
       lastUpdated: Date.now(),
@@ -64,7 +64,7 @@ export default function SMSSettings() {
 
     set(ref(db, "smsSettings/testTrigger"), {
       command: "TEST_SMS",
-      timestamp: Date.now(),
+      timestamp: String(Date.now()),
     })
       .then(() => {
         toast("Test SMS command sent (ESP32 will process when connected)", "info");

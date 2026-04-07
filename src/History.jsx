@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   Box,
-  Chip,
   Paper,
   Stack,
   Tab,
@@ -31,6 +30,7 @@ const FEED_CAPACITY_GRAMS = 330;
 const WATER_CAPACITY_ML = 350;
 const TEMP_THRESHOLD = 30;
 const HUMIDITY_THRESHOLD = 70;
+const CONSUMPTION_SANITY_MULTIPLIER = 1.5;
 
 function formatHourLabel(hour) {
   if (!Number.isInteger(hour) || hour < 0 || hour > 23) return "-";
@@ -89,6 +89,26 @@ function getNumericValue(value) {
   if (value == null || value === "") return null;
   const numeric = Number(value);
   return Number.isFinite(numeric) ? numeric : null;
+}
+
+function normalizeConsumptionAmount(eventType, amount, dropPercent) {
+  const numericAmount = getNumericValue(amount);
+  const numericDropPercent = getNumericValue(dropPercent);
+  const maxCapacity = eventType === "feed" ? FEED_CAPACITY_GRAMS : WATER_CAPACITY_ML;
+  const maxAllowed = maxCapacity * CONSUMPTION_SANITY_MULTIPLIER;
+
+  if (numericAmount != null && numericAmount > 0 && numericAmount <= maxAllowed) {
+    return Number(numericAmount.toFixed(2));
+  }
+
+  if (numericDropPercent != null && numericDropPercent > 0) {
+    const derived = (numericDropPercent / 100) * maxCapacity;
+    if (derived > 0 && derived <= maxAllowed) {
+      return Number(derived.toFixed(2));
+    }
+  }
+
+  return null;
 }
 
 function buildHourSeries(hourlyObj) {
@@ -268,7 +288,6 @@ export default function History() {
   const [tab, setTab] = useState(0);
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [range, setRange] = useState("24h");
 
   const [hourlyByDay, setHourlyByDay] = useState({});
   const [consumptionEvents, setConsumptionEvents] = useState([]);
@@ -304,7 +323,18 @@ export default function History() {
           dayKey: String(event?.dayKey || ""),
           hourKey: String(event?.hourKey || ""),
         }))
-        .filter((event) => event.timestamp > 0)
+        .map((event) => {
+          if (event.type !== "feed" && event.type !== "water") return null;
+
+          const normalizedAmount = normalizeConsumptionAmount(event.type, event.amount, event.dropPercent);
+          if (normalizedAmount == null) return null;
+
+          return {
+            ...event,
+            amount: normalizedAmount,
+          };
+        })
+        .filter((event) => event && event.timestamp > 0)
         .sort((a, b) => a.timestamp - b.timestamp);
 
       setConsumptionEvents(rows);
@@ -350,17 +380,8 @@ export default function History() {
 
   const visibleDailyConsumption = useMemo(() => {
     if (!selectedDayKey) return [];
-    if (range === "all") return dailyConsumptionRows;
-
-    if (range === "24h") {
-      return dailyConsumptionRows.filter((row) => row.dayKey === selectedDayKey);
-    }
-
-    const days = range === "7d" ? 7 : 30;
-    return dailyConsumptionRows
-      .filter((row) => row.dayKey <= selectedDayKey)
-      .slice(-days);
-  }, [dailyConsumptionRows, range, selectedDayKey]);
+    return dailyConsumptionRows.filter((row) => row.dayKey === selectedDayKey);
+  }, [dailyConsumptionRows, selectedDayKey]);
 
   const selectedDayEvents = useMemo(() => {
     return consumptionEvents.filter((event) => {
@@ -515,12 +536,7 @@ export default function History() {
     (row) => getNumericValue(row.temp) != null || getNumericValue(row.humidity) != null
   );
 
-  const totalsHeading = useMemo(() => {
-    if (range === "24h") return `Consumption Totals (24H for ${selectedDateLabel})`;
-    if (range === "7d") return `Consumption Totals (7D ending ${selectedDateLabel})`;
-    if (range === "30d") return `Consumption Totals (30D ending ${selectedDateLabel})`;
-    return "Consumption Totals (All Recorded Days)";
-  }, [range, selectedDateLabel]);
+  const totalsHeading = useMemo(() => `Consumption Totals (${selectedDateLabel})`, [selectedDateLabel]);
 
   const weeklyWindowLabel = useMemo(() => {
     if (!weeklyDayKeys.length) return "No weekly data yet";
@@ -545,13 +561,6 @@ export default function History() {
             onChange={(dateValue) => dateValue && setSelectedDate(dateValue)}
             slotProps={{ textField: { size: "small" } }}
           />
-
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-            <Chip label="24h" color={range === "24h" ? "primary" : "default"} onClick={() => setRange("24h")} />
-            <Chip label="7d" color={range === "7d" ? "primary" : "default"} onClick={() => setRange("7d")} />
-            <Chip label="30d" color={range === "30d" ? "primary" : "default"} onClick={() => setRange("30d")} />
-            <Chip label="All" color={range === "all" ? "primary" : "default"} onClick={() => setRange("all")} />
-          </Box>
         </Stack>
 
         <Paper sx={{ mb: 3 }}>
@@ -686,7 +695,7 @@ export default function History() {
                 {totalsHeading}
               </Typography>
               {visibleDailyConsumption.length === 0 ? (
-                <Alert severity="info">No consumption records yet for the selected date range. Records appear after sensor-level drops are detected.</Alert>
+                <Alert severity="info">No consumption records yet for the selected date. Records appear after sensor-level drops are detected.</Alert>
               ) : (
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={visibleDailyConsumption}>
