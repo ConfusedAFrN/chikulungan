@@ -264,6 +264,19 @@ bool sim900WaitFor(const char* token, unsigned long timeoutMs = 4000) {
   return false;
 }
 
+String sim900ReadResponse(unsigned long timeoutMs = 2500) {
+  unsigned long start = millis();
+  String buffer;
+  while (millis() - start < timeoutMs) {
+    while (sim900.available()) {
+      buffer += (char)sim900.read();
+    }
+    delay(5);
+    yield();
+  }
+  return buffer;
+}
+
 bool sim900SendCommand(const char* cmd, const char* expect = "OK", unsigned long timeoutMs = 4000) {
   while (sim900.available()) sim900.read();
   sim900.println(cmd);
@@ -298,16 +311,46 @@ unsigned long long readFirebaseUInt64(const String& path) {
 
 void sim900Init() {
   sim900.begin(SIM900_BAUD, SERIAL_8N1, SIM900_RX_PIN, SIM900_TX_PIN);
-  delay(500);
-  sim900SendCommand("AT");
-  sim900SendCommand("ATE0");
-  sim900SendCommand("AT+CMGF=1");
-  sim900SendCommand("AT+CSCS=\"GSM\"");
+  delay(1200);
+  bool atOk = sim900SendCommand("AT");
+  bool echoOffOk = sim900SendCommand("ATE0");
+  bool textModeOk = sim900SendCommand("AT+CMGF=1");
+  bool charsetOk = sim900SendCommand("AT+CSCS=\"GSM\"");
+  bool simReadyOk = sim900SendCommand("AT+CPIN?", "READY", 5000);
+  bool networkReadyOk = sim900SendCommand("AT+CREG?", "+CREG: 0,1", 5000) ||
+                        sim900SendCommand("AT+CREG?", "+CREG: 0,5", 5000);
+
+  Serial.printf("[SMS] init AT=%d ATE0=%d CMGF=%d CSCS=%d CPIN=%d CREG=%d\n",
+                atOk ? 1 : 0,
+                echoOffOk ? 1 : 0,
+                textModeOk ? 1 : 0,
+                charsetOk ? 1 : 0,
+                simReadyOk ? 1 : 0,
+                networkReadyOk ? 1 : 0);
 }
 
 bool sendSMS(const String& to, const String& body) {
   if (!smsEnabled) return false;
   if (!isValidPHNumber(to)) return false;
+
+  if (!sim900SendCommand("AT")) {
+    Serial.println("[SMS] send failed: modem not responding to AT");
+    return false;
+  }
+  if (!sim900SendCommand("AT+CPIN?", "READY", 5000)) {
+    Serial.println("[SMS] send failed: SIM not ready (AT+CPIN?)");
+    return false;
+  }
+  if (!(sim900SendCommand("AT+CREG?", "+CREG: 0,1", 5000) ||
+        sim900SendCommand("AT+CREG?", "+CREG: 0,5", 5000))) {
+    Serial.println("[SMS] send failed: modem not registered to network (AT+CREG?)");
+    return false;
+  }
+  if (!sim900SendCommand("AT+CMGF=1")) {
+    Serial.println("[SMS] send failed: unable to set SMS text mode (AT+CMGF=1)");
+    return false;
+  }
+  sim900SendCommand("AT+CSCS=\"GSM\"");
 
   while (sim900.available()) sim900.read();
   sim900.print("AT+CMGS=\"");
@@ -315,12 +358,19 @@ bool sendSMS(const String& to, const String& body) {
   sim900.println("\"");
 
   if (!sim900WaitFor(">", 5000)) {
+    String resp = sim900ReadResponse(1200);
+    Serial.printf("[SMS] send failed: no CMGS prompt. response=%s\n", resp.c_str());
     return false;
   }
 
   sim900.print(body);
   sim900.write((char)26);
-  return sim900WaitFor("+CMGS", 15000);
+  bool ok = sim900WaitFor("+CMGS", 20000);
+  if (!ok) {
+    String resp = sim900ReadResponse(1500);
+    Serial.printf("[SMS] send failed after body submit. response=%s\n", resp.c_str());
+  }
+  return ok;
 }
 
 void fetchSmsSettingsFromFirebase(bool allowTestTrigger = true) {
