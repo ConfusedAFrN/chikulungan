@@ -133,16 +133,29 @@ bool smsEnabled = false;
 String smsPhone = "";
 unsigned long lastSmsSettingsPollMs = 0;
 const unsigned long SMS_SETTINGS_POLL_MS = 30000UL;
-unsigned long long lastProcessedTestTs = 0ULL;
+bool sim900Ready = false;
+String lastProcessedTestTriggerId = "";
 
 const int LOW_FEED_THRESHOLD = 20;
-const float HIGH_TEMP_THRESHOLD_C = 35.0f;
+const int CRITICAL_WATER_THRESHOLD = 10;
+const int CRITICAL_AMMONIA_THRESHOLD = 70;
+const float CRITICAL_HIGH_TEMP_THRESHOLD_C = 35.0f;
+const float CRITICAL_LOW_TEMP_THRESHOLD_C = 18.0f;
 const unsigned long WIFI_OFFLINE_MIN_MS = 120000UL;
 const unsigned long ALERT_COOLDOWN_MS = 30UL * 60UL * 1000UL;
 unsigned long lastLowFeedAlertMs = 0;
 unsigned long lastHighTempAlertMs = 0;
+unsigned long lastLowTempAlertMs = 0;
+unsigned long lastLowWaterAlertMs = 0;
+unsigned long lastHighAmmoniaAlertMs = 0;
 unsigned long lastWifiOfflineAlertMs = 0;
 unsigned long wifiDisconnectedSinceMs = 0;
+bool lowFeedAlertActive = false;
+bool highTempAlertActive = false;
+bool lowTempAlertActive = false;
+bool lowWaterAlertActive = false;
+bool highAmmoniaAlertActive = false;
+bool wifiOfflineAlertActive = false;
 
 // ========================
 // Objects
@@ -238,7 +251,7 @@ unsigned long lastMqttAttemptMs = 0;
 const unsigned long MQTT_RETRY_MS = 5000;
 
 // --------------------------------------------------------
-// SMS helpers
+// SMS helpers (revamped from known-working SIM900 test flow)
 // --------------------------------------------------------
 bool isValidPHNumber(const String& number) {
   if (number.length() != 13) return false;
@@ -249,131 +262,216 @@ bool isValidPHNumber(const String& number) {
   return true;
 }
 
-bool sim900WaitFor(const char* token, unsigned long timeoutMs = 4000) {
+String sim900ReadResponse(unsigned long timeoutMs = 1500) {
   unsigned long start = millis();
-  String buffer;
+  String response = "";
   while (millis() - start < timeoutMs) {
     while (sim900.available()) {
-      buffer += (char)sim900.read();
-      if (buffer.indexOf(token) >= 0) return true;
-      if (buffer.indexOf("ERROR") >= 0) return false;
+      response += (char)sim900.read();
     }
+    if (client.connected()) client.loop();
     delay(5);
     yield();
   }
+  return response;
+}
+
+void sim900FlushInput() {
+  while (sim900.available()) sim900.read();
+}
+
+void cooperativeDelay(unsigned long waitMs) {
+  unsigned long start = millis();
+  while (millis() - start < waitMs) {
+    if (client.connected()) client.loop();
+    delay(10);
+    yield();
+  }
+}
+
+bool sim900SendAT(const String& cmd, const char* expect = "OK", unsigned long timeoutMs = 3000) {
+  sim900FlushInput();
+  sim900.println(cmd);
+
+  unsigned long start = millis();
+  String response = "";
+  while (millis() - start < timeoutMs) {
+    while (sim900.available()) {
+      response += (char)sim900.read();
+      if (response.indexOf(expect) != -1) {
+        Serial.print("[SMS] AT <");
+        Serial.print(cmd);
+        Serial.println("> OK");
+        return true;
+      }
+      if (response.indexOf("ERROR") != -1) {
+        Serial.print("[SMS] AT <");
+        Serial.print(cmd);
+        Serial.print("> ERROR: ");
+        Serial.println(response);
+        return false;
+      }
+    }
+    if (client.connected()) client.loop();
+    delay(5);
+    yield();
+  }
+
+  Serial.print("[SMS] AT <");
+  Serial.print(cmd);
+  Serial.print("> timeout. resp=");
+  Serial.println(response);
   return false;
 }
 
-String sim900ReadResponse(unsigned long timeoutMs = 2500) {
-  unsigned long start = millis();
-  String buffer;
-  while (millis() - start < timeoutMs) {
-    while (sim900.available()) {
-      buffer += (char)sim900.read();
-    }
-    delay(5);
-    yield();
-  }
-  return buffer;
-}
-
-bool sim900SendCommand(const char* cmd, const char* expect = "OK", unsigned long timeoutMs = 4000) {
-  while (sim900.available()) sim900.read();
+bool sim900SendATWithDelay(const String& cmd, unsigned long waitMs = 1500) {
+  sim900FlushInput();
   sim900.println(cmd);
-  return sim900WaitFor(expect, timeoutMs);
+  cooperativeDelay(waitMs);
+
+  String response = sim900ReadResponse(300);
+  Serial.print("[SMS] -> ");
+  Serial.println(cmd);
+  Serial.print("[SMS] <- ");
+  Serial.println(response);
+
+  return (response.indexOf("OK") != -1) && (response.indexOf("ERROR") == -1);
 }
 
-unsigned long long parseUnsignedLongLong(const String& value) {
-  if (value.length() == 0) return 0ULL;
-  return strtoull(value.c_str(), nullptr, 10);
+String sim900RunCommand(const String& cmd, unsigned long waitMs = 1500) {
+  sim900FlushInput();
+  sim900.println(cmd);
+  cooperativeDelay(waitMs);
+  String response = sim900ReadResponse(500);
+  Serial.print("[SMS] -> ");
+  Serial.println(cmd);
+  Serial.print("[SMS] <- ");
+  Serial.println(response);
+  return response;
 }
 
-unsigned long long readFirebaseUInt64(const String& path) {
-  if (Firebase.getString(fbdo, path)) {
-    String s = fbdo.to<String>();
-    s.trim();
-    unsigned long long parsed = parseUnsignedLongLong(s);
-    if (parsed > 0ULL) return parsed;
+bool sim900NetworkReady() {
+  String reg = sim900RunCommand("AT+CREG?", 1200);
+  bool registered = reg.indexOf("+CREG: 0,1") != -1 || reg.indexOf("+CREG: 0,5") != -1;
+  if (!registered) {
+    Serial.println("[SMS] network not registered yet (AT+CREG?)");
+    return false;
   }
 
-  if (Firebase.getDouble(fbdo, path)) {
-    double d = fbdo.to<double>();
-    if (d > 0.0) return (unsigned long long)d;
+  String csq = sim900RunCommand("AT+CSQ", 800);
+  // CSQ: 0,99 means unknown/invalid RSSI.
+  if (csq.indexOf("+CSQ: 0,99") != -1) {
+    Serial.println("[SMS] weak/unknown signal (AT+CSQ)");
+    return false;
   }
+  return true;
+}
 
-  if (Firebase.getInt(fbdo, path)) {
-    long v = fbdo.to<int>();
-    if (v > 0) return (unsigned long long)v;
+void sim900ReadOwnNumber() {
+  sim900FlushInput();
+  sim900.println("AT+CNUM");
+  String response = sim900ReadResponse(2000);
+
+  Serial.print("[SMS] CNUM response: ");
+  Serial.println(response);
+
+  if (response.indexOf("+CNUM:") != -1) {
+    Serial.println("[SMS] SIM number available from modem.");
+  } else {
+    Serial.println("[SMS] SIM number not exposed by carrier/SIM (normal on some networks).");
   }
-
-  return 0ULL;
 }
 
 void sim900Init() {
   sim900.begin(SIM900_BAUD, SERIAL_8N1, SIM900_RX_PIN, SIM900_TX_PIN);
-  delay(1200);
-  bool atOk = sim900SendCommand("AT");
-  bool echoOffOk = sim900SendCommand("ATE0");
-  bool textModeOk = sim900SendCommand("AT+CMGF=1");
-  bool charsetOk = sim900SendCommand("AT+CSCS=\"GSM\"");
-  bool simReadyOk = sim900SendCommand("AT+CPIN?", "READY", 5000);
-  bool networkReadyOk = sim900SendCommand("AT+CREG?", "+CREG: 0,1", 5000) ||
-                        sim900SendCommand("AT+CREG?", "+CREG: 0,5", 5000);
+  cooperativeDelay(5000); // aligns with the proven standalone test sketch
 
-  Serial.printf("[SMS] init AT=%d ATE0=%d CMGF=%d CSCS=%d CPIN=%d CREG=%d\n",
-                atOk ? 1 : 0,
-                echoOffOk ? 1 : 0,
-                textModeOk ? 1 : 0,
-                charsetOk ? 1 : 0,
-                simReadyOk ? 1 : 0,
-                networkReadyOk ? 1 : 0);
+  Serial.println("[SMS] === SIM900 startup ===");
+  sim900FlushInput();
+
+  // Keep startup flow close to the working standalone sketch.
+  bool atOk = sim900SendATWithDelay("AT", 1200);
+  if (!atOk) {
+    // One retry using the token-based reader before giving up.
+    atOk = sim900SendAT("AT", "OK", 4000);
+  }
+
+  bool textOk = sim900SendATWithDelay("AT+CMGF=1", 1200);
+  if (!textOk) {
+    textOk = sim900SendAT("AT+CMGF=1", "OK", 4000);
+  }
+  sim900SendATWithDelay("ATE0", 600);
+  sim900SendATWithDelay("AT+CSCS=\"GSM\"", 1000);
+  sim900SendATWithDelay("AT+CSMP=17,167,0,0", 1000);
+
+  sim900ReadOwnNumber();
+
+  // Do not hard-fail startup on CPIN/CREG checks because some modules/SIMs
+  // respond slowly/noisily at boot. We validate on every actual send instead.
+  sim900Ready = atOk && textOk;
+  Serial.print("[SMS] ready=");
+  Serial.println(sim900Ready ? "1" : "0");
 }
 
-bool sendSMS(const String& to, const String& body) {
-  if (!smsEnabled) return false;
-  if (!isValidPHNumber(to)) return false;
+bool sendSMS(const String& number, const String& message) {
+  if (!sim900Ready) {
+    Serial.println("[SMS] send skipped: SIM900 not ready");
+    return false;
+  }
+  if (!isValidPHNumber(number)) {
+    Serial.print("[SMS] send skipped: invalid number ");
+    Serial.println(number);
+    return false;
+  }
 
-  if (!sim900SendCommand("AT")) {
-    Serial.println("[SMS] send failed: modem not responding to AT");
-    return false;
-  }
-  if (!sim900SendCommand("AT+CPIN?", "READY", 5000)) {
-    Serial.println("[SMS] send failed: SIM not ready (AT+CPIN?)");
-    return false;
-  }
-  if (!(sim900SendCommand("AT+CREG?", "+CREG: 0,1", 5000) ||
-        sim900SendCommand("AT+CREG?", "+CREG: 0,5", 5000))) {
-    Serial.println("[SMS] send failed: modem not registered to network (AT+CREG?)");
-    return false;
-  }
-  if (!sim900SendCommand("AT+CMGF=1")) {
-    Serial.println("[SMS] send failed: unable to set SMS text mode (AT+CMGF=1)");
-    return false;
-  }
-  sim900SendCommand("AT+CSCS=\"GSM\"");
+  // Keep send flow close to the known-good test sketch.
+  if (!sim900SendATWithDelay("AT", 1000)) return false;
+  if (!sim900SendATWithDelay("AT+CMGF=1", 1000)) return false;
+  sim900SendATWithDelay("AT+CSCS=\"GSM\"", 800);
+  if (!sim900NetworkReady()) return false;
 
-  while (sim900.available()) sim900.read();
+  sim900FlushInput();
   sim900.print("AT+CMGS=\"");
-  sim900.print(to);
+  sim900.print(number);
   sim900.println("\"");
+  cooperativeDelay(1000);
 
-  if (!sim900WaitFor(">", 5000)) {
-    String resp = sim900ReadResponse(1200);
-    Serial.printf("[SMS] send failed: no CMGS prompt. response=%s\n", resp.c_str());
-    return false;
-  }
+  sim900.print(message);
+  sim900.write((char)26); // Ctrl+Z
+  cooperativeDelay(7000);
 
-  sim900.print(body);
-  sim900.write((char)26);
-  bool ok = sim900WaitFor("+CMGS", 20000);
-  if (!ok) {
-    String resp = sim900ReadResponse(1500);
-    Serial.printf("[SMS] send failed after body submit. response=%s\n", resp.c_str());
-  }
+  String finalResp = sim900ReadResponse(10000);
+  bool ok = (finalResp.indexOf("ERROR") == -1) &&
+            (finalResp.indexOf("+CMGS:") != -1) &&
+            (finalResp.indexOf("OK") != -1);
+  Serial.print("[SMS] send result=");
+  Serial.println(ok ? "OK" : "FAIL");
+  Serial.println(finalResp);
   return ok;
 }
 
-void fetchSmsSettingsFromFirebase(bool allowTestTrigger = true) {
+void processSmsSerialCommand() {
+  if (!Serial.available()) return;
+
+  String command = Serial.readStringUntil('\n');
+  command.trim();
+  if (!command.startsWith("send ")) return;
+
+  String args = command.substring(5);
+  int split = args.indexOf(' ');
+  if (split == -1) {
+    Serial.println("[SMS] format error. use: send +63xxxxxxxxxx your message");
+    return;
+  }
+
+  String number = args.substring(0, split);
+  String message = args.substring(split + 1);
+  bool ok = sendSMS(number, message);
+  Serial.print("[SMS] manual send -> ");
+  Serial.println(ok ? "SUCCESS" : "FAILED");
+}
+
+void fetchSmsSettingsFromFirebase() {
   if (WiFi.status() != WL_CONNECTED) return;
 
   bool enabledVal = false;
@@ -395,64 +493,132 @@ void fetchSmsSettingsFromFirebase(bool allowTestTrigger = true) {
   smsEnabled = enabledVal && isValidPHNumber(phoneVal);
   smsPhone = phoneVal;
 
-  Serial.printf("[SMS] settings enabled=%d valid=%d phone=%s\n",
-                enabledVal ? 1 : 0, smsEnabled ? 1 : 0, smsPhone.c_str());
+  Serial.print("[SMS] settings: enabled=");
+  Serial.print(enabledVal ? "1" : "0");
+  Serial.print(" usable=");
+  Serial.print(smsEnabled ? "1" : "0");
+  Serial.print(" phone=");
+  Serial.println(smsPhone);
 
-  if (allowTestTrigger && smsEnabled) {
-    unsigned long long ts = readFirebaseUInt64("/smsSettings/testTrigger/timestamp");
-    if (ts > 0ULL && ts > lastProcessedTestTs) {
-      lastProcessedTestTs = ts;
+  if (!smsEnabled) return;
 
-      String cmd = "";
-      if (Firebase.getString(fbdo, "/smsSettings/testTrigger/command")) {
-        cmd = fbdo.to<String>();
-        cmd.trim();
-      }
+  String command = "";
+  String timestamp = "";
+  if (Firebase.getString(fbdo, "/smsSettings/testTrigger/command")) {
+    command = fbdo.to<String>();
+    command.trim();
+  }
+  if (Firebase.getString(fbdo, "/smsSettings/testTrigger/timestamp")) {
+    timestamp = fbdo.to<String>();
+    timestamp.trim();
+  }
 
-      if (cmd == "TEST_SMS") {
-        bool ok = sendSMS(smsPhone, "[Chikulungan] Test SMS successful. SIM900 link is working.");
-        Serial.printf("[SMS] TEST_SMS trigger ts=%llu result=%s\n", ts, ok ? "OK" : "FAIL");
-      }
-    }
+  String triggerId = command + "|" + timestamp;
+  if (command == "TEST_SMS" && timestamp.length() > 0 && triggerId != lastProcessedTestTriggerId) {
+    lastProcessedTestTriggerId = triggerId;
+    String msg = "[Chikulungan] TEST SMS " + timestamp + ": SIM900 link is working.";
+    bool ok = sendSMS(smsPhone, msg);
+    Serial.print("[SMS] TEST_SMS trigger -> ");
+    Serial.println(ok ? "SUCCESS" : "FAILED");
+
+    Firebase.setString(fbdo, "/smsSettings/testTrigger/lastProcessedId", triggerId);
+    Firebase.setString(fbdo, "/smsSettings/testTrigger/lastStatus", ok ? "SUCCESS" : "FAILED");
+    Firebase.setString(fbdo, "/smsSettings/testTrigger/lastResponseAt", String((unsigned long)time(nullptr)));
   }
 }
 
 void evaluateCriticalSmsAlerts() {
-  if (!smsEnabled || !isValidPHNumber(smsPhone)) return;
+  if (!sim900Ready || !smsEnabled || !isValidPHNumber(smsPhone)) return;
 
   unsigned long now = millis();
+  bool lowFeedNow = (feedLevel <= LOW_FEED_THRESHOLD);
+  bool highTempNow = (currentTemp >= CRITICAL_HIGH_TEMP_THRESHOLD_C);
+  bool lowTempNow = (currentTemp <= CRITICAL_LOW_TEMP_THRESHOLD_C);
+  bool lowWaterNow = (waterLevel <= CRITICAL_WATER_THRESHOLD);
+  bool highAmmoniaNow = (ammoniaLevel >= CRITICAL_AMMONIA_THRESHOLD);
 
-  if (feedLevel > 0 && feedLevel <= LOW_FEED_THRESHOLD) {
-    if (now - lastLowFeedAlertMs >= ALERT_COOLDOWN_MS) {
+  // Trigger on state transition to critical, then throttle repeats by cooldown.
+  if (lowFeedNow) {
+    bool shouldSend = !lowFeedAlertActive || (now - lastLowFeedAlertMs >= ALERT_COOLDOWN_MS);
+    if (shouldSend) {
       String msg = "[Chikulungan] CRITICAL: Feed level is low (" + String(feedLevel) + "%).";
       if (sendSMS(smsPhone, msg)) {
         lastLowFeedAlertMs = now;
+        lowFeedAlertActive = true;
       }
     }
+  } else {
+    lowFeedAlertActive = false;
   }
 
-  if (currentTemp >= HIGH_TEMP_THRESHOLD_C) {
-    if (now - lastHighTempAlertMs >= ALERT_COOLDOWN_MS) {
+  if (highTempNow) {
+    bool shouldSend = !highTempAlertActive || (now - lastHighTempAlertMs >= ALERT_COOLDOWN_MS);
+    if (shouldSend) {
       String msg = "[Chikulungan] CRITICAL: High temperature (" + String(currentTemp, 1) + "C).";
       if (sendSMS(smsPhone, msg)) {
         lastHighTempAlertMs = now;
+        highTempAlertActive = true;
       }
     }
+  } else {
+    highTempAlertActive = false;
+  }
+
+  if (lowTempNow) {
+    bool shouldSend = !lowTempAlertActive || (now - lastLowTempAlertMs >= ALERT_COOLDOWN_MS);
+    if (shouldSend) {
+      String msg = "[Chikulungan] CRITICAL: Low temperature (" + String(currentTemp, 1) + "C).";
+      if (sendSMS(smsPhone, msg)) {
+        lastLowTempAlertMs = now;
+        lowTempAlertActive = true;
+      }
+    }
+  } else {
+    lowTempAlertActive = false;
+  }
+
+  if (lowWaterNow) {
+    bool shouldSend = !lowWaterAlertActive || (now - lastLowWaterAlertMs >= ALERT_COOLDOWN_MS);
+    if (shouldSend) {
+      String msg = "[Chikulungan] CRITICAL: Water level is low (" + String(waterLevel) + "%).";
+      if (sendSMS(smsPhone, msg)) {
+        lastLowWaterAlertMs = now;
+        lowWaterAlertActive = true;
+      }
+    }
+  } else {
+    lowWaterAlertActive = false;
+  }
+
+  if (highAmmoniaNow) {
+    bool shouldSend = !highAmmoniaAlertActive || (now - lastHighAmmoniaAlertMs >= ALERT_COOLDOWN_MS);
+    if (shouldSend) {
+      String msg = "[Chikulungan] CRITICAL: Ammonia is high (" + String(ammoniaLevel) + "%).";
+      if (sendSMS(smsPhone, msg)) {
+        lastHighAmmoniaAlertMs = now;
+        highAmmoniaAlertActive = true;
+      }
+    }
+  } else {
+    highAmmoniaAlertActive = false;
   }
 
   if (WiFi.status() != WL_CONNECTED) {
     if (wifiDisconnectedSinceMs == 0) {
       wifiDisconnectedSinceMs = now;
-    } else {
-      unsigned long offlineFor = now - wifiDisconnectedSinceMs;
-      if (offlineFor >= WIFI_OFFLINE_MIN_MS && (now - lastWifiOfflineAlertMs >= ALERT_COOLDOWN_MS)) {
-        if (sendSMS(smsPhone, "[Chikulungan] CRITICAL: Device WiFi is offline.")) {
-          lastWifiOfflineAlertMs = now;
-        }
+    }
+
+    bool offlineCritical = (now - wifiDisconnectedSinceMs >= WIFI_OFFLINE_MIN_MS);
+    if (offlineCritical) {
+      bool shouldSend = !wifiOfflineAlertActive || (now - lastWifiOfflineAlertMs >= ALERT_COOLDOWN_MS);
+      if (shouldSend && sendSMS(smsPhone, "[Chikulungan] CRITICAL: Device WiFi is offline.")) {
+        lastWifiOfflineAlertMs = now;
+        wifiOfflineAlertActive = true;
       }
     }
   } else {
     wifiDisconnectedSinceMs = 0;
+    wifiOfflineAlertActive = false;
   }
 }
 
@@ -1353,7 +1519,7 @@ void setup() {
     Serial.println("Using cached schedules (no new schedules fetched)");
   }
 
-  fetchSmsSettingsFromFirebase(false);
+  fetchSmsSettingsFromFirebase();
 
   {
     float t0 = dht.readTemperature();
@@ -1392,12 +1558,13 @@ void loop() {
   if (client.connected()) client.loop();
 
   unsigned long now = millis();
+  processSmsSerialCommand();
 
   printRtcAndSystemTimeDebug();
   rtcResyncDailyIfOnline();
 
   if (now - lastSmsSettingsPollMs > SMS_SETTINGS_POLL_MS) {
-    fetchSmsSettingsFromFirebase(true);
+    fetchSmsSettingsFromFirebase();
     lastSmsSettingsPollMs = now;
   }
 
