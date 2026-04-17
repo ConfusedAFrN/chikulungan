@@ -183,13 +183,9 @@ The hardware side of ChicKulungan is built around an ESP32 controller and suppor
 
 ### Pinout image
 
-If your pinout image file is present in the repo, set the path below to the exact filename and keep it as the official wiring reference.
-
 ```md
 ![ChicKulungan hardware pinout](./public/Chikulungan%20Pinout.png)
 ```
-
-Example link placeholder:
 
 - [Open pinout image](./public/Chikulungan%20Pinout.png)
 
