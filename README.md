@@ -11,6 +11,8 @@ ChicKulungan is a smart poultry-house monitoring dashboard that combines real-ti
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
 - [Project Structure](#project-structure)
+- [Arduino/ESP32 Components](#arduinoesp32-components)
+- [Pinout and Wiring](#pinout-and-wiring)
 - [Getting Started](#getting-started)
 - [Available Scripts](#available-scripts)
 - [Configuration](#configuration)
@@ -91,6 +93,7 @@ The app focuses on:
 | Routing | `react-router-dom` |
 | Charts/Visualization | Recharts, MUI X Charts |
 | PWA | `vite-plugin-pwa` |
+| Firmware | ESP32 + Arduino ecosystem |
 | Linting | ESLint |
 
 ---
@@ -135,6 +138,60 @@ Firebase Realtime Database
 ├─ vite.config.js
 └─ package.json
 ```
+
+---
+
+## Arduino/ESP32 Components
+
+The hardware side of ChicKulungan is built around an ESP32 controller and supporting sensor/actuator modules.
+
+| Component | Purpose in the System |
+|---|---|
+| **ESP32 Dev Board** | Main controller; reads sensors, drives actuators, connects to Wi-Fi/MQTT/Firebase. |
+| **DHT22** | Measures air temperature and humidity for environmental monitoring. |
+| **HC-SR04 Ultrasonic Sensor** | Estimates feed-bin level from distance to feed surface. |
+| **Analog Water Level Sensor** | Measures water level percentage in the water container. |
+| **MQ-135 Gas Sensor** | Tracks ammonia-related air-quality signal (raw/voltage/normalized level). |
+| **TMC2209 Stepper Driver** | Drives feeder motor with STEP/DIR/EN control from ESP32. |
+| **Stepper Motor (NEMA-type)** | Mechanically dispenses feed during manual or scheduled runs. |
+| **SIM900 GSM Module** | Sends critical SMS alerts and handles test-SMS flow. |
+| **DS1302 RTC Module** | Provides hardware timekeeping for schedule reliability and offline fallback timing. |
+| **DC Power Supply** | Powers motor/driver and supports overall hardware distribution. |
+| **Breadboard + Resistors/Wiring** | Signal routing, level conditioning, and module interconnection. |
+
+---
+
+## Pinout and Wiring
+
+### Pin mapping used in firmware (`src/chikulungan_esp32.ino`)
+
+| Function | Pin |
+|---|---:|
+| DHT22 data | GPIO 4 |
+| HC-SR04 TRIG | GPIO 33 |
+| HC-SR04 ECHO | GPIO 32 |
+| Water sensor analog out | GPIO 34 |
+| MQ-135 analog out | GPIO 35 |
+| Stepper STEP (TMC2209) | GPIO 25 |
+| Stepper DIR (TMC2209) | GPIO 26 |
+| Stepper EN (TMC2209) | GPIO 27 |
+| SIM900 RX (ESP32 receives) | GPIO 16 |
+| SIM900 TX (ESP32 transmits) | GPIO 17 |
+| DS1302 CLK | GPIO 18 |
+| DS1302 DAT | GPIO 19 |
+| DS1302 RST | GPIO 23 |
+
+### Pinout image
+
+If your pinout image file is present in the repo, set the path below to the exact filename and keep it as the official wiring reference.
+
+```md
+![ChicKulungan hardware pinout](./public/Chikulungan%20Pinout.png)
+```
+
+Example link placeholder:
+
+- [Open pinout image](./public/Chikulungan%20Pinout.png)
 
 ---
 
@@ -302,13 +359,8 @@ Current manifest setup includes:
 ## Roadmap
 
 - [ ] Add `.env.example` and migrate hardcoded config to env loading
+- [ ] Add final pinout image path once the image file name is finalized
 - [ ] Add visual architecture diagram in `/docs`
 - [ ] Document deployment workflow and target environments
 - [ ] Expand test strategy section (unit/integration/e2e)
 - [ ] Publish explicit MQTT/Firebase contract docs for firmware integration
-
----
-
-## Notes
-
-For capability-only documentation (without setup/process sections), see `CAPABILITIES.md`.
